@@ -1,0 +1,31 @@
+# Normalize line endings to LF on checkout/commit (consistent across Windows/macOS/Linux).
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.ts     text
+*.tsx    text
+*.js     text
+*.mjs    text
+*.json   text
+*.md     text
+*.sql    text
+*.prisma text
+*.css    text
+*.sh     text eol=lf
+*.yml    text
+*.yaml   text
+
+# Binary files (never diff/normalize)
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.webp   binary
+*.gif    binary
+*.ico    binary
+*.woff   binary
+*.woff2  binary
+*.pdf    binary
+
+# Collapse noisy generated files in PR diffs
+package-lock.json linguist-generated=true
+skills-lock.json  linguist-generated=true
