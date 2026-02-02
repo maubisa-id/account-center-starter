@@ -1,0 +1,346 @@
+// maubisa_core (Account Center) - Prisma schema
+// LOKAL: provider sqlite (nol instalasi). PROD: ganti ke "mysql" + DATABASE_URL Cloud SQL.
+// Catatan lokal: enum & JSON disimpan sebagai String (SQLite tak punya enum/json);
+// nilai divalidasi di aplikasi. Tabel/kolom/relasi mengikuti maubisa-core-schema.
+//
+// ── MIGRASI KE MySQL / CLOUD SQL (produksi) ──────────────────────────
+// PENTING: `datasource.provider` di bawah WAJIB literal statis (Prisma tak mengizinkan
+// env()). Jadi saat pindah ke MySQL, samakan TIGA hal (guard di src/lib/db-config.ts
+// akan melempar error jelas kalau tidak konsisten):
+//   1) datasource.provider di FILE INI  -> "mysql"  (lalu `npx prisma generate`)
+//   2) .env DB_PROVIDER                  -> "mysql"  (dipakai Better Auth adapter)
+//   3) .env DATABASE_URL                 -> "mysql://USER:PASS@HOST:3306/maubisa_core"
+//    Cloud SQL: pakai Cloud SQL Auth Proxy (mysql://user:pass@127.0.0.1:3306/db)
+//    atau socket ("...?socket=/cloudsql/PROJECT:REGION:INSTANCE").
+// 4) Model String yang seharusnya native MySQL (opsional, agar persis maubisa-core-schema.sql):
+//    - status/scope/type/interval/motion/source -> boleh tetap String (VARCHAR) ATAU
+//      naikkan ke enum: mis. `status String` -> `status Status` + `enum Status { active suspended }`.
+//    - metadata/rawPayload/payload String -> Json  @db.Json
+//    - price/amount/grossAmount/unitPrice Decimal -> Decimal @db.Decimal(12,2)
+//    (App sudah memvalidasi enum di kode, jadi VARCHAR pun aman; enum native = polesan.)
+// 5) Terapkan: `npx prisma migrate deploy` (histori) ATAU `npx prisma db push` (cepat).
+// 6) Better Auth (auth_*) ikut ke MySQL yang sama; provider adapter kini otomatis dari
+//    DB_PROVIDER (src/lib/auth.ts), jadi cukup set env di atas. Set BETTER_AUTH_URL ke
+//    https://akun.maubisa.id + crossSubDomainCookies (".maubisa.id") untuk SSO subdomain.
+// 7) Seed produk: `npm run seed` (atau jalankan INSERT products dari maubisa-core-schema.sql).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  uuid            String    @unique
+  authUserId      String?   @unique @map("auth_user_id")
+  name            String
+  displayName     String?   @map("display_name")
+  avatarUrl       String?   @map("avatar_url")
+  email           String    @unique
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  phone           String?
+  birthDate       DateTime? @map("birth_date")
+  gender          String?
+  headline        String?
+  city            String?
+  country         String    @default("Indonesia")
+  language        String    @default("id")
+  timezone        String    @default("Asia/Jakarta")
+  status          String    @default("active")
+  createdAt       DateTime? @map("created_at")
+  updatedAt       DateTime? @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  subscriptions      Subscription[]
+  invoices           Invoice[]
+  entitlements       Entitlement[]
+  preferences        UserPreference[]
+  eventRegistrations EventRegistration[]
+  paymentMethods     PaymentMethod[]
+
+  @@map("users")
+}
+
+// Metode pembayaran tersimpan (kartu). Yang disimpan adalah TOKEN aman dari Midtrans
+// (saved_token_id), BUKAN nomor kartu (PCI). Dipakai untuk checkout lebih cepat & perpanjangan
+// otomatis. Satu metode boleh ditandai utama (isPrimary) per pengguna.
+model PaymentMethod {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  provider       String    @default("midtrans")
+  type           String    @default("card")
+  brand          String?   // visa | mastercard | jcb | amex | unionpay | discover
+  bankCode       String?   @map("bank_code") // kode bank penerbit (BIN API), mis. "bca"
+  last4          String?   // 4 digit terakhir (dari masked_card)
+  expMonth       Int?      @map("exp_month")
+  expYear        Int?      @map("exp_year")
+  savedToken     String    @map("saved_token")
+  savedTokenExpiresAt DateTime? @map("saved_token_expires_at")
+  isPrimary      Boolean   @default(false) @map("is_primary")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, savedToken])
+  @@index([userId, isPrimary])
+  @@map("payment_methods")
+}
+
+// Preferensi notifikasi (key-value boolean) per pengguna. Transaksional (keamanan,
+// tagihan) tetap dikirim; toggle di sini mengatur email non-esensial & saluran lain.
+model UserPreference {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  key       String
+  value     Boolean  @default(false)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@map("user_preferences")
+}
+
+// FALLBACK DEV-ONLY. Sumber kebenaran pendaftaran acara = Directus koleksi
+// `event_registrations` (menampung web anonim + Account Center; lihat
+// directus-maubisa/docs/acara-pendaftaran.md). Tabel ini HANYA dipakai saat
+// DIRECTUS_URL/TOKEN belum diset (mis. dev lokal) supaya alur tetap jalan.
+// Di produksi Directus dikonfigurasi -> tabel ini tetap KOSONG (jangan jadikan
+// sumber; canonical maubisa_core TIDAK memuat event_registrations).
+// Identitas TIDAK diduplikasi (ADR-001): cukup user_id ke core; nama/email/HP
+// ditarik lewat relasi. Yang disimpan hanya jawaban FORM spesifik acara
+// (asal instansi, catatan) + snapshot judul acara.
+model EventRegistration {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  eventRef    String   @map("event_ref")
+  eventTitle  String?  @map("event_title")
+  institution String?
+  note        String?
+  paid        Boolean  @default(false)
+  invoiceId   Int?     @map("invoice_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventRef])
+  @@index([eventRef])
+  @@map("event_registrations")
+}
+
+model Product {
+  id              Int       @id @default(autoincrement())
+  code            String    @unique
+  name            String
+  description     String?
+  scope           String
+  type            String
+  billingInterval String    @default("once") @map("billing_interval")
+  price           Decimal   @default(0)
+  costPrice       Decimal?  @map("cost_price")
+  currency        String    @default("IDR")
+  fulfillment     String    @default("none")
+  provider        String?
+  eventAt         DateTime? @map("event_at")
+  metadata        String?
+  active          Boolean   @default(true)
+  createdAt       DateTime? @map("created_at")
+  updatedAt       DateTime? @map("updated_at")
+
+  @@map("products")
+  @@index([scope, active])
+}
+
+model Subscription {
+  id                 Int       @id @default(autoincrement())
+  userId             Int       @map("user_id")
+  productCode        String    @map("product_code")
+  status             String    @default("active")
+  provider           String    @default("midtrans")
+  providerRef        String?   @map("provider_ref")
+  // Token kartu tersimpan (saved_token_id Midtrans) + kedaluwarsanya, untuk tagihan
+  // berulang (recurring). providerRef menyimpan id Subscription API Midtrans.
+  savedToken         String?   @map("saved_token")
+  savedTokenExpiresAt DateTime? @map("saved_token_expires_at")
+  interval           String    @default("monthly")
+  amount             Decimal
+  currency           String    @default("IDR")
+  currentPeriodStart DateTime? @map("current_period_start")
+  currentPeriodEnd   DateTime? @map("current_period_end")
+  cancelAtPeriodEnd  Boolean   @default(false) @map("cancel_at_period_end")
+  cancelledAt        DateTime? @map("cancelled_at")
+  createdAt          DateTime? @map("created_at")
+  updatedAt          DateTime? @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices     Invoice[]
+  entitlements Entitlement[]
+
+  @@map("subscriptions")
+  @@index([userId, status])
+  @@index([currentPeriodEnd])
+  @@index([providerRef])
+}
+
+model Invoice {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  orderId        String    @unique @map("order_id")
+  productCode    String?   @map("product_code")
+  itemType       String?   @map("item_type")
+  itemRef        String?   @map("item_ref")
+  itemName       String?   @map("item_name")
+  unitPrice      Decimal?  @map("unit_price")
+  quantity       Int       @default(1)
+  subscriptionId Int?      @map("subscription_id")
+  scope          String
+  grossAmount    Decimal   @map("gross_amount")
+  currency       String    @default("IDR")
+  status         String    @default("pending")
+  motion         String
+  paymentType    String?   @map("payment_type")
+  midtransTxnId  String?   @map("midtrans_txn_id")
+  periodStart    DateTime? @map("period_start")
+  periodEnd      DateTime? @map("period_end")
+  paidAt         DateTime? @map("paid_at")
+  rawPayload     String?   @map("raw_payload")
+  // Instruksi charge Core API (QR/VA/tagihan) yang dinormalisasi, JSON. Dipakai halaman
+  // /bayar/[orderId] untuk menampilkan ulang cara bayar (mis. nomor VA) sebelum lunas.
+  chargePayload  String?   @map("charge_payload")
+  createdAt      DateTime? @map("created_at")
+  updatedAt      DateTime? @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  entitlements Entitlement[]
+
+  @@map("invoices")
+  @@index([userId])
+  @@index([status])
+  @@index([itemType, itemRef])
+  @@index([subscriptionId])
+}
+
+model Entitlement {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  productCode    String?   @map("product_code")
+  itemType       String?   @map("item_type")
+  itemRef        String?   @map("item_ref")
+  scope          String
+  status         String    @default("pending")
+  source         String
+  invoiceId      Int?      @map("invoice_id")
+  subscriptionId Int?      @map("subscription_id")
+  startsAt       DateTime? @map("starts_at")
+  expiresAt      DateTime? @map("expires_at")
+  createdAt      DateTime? @map("created_at")
+  updatedAt      DateTime? @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoice      Invoice?      @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@map("entitlements")
+  @@unique([invoiceId, itemRef])
+  @@unique([invoiceId])
+  @@index([userId, scope, status])
+  @@index([itemType, itemRef])
+  @@index([subscriptionId])
+}
+
+model PaymentEvent {
+  id          Int      @id @default(autoincrement())
+  eventId     String   @unique @map("event_id")
+  orderId     String   @map("order_id")
+  status      String?
+  fraudStatus String?  @map("fraud_status")
+  payload     String?
+  processed   Boolean  @default(false)
+  receivedAt  DateTime @default(now()) @map("received_at")
+
+  @@map("payment_events")
+  @@index([orderId])
+}
+
+// ── Better Auth (tabel identitas/sesi dikelola library) ──────────────
+// Dipisah dari `users` (maubisa_core) dan ditautkan lewat users.auth_user_id.
+
+model AuthUser {
+  id              String   @id
+  name            String
+  email           String   @unique
+  emailVerified   Boolean  @default(false)
+  image           String?
+  twoFactorEnabled Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  sessions  AuthSession[]
+  accounts  AuthAccount[]
+  twoFactor AuthTwoFactor[]
+
+  @@map("auth_users")
+}
+
+model AuthTwoFactor {
+  id                      String   @id
+  secret                  String
+  backupCodes             String
+  verified                Boolean  @default(false)
+  failedVerificationCount Int      @default(0)
+  userId                  String
+  user                    AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_two_factors")
+}
+
+model AuthSession {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_sessions")
+}
+
+model AuthAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  AuthUser  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("auth_accounts")
+}
+
+model AuthVerification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("auth_verifications")
+}

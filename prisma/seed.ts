@@ -1,0 +1,237 @@
+import { PrismaClient } from "@prisma/client";
+import { auth } from "../src/lib/auth";
+
+const prisma = new PrismaClient();
+
+const DEMO_EMAIL = "budi@example.com";
+const DEMO_PASSWORD = "password123";
+// Akun admin demo terpisah: masuk sebagai admin -> otomatis mendarat di /admin.
+// (budi = user biasa; admin@maubisa.id = admin lewat ADMIN_EMAILS di lingkungan demo.)
+const ADMIN_EMAIL = "admin@maubisa.id";
+const ADMIN_PASSWORD = "password123";
+
+async function main() {
+  // Bersihkan user demo dulu supaya seed bisa dijalankan berulang (idempoten).
+  // Hapus anak-anaknya lebih dulu (invoices onDelete: Restrict memblok hapus user).
+  await prisma.authUser.deleteMany({ where: { email: DEMO_EMAIL } });
+  const existing = await prisma.user.findFirst({ where: { email: DEMO_EMAIL } });
+  if (existing) {
+    await prisma.eventRegistration.deleteMany({ where: { userId: existing.id } });
+    await prisma.entitlement.deleteMany({ where: { userId: existing.id } });
+    await prisma.invoice.deleteMany({ where: { userId: existing.id } });
+    await prisma.subscription.deleteMany({ where: { userId: existing.id } });
+    await prisma.userPreference.deleteMany({ where: { userId: existing.id } });
+    await prisma.user.delete({ where: { id: existing.id } });
+  }
+
+  // Bersihkan akun admin demo juga (idempoten). Admin tak punya data billing seed.
+  await prisma.authUser.deleteMany({ where: { email: ADMIN_EMAIL } });
+  const existingAdmin = await prisma.user.findFirst({ where: { email: ADMIN_EMAIL } });
+  if (existingAdmin) {
+    await prisma.entitlement.deleteMany({ where: { userId: existingAdmin.id } });
+    await prisma.invoice.deleteMany({ where: { userId: existingAdmin.id } });
+    await prisma.subscription.deleteMany({ where: { userId: existingAdmin.id } });
+    await prisma.userPreference.deleteMany({ where: { userId: existingAdmin.id } });
+    await prisma.user.delete({ where: { id: existingAdmin.id } });
+  }
+
+  const now = new Date();
+  const periodEnd = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+  const user = await prisma.user.create({
+    data: {
+      uuid: crypto.randomUUID(),
+      name: "Budi Santoso",
+      email: DEMO_EMAIL,
+      phone: "081234567890",
+      status: "active",
+      emailVerifiedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  await prisma.product.upsert({
+    where: { code: "mbg-plus" },
+    update: {},
+    create: {
+      code: "mbg-plus",
+      name: "MBG+ (Langganan)",
+      scope: "app",
+      type: "subscription",
+      billingInterval: "monthly",
+      price: 75000,
+      currency: "IDR",
+      active: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  await prisma.product.upsert({
+    where: { code: "mbg-forge" },
+    update: {},
+    create: {
+      code: "mbg-forge",
+      name: "MBG Forge (Webinar)",
+      scope: "app",
+      type: "event",
+      billingInterval: "once",
+      price: 29000,
+      currency: "IDR",
+      active: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  // Paket bimbingan skripsi (Motion C / Payment Link). Harga otoritatif dari sini.
+  for (const p of [
+    { code: "thesis-mulai", name: "Bimbingan Skripsi — Mulai", price: 150000 },
+    { code: "thesis-sempro", name: "Bimbingan Skripsi — Sempro", price: 850000 },
+    { code: "thesis-wisuda", name: "Bimbingan Skripsi — Wisuda", price: 1550000 },
+  ]) {
+    await prisma.product.upsert({
+      where: { code: p.code },
+      update: {},
+      create: {
+        code: p.code,
+        name: p.name,
+        scope: "thesis",
+        type: "service",
+        billingInterval: "once",
+        price: p.price,
+        currency: "IDR",
+        active: true,
+        createdAt: now,
+        updatedAt: now,
+      },
+    });
+  }
+
+  const sub = await prisma.subscription.create({
+    data: {
+      userId: user.id,
+      productCode: "mbg-plus",
+      status: "active",
+      provider: "midtrans",
+      interval: "monthly",
+      amount: 75000,
+      currency: "IDR",
+      currentPeriodStart: now,
+      currentPeriodEnd: periodEnd,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const inv1 = await prisma.invoice.create({
+    data: {
+      userId: user.id,
+      orderId: "MB-" + Date.now(),
+      productCode: "mbg-plus",
+      itemType: "subscription",
+      itemRef: "mbg-plus",
+      itemName: "MBG+ (Langganan) - 1 bulan",
+      unitPrice: 75000,
+      quantity: 1,
+      subscriptionId: sub.id,
+      scope: "app",
+      grossAmount: 75000,
+      currency: "IDR",
+      status: "paid",
+      motion: "snap",
+      paymentType: "qris",
+      paidAt: now,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  await prisma.entitlement.create({
+    data: {
+      userId: user.id,
+      productCode: "mbg-plus",
+      itemType: "subscription",
+      itemRef: "mbg-plus",
+      scope: "app",
+      status: "active",
+      source: "subscription",
+      invoiceId: inv1.id,
+      subscriptionId: sub.id,
+      startsAt: now,
+      expiresAt: periodEnd,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  // Contoh webinar berbayar (sekali bayar) supaya ada variasi.
+  const inv2 = await prisma.invoice.create({
+    data: {
+      userId: user.id,
+      orderId: "MB-" + (Date.now() + 1),
+      itemType: "event",
+      itemRef: "mbg-forge-2026-07",
+      itemName: "MBG Forge: Personal Branding",
+      unitPrice: 29000,
+      quantity: 1,
+      scope: "app",
+      grossAmount: 29000,
+      currency: "IDR",
+      status: "paid",
+      motion: "snap",
+      paymentType: "gopay",
+      paidAt: now,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  await prisma.entitlement.create({
+    data: {
+      userId: user.id,
+      itemType: "event",
+      itemRef: "mbg-forge-2026-07",
+      scope: "app",
+      status: "active",
+      source: "checkout",
+      invoiceId: inv2.id,
+      startsAt: now,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log(`Seeded user ${user.email} (id ${user.id}) + 1 langganan, 2 invoice, 2 entitlement.`);
+
+  // Akun demo Better Auth (email+password) supaya bisa langsung login.
+  // databaseHook akan menautkan ke core user budi (upsert by email -> set auth_user_id).
+  try {
+    await auth.api.signUpEmail({
+      body: { name: "Budi Santoso", email: DEMO_EMAIL, password: DEMO_PASSWORD },
+    });
+    console.log(`Akun demo (user) siap: ${DEMO_EMAIL} / ${DEMO_PASSWORD}`);
+  } catch (e) {
+    console.log("Lewati pembuatan akun demo:", String(e).slice(0, 100));
+  }
+
+  // Akun ADMIN demo: dengan ADMIN_EMAILS berisi email ini, login sebagai admin akan
+  // otomatis diarahkan ke /admin (dashboard). Pakai untuk memperagakan sisi admin.
+  try {
+    await auth.api.signUpEmail({
+      body: { name: "Admin Maubisa", email: ADMIN_EMAIL, password: ADMIN_PASSWORD },
+    });
+    console.log(`Akun demo (admin) siap: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+  } catch (e) {
+    console.log("Lewati pembuatan akun admin demo:", String(e).slice(0, 100));
+  }
+}
+
+main()
+  .then(() => prisma.$disconnect())
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
