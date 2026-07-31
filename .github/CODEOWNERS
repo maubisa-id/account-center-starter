@@ -1,0 +1,18 @@
+# Code owners for maubisa-account-center.
+# These owners are automatically requested for review on matching pull requests.
+# Docs: https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything in the repo
+*                       @maubisa-id/engineering
+
+# Payments are high-stakes — require payments/backend review
+/src/lib/midtrans/      @maubisa-id/payments
+/src/lib/midtrans-card.ts @maubisa-id/payments
+/src/app/api/pay/       @maubisa-id/payments
+/src/app/api/webhook/   @maubisa-id/payments
+
+# Database schema changes
+/prisma/                @maubisa-id/engineering
+
+# CI / repo governance
+/.github/               @maubisa-id/engineering

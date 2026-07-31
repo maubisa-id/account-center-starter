@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+dev.db
+dev.db-journal
+*.log
+dev.log
+files
+.vscode
+.idea
+npm-debug.log*
