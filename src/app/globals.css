@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #faf8f5;
+  --color-cream-100: #f5f1ea;
+  --color-cream-200: #ece5d9;
+
+  --color-ink: #141414;
+  --color-ink-soft: #3f3f46;
+  --color-muted: #6b6b6b;
+
+  --color-sidebar: #0a48b7;
+
+  --color-brand-50: #eef4fe;
+  --color-brand-100: #dbe6fb;
+  --color-brand-200: #b6ccf6;
+  --color-brand-300: #7f9ff0;
+  --color-brand-400: #3f6be0;
+  --color-brand-500: #0a48b7;
+  --color-brand-600: #083a95;
+  --color-brand-700: #062c70;
+  --color-brand-900: #05204f;
+  --color-brand: #0a48b7;
+
+  --color-sky: #419fe8;
+  --color-teal: #5099bb;
+  --color-lime: #9acc25;
+  --color-rose-accent: #e61e38;
+  --color-lime-accent: #6f9e12;
+  --color-lime-bright: #84b81a;
+
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-quint: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --radius-bezel: 1.75rem;
+
+  --shadow-soft: 0 1px 2px rgba(11, 15, 23, 0.05), 0 20px 45px -28px rgba(11, 15, 23, 0.28);
+  --shadow-lift: 0 1px 2px rgba(11, 15, 23, 0.06), 0 34px 60px -30px rgba(11, 15, 23, 0.4);
+  --shadow-brand: 0 1px 2px rgba(10, 72, 183, 0.12), 0 18px 40px -12px rgba(10, 72, 183, 0.45);
+}
+
+@theme inline {
+  --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-cabinet), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 620px at 100% -8%, rgba(10, 72, 183, 0.1), transparent 58%),
+    radial-gradient(1000px 520px at -8% 2%, rgba(10, 72, 183, 0.07), transparent 55%),
+    var(--color-canvas);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(10, 72, 183, 0.16);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-cabinet), ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Indikator fokus keyboard yang konsisten di seluruh elemen interaktif.
+     Hanya tampil untuk navigasi keyboard (:focus-visible), tidak saat klik mouse. */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 23, 42, 0.16) transparent;
+}
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.14);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.26);
+  background-clip: content-box;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-rise {
+  animation: riseIn 0.72s var(--ease-out-quint) both;
+}
+.animate-fade {
+  animation: fadeIn 0.4s var(--ease-fluid) both;
+}
+
+/* ── Auth pages entrance (staggered fade / slide) ── */
+@keyframes authElement {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+@keyframes authSlideRight {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+  }
+}
+@keyframes authTestimonial {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-element {
+  opacity: 0;
+  animation: authElement 0.8s var(--ease-out-quint) forwards;
+}
+.animate-slide-right {
+  opacity: 0;
+  animation: authSlideRight 0.9s var(--ease-out-quint) forwards;
+}
+.animate-testimonial {
+  opacity: 0;
+  animation: authTestimonial 0.8s var(--ease-out-quint) forwards;
+}
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+.animate-delay-600 { animation-delay: 0.6s; }
+.animate-delay-700 { animation-delay: 0.7s; }
+.animate-delay-800 { animation-delay: 0.8s; }
+.animate-delay-900 { animation-delay: 0.9s; }
+.animate-delay-1000 { animation-delay: 1s; }
+.animate-delay-1200 { animation-delay: 1.2s; }
+.animate-delay-1400 { animation-delay: 1.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-fade {
+    animation: none;
+  }
+  .animate-element,
+  .animate-slide-right,
+  .animate-testimonial {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+/* Cetak: paksa warna background & teks tetap tercetak (default browser membuangnya
+   demi hemat tinta -> header navy hilang & logo putih jadi tak terlihat). */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  /* Hilangkan margin ekstra & pastikan lebar penuh saat dicetak. */
+  @page {
+    margin: 14mm;
+  }
+}

@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Batalkan run lama pada branch yang sama saat ada push baru
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: CI hanya membaca kode (tak butuh write apa pun).
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint, typecheck, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # CI memakai SQLite + nilai dummy: build tidak butuh kredensial produksi.
+      - name: Prepare env (CI)
+        run: |
+          cp .env.example .env
+          {
+            echo "DATABASE_URL=file:./dev.db"
+            echo "DB_PROVIDER=sqlite"
+            echo "BETTER_AUTH_SECRET=ci-dummy-secret-not-used-in-production-000"
+            echo "BETTER_AUTH_URL=http://localhost:3000"
+          } >> .env
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Sync database schema
+        run: npx prisma db push --skip-generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          # Jangan upload source map Sentry di CI (tak ada token)
+          SENTRY_AUTH_TOKEN: ""

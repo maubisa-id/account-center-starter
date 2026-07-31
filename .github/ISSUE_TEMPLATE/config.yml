@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Kerentanan keamanan
+    url: https://github.com/acme-id/acme-account-center/security/policy
+    about: Jangan buka issue publik untuk kerentanan. Ikuti kebijakan keamanan (SECURITY.md).
+  - name: Pertanyaan umum / dukungan
+    url: mailto:halo@example.com
+    about: Untuk pertanyaan produk atau dukungan, hubungi tim Acme.
