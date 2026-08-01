@@ -1,0 +1,32 @@
+name: Permintaan fitur
+description: Usulkan ide atau peningkatan
+title: "[Fitur]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah yang ingin diselesaikan
+      description: Fitur ini menyelesaikan masalah apa? Untuk siapa?
+      placeholder: Sebagai <pengguna>, saya ingin <tujuan> supaya <manfaat>.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solusi yang diusulkan
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif yang dipertimbangkan
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Konteks tambahan
+      description: Mockup, tautan, atau referensi.
+    validations:
+      required: false

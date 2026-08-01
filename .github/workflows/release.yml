@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+# Hanya butuh menulis Release (contents). Tak ada trigger dari kontributor luar.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      # Pakai gh CLI bawaan runner (bukan action pihak-3) — supply chain paling aman.
+      # GITHUB_TOKEN default cukup untuk membuat Release di repo yang sama.
+      # Idempoten: kalau Release untuk tag ini sudah ada (mis. dibuat manual dengan catatan
+      # rilis kurasi), lewati tanpa gagal — supaya workflow tetap hijau.
+      - name: Create release (kalau belum ada)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME sudah ada — lewati."
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes
+          fi

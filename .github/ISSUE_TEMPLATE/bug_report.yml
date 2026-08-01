@@ -1,0 +1,54 @@
+name: Laporan bug
+description: Laporkan masalah agar bisa kami perbaiki
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih sudah melapor. Jangan sertakan data sensitif (kredensial, token, PII).
+        Untuk kerentanan keamanan, JANGAN pakai form ini — ikuti SECURITY.md.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Apa yang terjadi?
+      description: Jelaskan bug-nya dengan jelas dan ringkas.
+      placeholder: Saat saya ..., yang terjadi ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah reproduksi
+      placeholder: |
+        1. Buka '...'
+        2. Klik '...'
+        3. Lihat error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang diharapkan
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area terdampak
+      options:
+        - Checkout / pembayaran
+        - Autentikasi / akun
+        - Langganan
+        - Dashboard / UI
+        - Webhook / API
+        - Lainnya
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Lingkungan
+      description: Browser, OS, versi Node, dev/produksi.
+    validations:
+      required: false

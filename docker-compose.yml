@@ -1,0 +1,66 @@
+# docker-compose.yml — demo/self-host lengkap: aplikasi + MySQL dalam satu paket.
+# Cocok untuk Coolify (pilih "Docker Compose") atau `docker compose up` di VPS.
+#
+# PENTING: MySQL di sini TERPISAH dari Cloud SQL produksi — jadi demo tidak pernah
+# menyentuh data asli. Datanya tersimpan di volume `db-data`.
+#
+# Langkah cepat:
+#   1) Salin .env.example -> .env, isi minimal BETTER_AUTH_SECRET + kunci Midtrans Sandbox.
+#   2) `docker compose up -d --build`  (tabel dibuat otomatis saat start).
+#   3) Isi data contoh sekali: set SEED_ON_START=1 di .env lalu restart, ATAU jalankan:
+#      `docker compose exec app npm run seed`
+#
+# Coolify: hubungkan repo, pilih Compose ini, isi Environment Variables di UI, aktifkan
+# domain + HTTPS (wajib supaya webhook Midtrans yang butuh HTTPS publik bisa masuk).
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        DB_PROVIDER: mysql
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Database: tunjuk ke service `db` di bawah (BUKAN Cloud SQL produksi).
+      DB_PROVIDER: mysql
+      DATABASE_URL: "mysql://maubisa:${DB_PASSWORD:-maubisa}@db:3306/maubisa_core"
+      # Wajib. Buat rahasia acak: openssl rand -base64 32
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+      BETTER_AUTH_URL: "${BETTER_AUTH_URL:-http://localhost:3000}"
+      # Demo: tampilkan bilah "Mode Demo", buat tabel di MySQL kosong ini, & isi data contoh.
+      NEXT_PUBLIC_DEMO_MODE: "${NEXT_PUBLIC_DEMO_MODE:-1}"
+      DB_PUSH_ON_START: "1"
+      SEED_ON_START: "${SEED_ON_START:-0}"
+      # Midtrans (Sandbox untuk demo).
+      MIDTRANS_SERVER_KEY: "${MIDTRANS_SERVER_KEY:-}"
+      NEXT_PUBLIC_MIDTRANS_CLIENT_KEY: "${NEXT_PUBLIC_MIDTRANS_CLIENT_KEY:-}"
+      MIDTRANS_IS_PRODUCTION: "${MIDTRANS_IS_PRODUCTION:-false}"
+      # Email (opsional untuk demo; tanpa ini OTP hanya tercetak di log).
+      MAIL_HOST: "${MAIL_HOST:-}"
+      MAIL_PORT: "${MAIL_PORT:-587}"
+      MAIL_USERNAME: "${MAIL_USERNAME:-}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD:-}"
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: maubisa_core
+      MYSQL_USER: maubisa
+      MYSQL_PASSWORD: "${DB_PASSWORD:-maubisa}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root-ganti-ini}"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_ROOT_PASSWORD:-root-ganti-ini}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-data:
