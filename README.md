@@ -16,7 +16,7 @@ sesuai merek Anda dan dipakai ulang di web, aplikasi, maupun kelas.
 <p>
   <a href="https://demo-akun.maubisa.id"><img alt="Demo langsung" src="https://img.shields.io/badge/Demo%20langsung-demo--akun.maubisa.id-0a48b7?style=for-the-badge&logo=vercel&logoColor=white"></a>
   <a href="https://github.com/maubisa-id/account-center-starter/generate"><img alt="Gunakan template ini" src="https://img.shields.io/badge/Gunakan%20template%20ini-2ea44f?style=for-the-badge&logo=github&logoColor=white"></a>
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter&env=DB_PROVIDER,DATABASE_URL,BETTER_AUTH_SECRET,MIDTRANS_SERVER_KEY,NEXT_PUBLIC_MIDTRANS_CLIENT_KEY&envDescription=Provider%20%2B%20koneksi%20database%2C%20kunci%20Better%20Auth%2C%20dan%20kunci%20Midtrans%20Core%20API&envLink=https://github.com/maubisa-id/account-center-starter/blob/main/.env.example&project-name=account-center&repository-name=account-center-starter"><img alt="Deploy with Vercel" src="https://vercel.com/button"></a>
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter&env=DB_PROVIDER,DATABASE_URL,BETTER_AUTH_SECRET,TURNSTILE_SECRET_KEY&envDescription=Provider%20%2B%20koneksi%20database%2C%20rahasia%20Better%20Auth%2C%20dan%20kunci%20Turnstile%20anti-bot%20%28wajib%20di%20produksi%29&envLink=https://github.com/maubisa-id/account-center-starter/blob/main/.env.example&project-name=account-center&repository-name=account-center-starter"><img alt="Deploy with Vercel" src="https://vercel.com/button"></a>
 </p>
 
 <!-- Badge LIVE: nilainya diambil otomatis oleh shields.io dari GitHub (mirip skor
@@ -186,8 +186,11 @@ pakai ulang. Untuk menjadikannya milik Anda sendiri:
    `src/lib/catalog.ts`. Harga tetap dihitung di server, bukan dari halaman.
 4. **Isi kunci Midtrans Anda** — dari [dashboard Midtrans](https://dashboard.midtrans.com/)
    (Sandbox untuk uji, Production untuk rilis) ke `.env`.
-5. **Deploy** — lihat [docs/produksi-mysql.md](./docs/produksi-mysql.md) untuk MySQL/PostgreSQL.
-   `Dockerfile` tersedia di root.
+5. **Deploy** — cara tercepat: tombol **Deploy with Vercel** di atas (bawa DB terkelola sendiri,
+   mis. [Neon](https://neon.tech)/[Supabase](https://supabase.com); `vercel.json` sudah mengatur
+   `prisma db push` + `next build` otomatis). Setelah rilis pertama, set `BETTER_AUTH_URL` ke domain
+   final Anda lalu redeploy. Untuk MySQL/PostgreSQL manual atau Docker: lihat
+   [docs/produksi-mysql.md](./docs/produksi-mysql.md); `Dockerfile` tersedia di root.
 
 > [!TIP]
 > [`PRODUCT.md`](./PRODUCT.md) dan [`DESIGN.md`](./DESIGN.md) berisi konteks produk & sistem
