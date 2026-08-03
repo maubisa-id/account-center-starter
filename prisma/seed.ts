@@ -6,8 +6,8 @@ const prisma = new PrismaClient();
 const DEMO_EMAIL = "budi@example.com";
 const DEMO_PASSWORD = "password123";
 // Akun admin demo terpisah: masuk sebagai admin -> otomatis mendarat di /admin.
-// (budi = user biasa; admin@maubisa.id = admin lewat ADMIN_EMAILS di lingkungan demo.)
-const ADMIN_EMAIL = "admin@maubisa.id";
+// (budi = user biasa; admin@example.com = admin lewat ADMIN_EMAILS di lingkungan demo.)
+const ADMIN_EMAIL = "admin@example.com";
 const ADMIN_PASSWORD = "password123";
 
 async function main() {

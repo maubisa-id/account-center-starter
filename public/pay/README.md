@@ -1,8 +1,8 @@
 # Logo Metode Pembayaran
 
 Berkas logo di folder ini di-raster ke **PNG transparan** dari pustaka SVG
-**idn-finlogos** (<https://github.com/hafidznoor/idn-finlogos>, v2.5.0) — koleksi logo
-fintech & lembaga keuangan Indonesia yang teroptimasi (SVGO).
+**idn-finlogos** (<https://github.com/hafidznoor/idn-finlogos>, v2.5.0) - koleksi logo
+fintech & lembaga keuangan Indonesia yang dioptimasi dengan SVGO.
 
 ## Kenapa PNG (bukan SVG langsung)?
 
@@ -10,6 +10,27 @@ SVG idn-finlogos dioptimasi untuk pemakaian **inline / komponen React** (tanpa `
 dan tanpa width/height), sehingga tidak selalu ter-render andal saat dimuat sebagai
 gambar biasa lintas browser. Karena `brand-logo.tsx` memakai gambar biasa, tiap SVG
 di-raster ke PNG 96px transparan (via `sharp`) supaya tampil konsisten di mana pun.
+
+## Cara dipakai di aplikasi
+
+- Aset di folder ini dilayani sebagai berkas statis Next.js pada path `/pay/<nama-berkas>`.
+- `src/lib/pay-assets.ts` membentuk URL lewat `payIcon(...)`; default-nya `/pay`, dan bisa
+  diarahkan ke CDN atau bucket dengan `NEXT_PUBLIC_PAY_ICON_BASE`.
+- `src/components/pay/brand-logo.tsx` memakai logo metode pembayaran untuk QRIS, e-wallet,
+  dan Virtual Account. Metode `card` memakai ikon kartu generik karena beberapa jaringan
+  kartu dapat dipakai dalam satu form.
+- Logo jaringan kartu standar dipakai di `card-form.tsx`; logo 3DS dipakai di
+  `three-ds-modal.tsx` dan `secure-strip.tsx`.
+
+## Aturan mengganti atau menambah logo
+
+1. Jaga nama berkas stabil bila komponen sudah merujuk ke nama itu. Perubahan nama perlu
+   diselaraskan dengan registry logo di kode.
+2. Gunakan PNG transparan agar konsisten dengan cara render saat ini.
+3. Pilih varian yang paling jelas pada tinggi kecil, karena logo muncul di kartu metode bayar
+   dan instruksi pembayaran.
+4. Jangan mencampur aset produksi dengan eksperimen. Bila perlu uji CDN, arahkan base URL
+   lewat env, bukan dengan mengubah path di komponen.
 
 ## Lisensi & merek
 

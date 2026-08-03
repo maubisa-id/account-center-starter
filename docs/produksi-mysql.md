@@ -1,4 +1,4 @@
-# Produksi MySQL — Panduan Enterprise (maubisa_core)
+# Produksi MySQL - Panduan Enterprise (maubisa_core)
 
 Panduan migrasi **SQLite (dev) → MySQL/Cloud SQL (produksi)** untuk `maubisa-account-center`,
 disusun untuk standar enterprise: konsistensi engine, integritas data, performa, keamanan, dan
@@ -30,7 +30,7 @@ Lalu `npx prisma generate`. Guard akan menolak start bila skema URL ≠ provider
 
 - **Engine:** MySQL 8.0+ (bukan 5.7; butuh CTE, `utf8mb4`, JSON native, invisible index).
 - **Charset/Collation server:** `utf8mb4` / `utf8mb4_0900_ai_ci` (emoji & nama internasional aman).
-- **Storage engine:** InnoDB (default) — transaksional, row-level lock, FK. WAJIB untuk webhook
+- **Storage engine:** InnoDB (default) - transaksional, row-level lock, FK. WAJIB untuk webhook
   pembayaran yang memakai `prisma.$transaction`.
 - **Timezone:** simpan UTC di DB; aplikasi memformat ke `Asia/Jakarta` (sudah dilakukan di kode).
 - **High availability:** aktifkan (regional) untuk produksi; automatic backup + PITR
@@ -38,10 +38,10 @@ Lalu `npx prisma generate`. Guard akan menolak start bila skema URL ≠ provider
 - **Koneksi:** Cloud SQL Auth Proxy (mysql://user:pass@127.0.0.1:3306/db) atau socket
   (`?socket=/cloudsql/PROJECT:REGION:INSTANCE`). Jangan ekspos IP publik tanpa allowlist.
 - **Parameter (flags) yang disarankan:**
-  - `innodb_buffer_pool_size` ~ 60-70% RAM instance.
-  - `max_connections` sesuai pool (lihat 5) + headroom Directus/produk lain.
-  - `sql_mode` mencakup `STRICT_TRANS_TABLES` (tolak data tak valid — enterprise default).
-  - `require_secure_transport = ON` (paksa TLS).
+ - `innodb_buffer_pool_size` ~ 60-70% RAM instance.
+ - `max_connections` sesuai pool (lihat 5) + headroom Directus/produk lain.
+ - `sql_mode` mencakup `STRICT_TRANS_TABLES` (tolak data tak valid - enterprise default).
+ - `require_secure_transport = ON` (paksa TLS).
 
 ---
 
@@ -50,7 +50,7 @@ Lalu `npx prisma generate`. Guard akan menolak start bila skema URL ≠ provider
 Skema Prisma memakai `String` untuk enum/JSON supaya jalan di SQLite. Di MySQL, tingkatkan ke tipe
 native agar integritas dijamin DB, bukan hanya aplikasi. Ada dua jalur:
 
-**Jalur A — Prisma murni (paling sederhana, disarankan awal).** Biarkan `String`/`Decimal`, cukup
+**Jalur A - Prisma murni (paling sederhana, disarankan awal).** Biarkan `String`/`Decimal`, cukup
 tambahkan atribut `@db.*` agar kolom presisi benar:
 
 ```prisma
@@ -62,7 +62,7 @@ metadata      String? @db.Json
 // atau naikkan ke enum native (Jalur B).
 ```
 
-**Jalur B — DDL kanonik (paling ketat).** Jalankan `maubisa-core-schema.sql` yang sudah memakai
+**Jalur B - DDL kanonik (paling ketat).** Jalankan `maubisa-core-schema.sql` yang sudah memakai
 `ENUM`, `DECIMAL(12,2)`, `JSON`, `TIMESTAMP`, FK, dan index. Prisma lalu `db pull` untuk
 menyelaraskan model. Dipakai bila ingin constraint enum & FK ditegakkan MySQL.
 
@@ -73,10 +73,10 @@ pakai ENUM**, **`order_id` UNIQUE** (idempotensi), **JSON native** untuk payload
 
 Pastikan DDL produksi memuat (sudah diselaraskan di `maubisa-core-schema.sql`):
 
-- `invoices.charge_payload JSON NULL` — instruksi bayar (resume VA/QR).
+- `invoices.charge_payload JSON NULL` - instruksi bayar (resume VA/QR).
 - `invoices.motion` mencakup `'coreapi','coreapi-guest','coreapi-recurring','payment_link','web-utama','manual'` (dan `'snap'` utk histori).
 - `subscriptions.status` mencakup `'pending'` (baris dibuat saat checkout, dinaikkan webhook).
-- `subscriptions.saved_token VARCHAR(120) NULL` + `saved_token_expires_at TIMESTAMP NULL` —
+- `subscriptions.saved_token VARCHAR(120) NULL` + `saved_token_expires_at TIMESTAMP NULL` -
   token kartu untuk recurring. **Perlakukan `saved_token` sebagai rahasia** (6).
 - **`payment_methods`** (kartu tersimpan One Click): `saved_token` (RAHASIA, token Midtrans bukan
   PAN), `brand`, `bank_code` (BIN API), `last4`, `exp_month/year`, `is_primary`, UNIQUE
@@ -96,15 +96,15 @@ Pastikan DDL produksi memuat (sudah diselaraskan di `maubisa-core-schema.sql`):
 ## 4. Integritas & index (yang benar-benar dipakai)
 
 - **UNIQUE:** `users.email`, `users.uuid`, `invoices.order_id`, `payment_events.event_id`,
-  `entitlements (invoice_id, item_ref)`, `payment_methods (user_id, saved_token)` — kunci
+  `entitlements (invoice_id, item_ref)`, `payment_methods (user_id, saved_token)` - kunci
   idempotensi & dedup (ADR-003).
-- **Foreign key** (InnoDB): `invoices.user_id -> users.id` (ON DELETE RESTRICT — jangan hapus user
+- **Foreign key** (InnoDB): `invoices.user_id -> users.id` (ON DELETE RESTRICT - jangan hapus user
   yang punya tagihan; patuh retensi pajak), `entitlements/subscriptions.user_id -> users.id`
   (CASCADE), `invoices.subscription_id -> subscriptions.id` (SET NULL).
 - **Index lookup** (sesuai query nyata): `invoices(user_id)`, `invoices(status)`,
   `invoices(item_type,item_ref)`, `subscriptions(user_id,status)`,
   `subscriptions(current_period_end)`, `subscriptions(provider_ref)` (dipakai matching renewal
-  webhook — TAMBAHKAN bila belum ada), `entitlements(user_id,scope,status)`,
+  webhook - TAMBAHKAN bila belum ada), `entitlements(user_id,scope,status)`,
   `payment_events(order_id)`.
 - **Charset per kolom teks** ikut server (`utf8mb4`). Hindari `utf8` (3-byte lama).
 
@@ -158,14 +158,14 @@ Prisma membuka pool per instance. Di beberapa container/replica, total koneksi b
 
 ## 8. Operasional & kapasitas
 
-- **Read replica** untuk laporan berat/analitik lintas Directus+core (jangan bebani primary) —
+- **Read replica** untuk laporan berat/analitik lintas Directus+core (jangan bebani primary) -
   lihat `directus-maubisa/docs/skalabilitas.md`.
 - **Monitoring:** slow query log ON (threshold mis. 500 ms), alert pada `Threads_connected`,
   replication lag, buffer pool hit rate, disk.
-- **SLO webhook:** p95 < 800 ms — pastikan index di atas ada supaya lookup invoice/
+- **SLO webhook:** p95 < 800 ms - pastikan index di atas ada supaya lookup invoice/
   subscription cepat di bawah beban.
 - Satu instance Cloud SQL menampung beberapa database logis (`maubisa_core`, `app_maubisa`,
-  `kelas_maubisa`, `thesis_maubisa`) — ADR-001 2.2.
+  `kelas_maubisa`, `thesis_maubisa`) - ADR-001 2.2.
 
 ---
 
@@ -185,7 +185,7 @@ Prisma membuka pool per instance. Di beberapa container/replica, total koneksi b
 
 ## Lihat juga
 
-- `directus-maubisa/docs/arsitektur/maubisa-core-schema.sql` — DDL kanonik
-- `directus-maubisa/docs/deploy-dan-kapasitas.md` — Cloud SQL & Coolify
-- `directus-maubisa/docs/skalabilitas.md` — read replica & penskalaan
-- `src/lib/db-config.ts` — guard provider fail-fast
+- `directus-maubisa/docs/arsitektur/maubisa-core-schema.sql` - DDL kanonik
+- `directus-maubisa/docs/deploy-dan-kapasitas.md` - Cloud SQL & Coolify
+- `directus-maubisa/docs/skalabilitas.md` - read replica & penskalaan
+- `src/lib/db-config.ts` - guard provider fail-fast

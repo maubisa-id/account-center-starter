@@ -26,7 +26,7 @@
 - [ ] Rahasia tidak bocor ke klien/log
 - [ ] Diuji di Midtrans Sandbox (charge + webhook)
 - [ ] Skema selaras dengan `maubisa-core-schema.sql`
-- [ ] N/A — PR ini tidak menyentuh pembayaran
+- [ ] N/A - PR ini tidak menyentuh pembayaran
 
 ## Catatan untuk reviewer
 

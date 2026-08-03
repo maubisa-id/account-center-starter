@@ -11,16 +11,16 @@ pembayaran.
 ## Daftar isi
 
 - [Menyiapkan lingkungan](#menyiapkan-lingkungan)
-  - [Prasyarat](#prasyarat)
-  - [Langkah cepat](#langkah-cepat)
-  - [Variabel lingkungan minimal](#variabel-lingkungan-minimal)
-  - [Akun demo (hasil seed)](#akun-demo-hasil-seed)
+ - [Prasyarat](#prasyarat)
+ - [Langkah cepat](#langkah-cepat)
+ - [Variabel lingkungan minimal](#variabel-lingkungan-minimal)
+ - [Akun demo (hasil seed)](#akun-demo-hasil-seed)
 - [Orientasi struktur proyek](#orientasi-struktur-proyek)
 - [Menjalankan tes](#menjalankan-tes)
 - [Gerbang kualitas (wajib hijau)](#gerbang-kualitas-wajib-hijau)
 - [Alur kerja](#alur-kerja)
-  - [Branch](#branch)
-  - [Conventional Commits](#conventional-commits)
+ - [Branch](#branch)
+ - [Conventional Commits](#conventional-commits)
 - [Standar kode](#standar-kode)
 - [Checklist pembayaran](#checklist-pembayaran)
 - [Smoke test webhook (tanpa tunnel)](#smoke-test-webhook-tanpa-tunnel)
@@ -33,11 +33,11 @@ pembayaran.
 
 ### Prasyarat
 
-- **Node.js 22** — versinya dikunci di [`.nvmrc`](./.nvmrc). Pakai `nvm use` supaya
+- **Node.js 22** - versinya dikunci di [`.nvmrc`](./.nvmrc). Pakai `nvm use` supaya
   konsisten dengan CI. Versi lain bisa jalan tapi tidak didukung.
-- **npm** (ikut Node) — proyek memakai `package-lock.json`, jadi gunakan `npm ci`/`npm install`,
+- **npm** (ikut Node) - proyek memakai `package-lock.json`, jadi gunakan `npm ci`/`npm install`,
   bukan yarn/pnpm.
-- **Git**. Tidak butuh Docker/MySQL untuk dev — SQLite dipakai secara default.
+- **Git**. Tidak butuh Docker/MySQL untuk dev - SQLite dipakai secara default.
 
 ### Langkah cepat
 
@@ -52,11 +52,11 @@ npm run dev                    # http://localhost:3000
 
 > [!TIP]
 > `npx prisma db push` cocok untuk dev cepat (SQLite). Di produksi (MySQL) gunakan migrasi
-> berversi — lihat [`docs/produksi-mysql.md`](./docs/produksi-mysql.md).
+> berversi - lihat [`docs/produksi-mysql.md`](./docs/produksi-mysql.md).
 
 ### Variabel lingkungan minimal
 
-Untuk dev lokal, hampir semua kunci boleh kosong — aplikasi dirancang agar tetap jalan
+Untuk dev lokal, hampir semua kunci boleh kosong - aplikasi dirancang agar tetap jalan
 (fitur berbayar/eksternal menampilkan status "belum tersedia" alih-alih error). Yang benar-benar
 perlu diisi:
 
@@ -72,14 +72,14 @@ perlu diisi:
 | `MAIL_*` | opsional | Kosong → OTP/tautan dicetak ke konsol (hanya non-produksi). |
 | `NEXT_PUBLIC_SENTRY_DSN` | opsional | Sentry hanya aktif di produksi + DSN terisi. Dev mati total. |
 
-Semua variabel didokumentasikan di [`.env.example`](./.env.example) — baca komentarnya,
+Semua variabel didokumentasikan di [`.env.example`](./.env.example) - baca komentarnya,
 karena berisi konteks operasional (URL webhook Midtrans, tunnel, dsb).
 
 ### Akun demo (hasil seed)
 
 `npm run seed` mengisi produk contoh + akun demo. Akun yang dipakai smoke test webhook:
 
-- **budi@example.com** — dipakai oleh `scripts/test-webhook.mjs` (lihat di bawah).
+- **budi@example.com** - dipakai oleh `scripts/test-webhook.mjs` (lihat di bawah).
 
 ## Orientasi struktur proyek
 
@@ -116,7 +116,7 @@ maubisa-account-center/
 │  ├─ unit/                 # Vitest: signature, order-id, safe-redirect, status, guest-order
 │  └─ integration/
 ├─ next.config.ts           # security headers + Sentry (errors-only)
-└─ vitest.config.ts         # harness tes (env: MIDTRANS_SERVER_KEY, TZ Asia/Jakarta)
+└─ vitest.config.ts         # perangkat tes (env: MIDTRANS_SERVER_KEY, TZ Asia/Jakarta)
 ```
 
 > [!NOTE]
@@ -127,11 +127,11 @@ maubisa-account-center/
 ## Menjalankan tes
 
 Tes memakai **Vitest** (`test/**/*.test.ts`). Env uji diterapkan otomatis oleh
-`vitest.config.ts` (`MIDTRANS_SERVER_KEY=TEST-SERVER-KEY`, `TZ=Asia/Jakarta`) — penting karena
+`vitest.config.ts` (`MIDTRANS_SERVER_KEY=TEST-SERVER-KEY`, `TZ=Asia/Jakarta`) - penting karena
 `src/lib/midtrans/config.ts` menangkap server key saat modul di-load.
 
 ```bash
-npm run test          # sekali jalan (vitest run) — dipakai CI
+npm run test          # sekali jalan (vitest run) - dipakai CI
 npm run test:watch    # mode watch saat mengembangkan
 npm run test:cov      # dengan laporan coverage (v8)
 ```
@@ -145,7 +145,7 @@ Jalankan ini sampai **hijau** sebelum push. CI menjalankan hal yang sama di seti
 (lihat `.github/workflows/ci.yml`).
 
 ```bash
-npx tsc --noEmit     # typecheck (0 error) — TypeScript strict
+npx tsc --noEmit     # typecheck (0 error) - TypeScript strict
 npm run lint         # ESLint (0 error)
 npm run test         # Vitest (semua lulus)
 npm run build        # build produksi berhasil
@@ -171,9 +171,9 @@ npm run build        # build produksi berhasil
 
 Gunakan prefiks jelas + ringkasan kebab-case:
 
-- `feat/<ringkas>` — fitur baru
-- `fix/<ringkas>` — perbaikan bug
-- `docs/<ringkas>` — dokumentasi
+- `feat/<ringkas>` - fitur baru
+- `fix/<ringkas>` - perbaikan bug
+- `docs/<ringkas>` - dokumentasi
 - `refactor/<ringkas>`, `chore/<ringkas>`, `test/<ringkas>`
 
 ### Conventional Commits
@@ -236,7 +236,7 @@ Metode pembayaran dikelola sebagai **satu registry data** + pemetaan Core API. L
    `case` yang mengembalikan `payment_type` + objek metode Core API yang benar (mis. `qris`,
    `gopay`, `bank_transfer: { bank }`, `echannel`, `credit_card`). Sesuaikan `expiryMinutes`
    bila perlu (QR/e-wallet 60 menit; VA 24 jam).
-3. **Tampilkan instruksi bayar** di `toDisplay` (`charge.ts`) — cara menampilkan VA number /
+3. **Tampilkan instruksi bayar** di `toDisplay` (`charge.ts`) - cara menampilkan VA number /
    QR / bill key hasil respons Midtrans.
 4. **Tidak ada perubahan webhook** yang diperlukan: notifikasi semua metode masuk lewat satu
    handler dan diverifikasi dengan signature yang sama.
@@ -254,7 +254,7 @@ metadata presentasi ada di katalog.
    `scope`, `status`, `cta`, dan `productCode` yang menautkan ke `products.code`. Harga tampil
    tetap diambil dari DB (`priceIdr`/`products`), bukan di-hardcode di UI.
 3. Pastikan `scope`/`itemType` konsisten dengan enum di skema (lihat `docs/produksi-mysql.md`).
-4. Jangan pernah mengirim harga dari klien — checkout selalu me-resolve ulang lewat
+4. Jangan pernah mengirim harga dari klien - checkout selalu me-resolve ulang lewat
    `src/lib/checkout.ts`.
 
 ## Ke mana mencari bantuan
