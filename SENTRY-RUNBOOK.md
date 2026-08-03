@@ -1,8 +1,8 @@
-# Sentry Runbook — Maubisa Account Center
+# Sentry Runbook - Maubisa Account Center
 
 Panduan singkat membaca & menangani error di Sentry untuk **Pusat Akun**
 (project Sentry: `javascript-nextjs`). App ini pegang **auth, pembayaran (Midtrans),
-langganan, profil, dan data pribadi** — jadi error di sini sering berdampak langsung
+langganan, profil, dan data pribadi** - jadi error di sini sering berdampak langsung
 ke uang & akses user. Tujuan dokumen: buka dashboard → langsung tahu *ini error apa*
 dan *harus ngapain*.
 
@@ -13,10 +13,10 @@ dan *harus ngapain*.
 - **Rate limit 100 event/jam** di DSN (rem loop error).
 
 ## Cara baca satu issue
-Tiap error otomatis diberi tag — pakai untuk filter/search:
-- **`feature`** — alur tempat error terjadi (tabel di bawah). Contoh: `feature:payment.webhook`.
-- **`environment`** — `production` / `staging`.
-- **release** — otomatis dari build (jika `SENTRY_AUTH_TOKEN` di CI) → tahu deploy penyebab.
+Tiap error otomatis diberi tag - pakai untuk filter/search:
+- **`feature`** - alur tempat error terjadi (tabel di bawah). Contoh: `feature:payment.webhook`.
+- **`environment`** - `production` / `staging`.
+- **release** - otomatis dari build (jika `SENTRY_AUTH_TOKEN` di CI) → tahu deploy penyebab.
 
 ## Tabel area fitur (`feature`) → arti → penanganan
 

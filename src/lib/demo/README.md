@@ -9,6 +9,19 @@ Semua berkas di folder `demo/` ini **hanya aktif saat `NEXT_PUBLIC_DEMO_MODE="1"
 
 Dipisah ke folder sendiri supaya jelas mana yang khusus demo dan mana yang produksi.
 
+## Cara kerjanya
+
+- `demoMailboxEnabled()` membaca `NEXT_PUBLIC_DEMO_MODE === "1"`. Nilai ini menjadi gerbang
+  untuk penangkapan email, halaman `/demo/kotak`, dan endpoint `/api/demo/*`.
+- `sendEmail(...)` tetap memakai jalur email biasa. Saat mode demo aktif, salinan email juga
+  ditangkap ke kotak masuk in-memory agar pengunjung bisa melihat OTP, email selamat datang,
+  tagihan, struk, dan email langganan dari browser.
+- Kotak masuk menyimpan maksimum 50 email terbaru. Data hilang saat proses aplikasi restart,
+  sesuai sifat demo satu-instance.
+- Daftar email hanya mengembalikan metadata dan alamat penerima yang disamarkan. HTML penuh
+  diambil per email melalui route detail untuk pratinjau iframe.
+
+
 ## Peta berkas demo
 
 | Berkas | Fungsi |
@@ -20,4 +33,10 @@ Dipisah ke folder sendiri supaya jelas mana yang khusus demo dan mana yang produ
 | `src/app/api/demo/mailbox/route.ts` | API daftar / kirim contoh / kosongkan. |
 | `src/app/api/demo/mailbox/[id]/route.ts` | HTML satu email untuk iframe pratinjau. |
 
-Menonaktifkan seluruh fitur ini = cukup jangan set `NEXT_PUBLIC_DEMO_MODE`.
+## Batasan dan operasional
+
+- Kotak masuk demo bersifat bersama untuk semua pengunjung demo, jadi jangan pakai alamat atau
+  data pribadi sungguhan saat mencoba.
+- Fitur ini bukan pengganti SMTP produksi. Untuk produksi, biarkan `NEXT_PUBLIC_DEMO_MODE` kosong
+  dan isi `MAIL_*` agar email benar-benar dikirim.
+- Untuk mematikan seluruh fitur demo, cukup jangan set `NEXT_PUBLIC_DEMO_MODE`.

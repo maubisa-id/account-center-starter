@@ -1,4 +1,4 @@
-# Kebijakan Keamanan — Maubisa Account Center
+# Kebijakan Keamanan - Maubisa Account Center
 
 Dokumen ini menjelaskan cara melaporkan kerentanan dan ringkasan kontrol keamanan
 yang diterapkan di Pusat Akun Maubisa (`akun.maubisa.id`).
@@ -25,7 +25,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
 ## Kontrol keamanan yang diterapkan
 
 ### Autentikasi & sesi
-- **Better Auth** mengelola identitas; kata sandi di-hash (scrypt) — tidak pernah disimpan
+- **Better Auth** mengelola identitas; kata sandi di-hash (scrypt) - tidak pernah disimpan
   sebagai teks polos. Minimal 8 karakter.
 - **2FA (TOTP)** opsional + kode cadangan (backup codes).
 - **OTP email** 6 digit (berlaku 10 menit) untuk verifikasi email, masuk, dan reset sandi.
@@ -35,7 +35,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
 - **Rate limiting** diaktifkan pada endpoint auth (default 30 permintaan / 60 detik) dan
   endpoint sensitif lain (charge tamu, provision, ekspor, resend). Kunci IP diambil dari
   `cf-connecting-ip` (Cloudflare, tak bisa dipalsukan) lalu `x-real-ip` lalu hop **paling
-  kanan** `X-Forwarded-For` — bukan paling kiri yang bisa diisi klien (anti XFF-spoof).
+  kanan** `X-Forwarded-For` - bukan paling kiri yang bisa diisi klien (anti XFF-spoof).
   Catatan: limiter in-memory berlaku per-instance; untuk multi-instance pakai Redis/Upstash.
 - **Anti-bot (Cloudflare Turnstile)** pada daftar & masuk. **Fail-closed di produksi**: bila
   `TURNSTILE_SECRET_KEY` tak diset saat `NODE_ENV=production`, aplikasi menolak boot (tak
@@ -62,7 +62,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
   dicek ulang langsung ke `api.midtrans.com/v2/{order}/status` sebelum aktivasi (defense-in-depth).
 - **Fraud mapping**: `capture` hanya `paid` bila `fraud_status=accept`; `challenge`→pending;
   `deny`→failed. `authorize` (pre-auth) ditahan sebagai pending.
-- **Aktivasi akses hanya lewat webhook** — checkout TIDAK pernah memberi entitlement langsung.
+- **Aktivasi akses hanya lewat webhook** - checkout TIDAK pernah memberi entitlement langsung.
 - **Harga otoritatif dari server** (`products` di DB, resolver tunggal `lib/checkout.ts`), bukan dari
   klien; `gross_amount` dibulatkan ke integer IDR sesuai syarat Snap.
 - **Guest checkout (beli langsung)**: route tamu TIDAK menulis DB; identitas dibawa lewat Midtrans
@@ -79,7 +79,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
 
 ### Provisioning (dari web utama)
 - Endpoint `POST /api/provision` dilindungi **shared secret** (`x-provision-secret`) yang
-  dibandingkan **constant-time** (`secureEqual`/`timingSafeEqual`) — anti timing attack.
+  dibandingkan **constant-time** (`secureEqual`/`timingSafeEqual`) - anti timing attack.
 - **Validasi batas nominal** (0 < amount ≤ 1e9) untuk menolak payload cacat/berbahaya.
 - **Tidak pernah mengirim kata sandi acak dalam teks polos** (sesuai ADR-002): akun baru
   menerima **tautan atur kata sandi** sekali pakai; akun lama menerima **OTP masuk** via email.
@@ -91,7 +91,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
   profil, metode pembayaran (tanpa token/PAN), langganan, invoice, dan registrasi acara.
 - **Hapus akun**: mencabut akses, membatalkan langganan, *soft-delete* data inti, dan
   menghapus kredensial autentikasi.
-- **Kartu**: hanya token Midtrans + `brand`/`last4`/`exp` yang disimpan — **tidak pernah** PAN
+- **Kartu**: hanya token Midtrans + `brand`/`last4`/`exp` yang disimpan - **tidak pernah** PAN
   atau CVV (lingkup **SAQ-A**; pemrosesan kartu sepenuhnya di Midtrans).
 - **Lokasi data**: identitas & metadata pembayaran diproses di infrastruktur pilihan penerap
   (mis. Google Cloud SQL region Jakarta `asia-southeast2`). Klaim yurisdiksi apa pun di
@@ -120,7 +120,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
   akses order milik user lain → `404`. Ekspor & preferensi selalu diturunkan dari sesi, bukan input klien.
 
 ### Validasi input & konten
-- **URL foto profil (avatar)** hanya menerima skema `http(s)://` — memblokir `javascript:`/`data:`
+- **URL foto profil (avatar)** hanya menerima skema `http(s)://` - memblokir `javascript:`/`data:`
   URI (mencegah XSS lewat atribut `src`).
 - **Tanggal lahir** divalidasi di server: harus tanggal valid dan tidak di masa depan.
 - **Ganti kata sandi** butuh konfirmasi sandi baru (cegah salah ketik) + minimal 8 karakter;
@@ -130,7 +130,7 @@ Rilis stabil terbaru menerima perbaikan keamanan.
 
 ## Praktik untuk kontributor
 - Jangan log data sensitif (kata sandi, OTP, token, `raw_payload` penuh) ke output publik.
-- Validasi & batasi input di server (harga, kepemilikan, status) — jangan percaya klien.
+- Validasi & batasi input di server (harga, kepemilikan, status) - jangan percaya klien.
 - Pertahankan webhook tetap **idempotent** dan **ber-signature**.
 - Gunakan Prisma parameterized queries (hindari SQL string mentah).
 - Jalankan `npm run build` (type-check) & `npm run lint` sebelum PR.
@@ -141,7 +141,7 @@ Verifikasi ini sebelum mengarahkan trafik nyata:
 - [ ] Semua secret produksi diset & unik: `BETTER_AUTH_SECRET` (≥32 byte acak),
       `PROVISION_SECRET`, `MIDTRANS_SERVER_KEY` (kunci **Production**, bukan sandbox),
       `TURNSTILE_SECRET_KEY`, kredensial `MAIL_*` asli.
-- [ ] `NODE_ENV=production` — mengaktifkan Turnstile fail-closed & mematikan log OTP/reset dev.
+- [ ] `NODE_ENV=production` - mengaktifkan Turnstile fail-closed & mematikan log OTP/reset dev.
 - [ ] `BETTER_AUTH_URL` memakai domain produksi (`https://akun.maubisa.id`) agar cookie SSO
       lintas-subdomain `.maubisa.id` aktif.
 - [ ] Webhook Midtrans menunjuk ke `https://akun.maubisa.id/api/webhook/midtrans` (HTTPS).
@@ -151,7 +151,8 @@ Verifikasi ini sebelum mengarahkan trafik nyata:
 - [ ] Rate-limit lintas-instance (Redis/Upstash) bila deploy >1 replica.
 - [ ] Backup DB otomatis + uji restore; monitoring/alert (Sentry DSN produksi) aktif.
 
+## Pembagian tanggung jawab operasional
 
-- WAF/rate-limit tepi, proteksi DDoS, TLS termination → Cloudflare.
-- Backup & enkripsi at-rest database → Cloud SQL.
-- Rotasi kunci & manajemen secret produksi → platform deploy.
+- WAF/rate-limit tepi, proteksi DDoS, TLS termination -> Cloudflare.
+- Backup & enkripsi at-rest database -> Cloud SQL.
+- Rotasi kunci & manajemen secret produksi -> platform deploy.

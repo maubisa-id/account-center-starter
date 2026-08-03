@@ -1,5 +1,5 @@
 ---
-# DESIGN.md — machine-readable design tokens (normative).
+# DESIGN.md - machine-readable design tokens (normative).
 # Prose below provides context for how to apply them.
 colors:
   canvas: "#faf8f5"
@@ -104,209 +104,225 @@ components:
 
 # Design System: Maubisa Pusat Akun
 
-## Overview
+## Ringkasan
 
-**Creative North Star: "Ruang Belajar yang Tenang" (The Calm Study).** A warm, disciplined
-workspace for people making high-stakes decisions about their education and career — final-year
-students seeking thesis guidance, fresh graduates upskilling, professionals pursuing
-certification. The system pairs a cream paper canvas with deep academic navy so money and
-account tasks feel calm and trustworthy, never clinical or alarming.
+**Creative North Star: "Ruang Belajar yang Tenang" (The Calm Study).** Ruang kerja yang hangat dan
+tertata untuk orang yang sedang mengambil keputusan penting soal pendidikan dan kariernya:
+mahasiswa tingkat akhir yang mencari bimbingan skripsi, lulusan baru yang menambah keahlian, dan
+profesional yang mengejar sertifikasi. Sistem ini memadukan kanvas kertas krem dengan navy akademik
+yang pekat, supaya urusan uang dan akun terasa tenang dan tepercaya, bukan kaku atau bikin cemas.
 
-Mood: **warm, credible, quietly confident, unhurried.** Reassurance outranks expression: this is
-an Operate surface (dashboard + checkout) where scanability, consistency, and confidence at
-money/security moments matter more than flourish. Brand lives in precise details — the paper
-canvas, the navy sidebar, the disciplined type — not in loud gestures.
+Nuansa: **hangat, kredibel, percaya diri yang kalem, tidak terburu-buru.** Rasa aman lebih penting
+daripada ekspresi. Ini permukaan Operate (dashboard plus checkout), tempat kemudahan membaca,
+konsistensi, dan rasa percaya di momen uang atau keamanan lebih penting daripada hiasan. Merek hidup
+di detail yang presisi (kanvas kertas, sidebar navy, tipografi yang disiplin), bukan di gestur yang
+ramai.
 
-**Anti-reference:** generic purple-gradient SaaS billing dashboards, aggressive fintech red, and
-anything that makes an anxious student feel rushed or a certification buyer distrust the page.
+**Anti-referensi:** dashboard billing SaaS gradasi ungu yang generik, merah fintech yang agresif,
+dan apa pun yang membuat mahasiswa cemas merasa diburu atau pembeli sertifikasi tidak percaya pada
+halaman.
 
-> Note: this DESIGN.md was auto-extracted from code (Tailwind v4 `@theme` in `src/app/globals.css`)
-> and the North Star / voice inferred from PRODUCT.md audience while the user was unavailable to
-> confirm qualitative naming. Refresh with `/impeccable document` to confirm the descriptive
-> language.
+> [!NOTE]
+> DESIGN.md ini diekstrak otomatis dari kode (Tailwind v4 `@theme` di `src/app/globals.css`), dan
+> North Star serta karakter suaranya disimpulkan dari audiens di PRODUCT.md saat pemilik belum
+> sempat mengonfirmasi penamaan kualitatifnya. Segarkan dengan `/impeccable document` untuk
+> memastikan bahasa deskriptifnya.
 
-## Colors
+## Warna
 
-### Primary
-- **Maubisa Blue** (`#0a48b7`, `brand-500`): the single brand accent — primary buttons, links,
-  selected states, focus rings (`brand-400`), and the **left sidebar** (a `brand-500 → brand-700`
-  vertical gradient for depth; white text at AAA, section/label text ≥ AA). Deepest step
-  `brand-900` (`#05204f`) is reserved for the deepest headings only, no longer the sidebar.
-- Full ramp `brand-50 … brand-900` for tints (selected chip backgrounds `brand-50`, hover
-  borders `brand-300`, hover fills `brand-600`).
+### Utama
+- **Maubisa Blue** (`#0a48b7`, `brand-500`): satu-satunya aksen merek. Dipakai untuk tombol utama,
+  tautan, state terpilih, focus ring (`brand-400`), dan **sidebar kiri** (gradasi vertikal
+  `brand-500` ke `brand-700` untuk kedalaman; teks putih di level AAA, teks seksi/label minimal AA).
+  Langkah terpekat `brand-900` (`#05204f`) hanya untuk heading paling dalam, bukan lagi untuk sidebar.
+- Ramp penuh `brand-50` sampai `brand-900` untuk tint (latar chip terpilih `brand-50`, border hover
+  `brand-300`, isian hover `brand-600`).
 
-### Palette extension (brand family, use with intent)
-- **Sky** (`#419fe8`, `sky`): brighter blue for the **active nav accent** (icon + indicator dot)
-  on the blue sidebar, where a mid-blue would not pop.
-- **Teal** (`#5099bb`, `teal`) / **Lime** (`#9acc25`, `lime`): reserved accents from the brand
-  palette for future data/status use. Do not scatter; the page still has one primary (Maubisa
-  Blue).
+### Perluasan palet (keluarga merek, pakai dengan sengaja)
+- **Sky** (`#419fe8`, `sky`): biru lebih terang untuk **aksen nav aktif** (ikon plus titik indikator)
+  di sidebar biru, tempat biru sedang kurang menonjol.
+- **Teal** (`#5099bb`, `teal`) dan **Lime** (`#9acc25`, `lime`): aksen cadangan dari palet merek
+  untuk pemakaian data atau status di masa depan. Jangan disebar. Halaman tetap punya satu warna
+  utama (Maubisa Blue).
 
-### Neutral
-- **Paper Canvas** (`#faf8f5`, `canvas`): app background, softened by two faint navy radial
-  glows fixed at the top corners.
-- **Cream** (`#f5f1ea` / `#ece5d9`, `cream-100/200`): inset code/VA fields, secondary surfaces.
-- **Ink** (`#141414`) / **Ink Soft** (`#3f3f46`) / **Muted** (`#6b6b6b`): text primary →
-  secondary → tertiary. Body/supporting text on white uses `zinc-500`+ (≥4.5:1); reserve
-  `zinc-400` for non-essential metadata and icons only.
+### Netral
+- **Paper Canvas** (`#faf8f5`, `canvas`): latar aplikasi, dilembutkan dua glow radial navy tipis yang
+  terpasang di sudut atas.
+- **Cream** (`#f5f1ea` dan `#ece5d9`, `cream-100/200`): field inset untuk kode atau VA, permukaan
+  sekunder.
+- **Ink** (`#141414`), **Ink Soft** (`#3f3f46`), dan **Muted** (`#6b6b6b`): teks primer, sekunder,
+  lalu tersier. Teks isi atau pendukung di atas putih memakai `zinc-500` ke atas (minimal 4.5:1);
+  simpan `zinc-400` untuk metadata dan ikon yang tidak penting saja.
 
-### Status accents (semantic, used sparingly)
-- **Success Lime** (`#6f9e12` / `#84b81a`): paid/active confirmations, "Terpopuler".
-- **Danger Rose** (`#e61e38`, `rose-accent`): destructive confirms (cancel), errors — never a
-  decorative color.
-- Amber (`amber-50/200/600/700` from Tailwind): "menunggu pembayaran" nudges.
+### Aksen status (semantik, dipakai secukupnya)
+- **Success Lime** (`#6f9e12` dan `#84b81a`): konfirmasi lunas atau aktif, "Terpopuler".
+- **Danger Rose** (`#e61e38`, `rose-accent`): konfirmasi tindakan merusak (batal) dan error. Bukan
+  warna dekoratif.
+- Amber (`amber-50/200/600/700` dari Tailwind): nudge "menunggu pembayaran".
 
-### Named Rules
-- **One accent only.** Navy is the brand; lime/rose/amber are *semantic status*, not palette
-  expansion. Never introduce a second brand hue.
-- **Never gray on a colored surface.** On a tinted surface, tint secondary text from that hue or
-  the foreground.
+### Aturan Bernama
+- **Satu aksen saja.** Navy adalah merek; lime, rose, dan amber adalah *status semantik*, bukan
+  perluasan palet. Jangan pernah menambah warna merek kedua.
+- **Jangan pernah abu-abu di atas permukaan berwarna.** Di permukaan bertint, ambil warna teks
+  sekunder dari hue yang sama atau dari foreground.
 
-## Typography
+## Tipografi
 
-Three self-hosted faces: **Cabinet Grotesk** (display/headings, `-0.02em`), **Satoshi**
-(UI/body), **Geist Mono** (order IDs, VA numbers, amounts-as-data only).
+Tiga tipe huruf yang di-host sendiri: **Cabinet Grotesk** (display atau heading, `-0.02em`),
+**Satoshi** (UI atau body), dan **Geist Mono** (order ID, nomor VA, dan angka sebagai data saja).
 
-### Hierarchy
-- **Display** (Cabinet, 700, `clamp(1.75rem,4vw,2.25rem)`, tight): page hero ("Halo, {nama}.").
-- **Headline** (Cabinet, 700, ~1.25rem): panel titles.
-- **Title** (Satoshi, 700, 0.875rem): card/section titles, table item names.
-- **Body** (Satoshi, 400, 0.875rem, 1.6): descriptions, help text. Keep readable measure.
-- **Label** (Satoshi, 600, 0.6875rem, `0.16em`, uppercase): section eyebrows ("Ringkasan
-  pesanan", "Metode pembayaran"), stat labels. Use `zinc-500` for contrast.
+### Hierarki
+- **Display** (Cabinet, 700, `clamp(1.75rem,4vw,2.25rem)`, rapat): hero halaman ("Halo, {nama}.").
+- **Headline** (Cabinet, 700, sekitar 1.25rem): judul panel.
+- **Title** (Satoshi, 700, 0.875rem): judul kartu atau seksi, nama item tabel.
+- **Body** (Satoshi, 400, 0.875rem, 1.6): deskripsi, teks bantuan. Jaga lebar baris tetap nyaman
+  dibaca.
+- **Label** (Satoshi, 600, 0.6875rem, `0.16em`, huruf kapital): eyebrow seksi ("Ringkasan pesanan",
+  "Metode pembayaran"), label statistik. Pakai `zinc-500` untuk kontras.
 
-### Named Rules
-- Mono is **for data only** (order IDs, VA/bill numbers), never as a "technical" costume.
+### Aturan Bernama
+- Mono **untuk data saja** (order ID, nomor VA atau tagihan), bukan sebagai kostum "biar terlihat
+  teknis".
 
-## Layout
+## Tata Letak
 
-- **Shell:** fixed navy sidebar (desktop) + top bar with breadcrumb, quick-search (`/`),
-  notifications, profile; a slide-over drawer replaces the sidebar below `md`.
-- **Content rhythm:** page sections stack at `space-y-8` (`2rem`); the overview hero uses
-  `space-y-10`. Cards: internal padding `p-6` (`1.5rem`), large panels `p-6 sm:p-8`.
-- **Breakpoint behavior:** data tables (payments, subscription bills) render as a full table at
-  `md+` and as stacked **InvoiceRowCard**s below `md`, so primary actions never hide behind
-  horizontal scroll.
-- **Max width:** dashboard content ~`max-w-6xl`; checkout column `max-w-md`.
+- **Shell:** sidebar navy tetap (desktop) plus top bar berisi breadcrumb, pencarian cepat (`/`),
+  notifikasi, dan profil; sebuah drawer geser menggantikan sidebar di bawah `md`.
+- **Ritme konten:** seksi halaman ditumpuk `space-y-8` (`2rem`); hero ringkasan memakai `space-y-10`.
+  Kartu: padding dalam `p-6` (`1.5rem`), panel besar `p-6 sm:p-8`.
+- **Perilaku breakpoint:** tabel data (pembayaran, tagihan langganan) tampil sebagai tabel penuh di
+  `md+` dan sebagai **InvoiceRowCard** bertumpuk di bawah `md`, jadi aksi utama tidak pernah
+  tersembunyi di balik scroll horizontal.
+- **Lebar maksimum:** konten dashboard sekitar `max-w-6xl`; kolom checkout `max-w-md`.
 
-## Elevation & Depth
+## Elevasi dan Kedalaman
 
-Flat-with-soft-lift, not heavy. Shadows are ambient (separation), never hard offsets.
+Datar dengan sedikit angkatan lembut, tidak berat. Bayangan bersifat ambient (memisahkan), bukan
+offset yang keras.
 
-### Shadow Vocabulary
-- **soft** (`0 1px 2px rgba(11,15,23,.05), 0 20px 45px -28px rgba(11,15,23,.28)`): resting cards.
-- **lift** (`… 0 34px 60px -30px rgba(11,15,23,.4)`): toasts, popovers, drawer.
-- **brand** (`… 0 18px 40px -12px rgba(10,72,183,.45)`): primary CTA only.
+### Kosakata Bayangan
+- **soft** (`0 1px 2px rgba(11,15,23,.05), 0 20px 45px -28px rgba(11,15,23,.28)`): kartu diam.
+- **lift** (`… 0 34px 60px -30px rgba(11,15,23,.4)`): toast, popover, drawer.
+- **brand** (`… 0 18px 40px -12px rgba(10,72,183,.45)`): hanya untuk CTA utama.
 
-### Named Rules
-- Every shadow carries offset + soft blur. No zero-blur block shadows, no colored halos.
+### Aturan Bernama
+- Setiap bayangan punya offset plus blur lembut. Tidak ada bayangan blok tanpa blur, tidak ada halo
+  berwarna.
 
-## Shapes
+## Bentuk
 
-Generously rounded, friendly-not-childish. Radius scale: inputs/pills `rounded-2xl` (1.5rem) →
-cards `rounded-3xl` (1.75rem, `bezel`) → chips/buttons `rounded-full`. Borders are hairline
-(`border-black/[0.06–0.08]`); never a colored border above 1px.
+Sudut membulat royal, ramah tapi tidak kekanak-kanakan. Skala radius: input atau pill `rounded-2xl`
+(1.5rem), kartu `rounded-3xl` (1.75rem, `bezel`), chip atau tombol `rounded-full`. Border setipis
+rambut (`border-black/[0.06-0.08]`); jangan pernah border berwarna lebih dari 1px.
 
-## Components
+## Komponen
 
-### Buttons
-- **Shape:** `rounded-full`. Base carries `focus-visible:ring-2 ring-brand-400 ring-offset-2`.
+### Tombol
+- **Bentuk:** `rounded-full`. Base membawa `focus-visible:ring-2 ring-brand-400 ring-offset-2`.
 - **Primary:** `bg-brand-500 text-white shadow-brand`, hover `bg-brand-600 -translate-y-[1px]`,
-  `active:scale-[0.98]`. Padding `py-2.5 px-5` (icon variant `pl-5 pr-2`).
+  `active:scale-[0.98]`. Padding `py-2.5 px-5` (varian ikon `pl-5 pr-2`).
 - **Ghost:** `bg-white text-ink ring-1 ring-black/[0.08] shadow-soft`, hover `bg-zinc-50`.
-- **Destructive:** `bg-red-600` hover `bg-red-700` — only for confirmed cancel.
+- **Destructive:** `bg-red-600` hover `bg-red-700`, hanya untuk pembatalan yang sudah dikonfirmasi.
 
-### Chips
-- **Filter/goal chips:** `rounded-full border border-black/10 bg-white`; selected →
-  `border-brand-400 bg-brand-50 text-brand-700`. Keyboard focus via `peer`/`has-[:focus-visible]`.
+### Chip
+- **Chip filter atau tujuan:** `rounded-full border border-black/10 bg-white`; terpilih menjadi
+  `border-brand-400 bg-brand-50 text-brand-700`. Fokus keyboard lewat `peer`/`has-[:focus-visible]`.
 
-### Cards / Containers
-- **Corner:** `rounded-3xl`. **Background:** white on paper canvas. **Shadow:** `soft`.
-- **Border:** hairline `border-black/[0.06]`. **Padding:** `p-6` (large `p-6 sm:p-8`).
+### Kartu dan Kontainer
+- **Sudut:** `rounded-3xl`. **Latar:** putih di atas paper canvas. **Bayangan:** `soft`.
+- **Border:** setipis rambut `border-black/[0.06]`. **Padding:** `p-6` (besar `p-6 sm:p-8`).
 
 ### Status Badge
-- Pill with tinted bg + tinted text from the *same* status hue (lime=paid, amber=pending,
-  rose=failed/cancelled, zinc=neutral). Centralized labels in Indonesian.
+- Pill dengan latar bertint plus teks bertint dari hue status yang *sama* (lime=lunas, amber=menunggu,
+  rose=gagal atau batal, zinc=netral). Label dipusatkan dalam Bahasa Indonesia.
 
-### Trust & reassurance patterns (money/security surfaces)
-The North Star is calm confidence at high-stakes moments; these patterns encode it:
-- **Trust precedes the decision.** On guest checkout, a compact trust line (lock icon · badan
-  hukum · KOMDIGI · Midtrans 3D Secure) sits directly under the order summary, *before* the form
-  and Bayar CTA — a guest from an ad must believe before they commit. The full "Aman & tepercaya"
-  block (trust points + WhatsApp) stays below for depth. Never place all trust after the CTA.
-- **Status banners reassure first.** A pending-payment banner leads with the outcome ("aksesmu
-  aktif otomatis begitu dikonfirmasi"), not urgency. The container carries the amber *status* tint;
-  the CTA stays calm (white + amber-800 text), never a loud solid-amber button that manufactures
-  debt anxiety for an already-anxious student.
-- **Destructive surfaces stay quiet until intent.** Session/security rows keep the current device
-  primary (lime "Aktif sekarang"); secondary actions are neutral at rest ("Akhiri sesi" in zinc,
-  rose only on hover/confirm). Rose is reserved for the confirm step, never the resting list — a
-  wall of red makes protection feel like danger.
-- **Destructive confirmations are focused modals, not inline cards.** Cancelling a payment (checkout
-  waiting screen and payment/subscription tables) confirms in a centered `Modal` (dimmed backdrop,
-  focus-trap, esc, scroll-lock) — never an inline red block that pushes content. A destructive,
-  deliberate action deserves focus, and a modal never causes layout shift. Inline confirmation is
-  reserved for low-stakes, contextual toggles. One shared `CancelPaymentDialog` keeps checkout and
-  tables consistent.
-- **Every overlay renders through a portal to `document.body`.** A `position:fixed` overlay placed
-  inside an ancestor that has a `transform` (our `Reveal`/`animate-rise` keeps a transform via
-  fill-mode `both`) is positioned relative to that ancestor, not the viewport, so it gets trapped
-  and clipped inside a card. All modals/dialogs (shared `Modal`, `AddCardDialog`, `ThreeDsModal`)
-  use `createPortal` with a mount guard. Never hand-roll a `fixed inset-0` overlay inline in page
-  content; portal it, or the next `Reveal` wrapper silently breaks it.
-- **Payment success is a full-screen confirmation, not a status line.** When a payment resolves to
-  paid, the instruction card is replaced by a centered lime check + "Pembayaran berhasil" + a
-  redirecting spinner, held about 2s before navigating to the dashboard (`/akses` logged-in,
-  `/terima-kasih` guest). A money moment ending well deserves an unmistakable peak, not a quiet
-  status swap.
-- **Card method uses a neutral card icon, not one network's logo.** The card method tile (picker and
-  instruction header) shows a generic card glyph — every issuer/network is accepted, so featuring
-  Visa alone would misrepresent. The Visa/Mastercard/JCB marks appear only inside the card form as a
-  live BIN-detection indicator (the typed card's network highlights; others dim).
-- **A row of mixed-aspect logos sits in identical fixed boxes, not equal height.** Equal `height` +
-  `w-auto` makes a wide wordmark (Visa ~3:1) dwarf squarer marks (Mastercard, JCB). Give each mark
-  the same fixed box (`h-5 w-9`, `object-contain`) so they occupy one footprint and the wordmark
-  scales down to fit. This is the rule wherever network/brand marks line up (card-form header, and
-  any future logo strip), distinct from a single wide wordmark in one chip (banks, below).
-- **Redirects are allowlisted.** Any post-action navigation whose target can come from a query param
-  (`?redirect=` on checkout, login) passes `safeInternalPath()` — internal paths only, rejecting
-  absolute URLs, protocol-relative `//`, and schemes. No open redirect from a money/auth surface.
-- **Checkout is two columns on desktop, one on mobile.** The select phase uses a
-  `lg:grid-cols-[0.9fr_1fr]` split: left = order summary + trust (sticky), right = buyer form +
-  method picker + pay button. This keeps every method (including Card at the bottom) reachable
-  without a long scroll past the whole list. Below `lg` it collapses to a single column (summary →
-  form). The instruction/success phase stays a single narrow `max-w-md` column (focused task).
-- **Payment brand logos are wide wordmarks in a fixed wide chip.** Bank/e-wallet marks (from
-  idn-finlogos, newest variant when a bank has rebranded) are wordmarks, so the logo chip is a
-  fixed 56×36 slot with `object-contain`, never a tiny square that shrinks the wordmark. Logos are
-  rasterized to transparent PNG (reliable cross-browser as plain images); the card method stays a
-  neutral card icon.
-- **The credit card is a live, on-brand object, not a purple template.** `shared-assets/credit-card`
-  mirrors the Untitled UI API (`type`, `company`, `cardNumber`, `cardHolder`, `cardExpiration`,
-  `width`) but is themed with the nav gradient (`brand-500 → brand-700`), Maubisa wordmark, gold
-  chip, and contactless glyph. It updates as the buyer types and auto-detects the network logo from
-  the BIN. Reused in checkout (live preview above the fields) and in saved-method cards (masked
-  `•••• •••• •••• 1234`). One card object across products = consistent, trustworthy money moments.
-- **Saved payment methods read as a manager, not a log.** `/metode-pembayaran` shows real saved
-  cards with one **primary** (starred, ringed) and others secondary, each with set-primary + remove,
-  plus an **Add card** dialog (Midtrans Card Registration, no charge). What is stored is the Midtrans
-  token + brand/last4/expiry, never the PAN. A "previously used" list is the wrong model here; users
-  expect to add, designate a default, and remove, like every subscription app.
-- **3DS assurance is per-card.** The verification modal shows the program mark of the *typed*
-  network (Visa → Verified by Visa, Mastercard → SecureCode), or the card's own logo + a neutral
-  "3-D Secure" badge for others, next to the Midtrans gateway mark. Showing every brand regardless
-  of the card in hand is noise; match the instrument the buyer actually used.
-
+### Pola kepercayaan dan rasa aman (permukaan uang atau keamanan)
+North Star-nya adalah rasa percaya yang tenang di momen penting; pola berikut yang mewujudkannya:
+- **Kepercayaan mendahului keputusan.** Di checkout tamu, satu baris kepercayaan yang ringkas (ikon
+  gembok, badan hukum, KOMDIGI, Midtrans 3D Secure) berada tepat di bawah ringkasan pesanan,
+  *sebelum* formulir dan CTA Bayar. Tamu dari iklan harus percaya dulu sebelum berkomitmen. Blok
+  lengkap "Aman & tepercaya" (poin kepercayaan plus WhatsApp) tetap di bawah untuk detail. Jangan
+  pernah menaruh semua sinyal kepercayaan setelah CTA.
+- **Banner status menenangkan lebih dulu.** Banner menunggu pembayaran memimpin dengan hasilnya
+  ("aksesmu aktif otomatis begitu dikonfirmasi"), bukan dengan urgensi. Kontainernya membawa tint
+  *status* amber; CTA-nya tetap kalem (putih plus teks amber-800), bukan tombol amber solid yang
+  memancing kecemasan utang pada mahasiswa yang sudah cemas.
+- **Permukaan merusak tetap diam sampai ada niat.** Baris sesi atau keamanan menjaga perangkat saat
+  ini tetap primer (lime "Aktif sekarang"); aksi sekunder netral saat diam ("Akhiri sesi" dalam zinc,
+  rose hanya saat hover atau konfirmasi). Rose disimpan untuk langkah konfirmasi, bukan untuk daftar
+  yang diam. Dinding merah membuat perlindungan terasa seperti bahaya.
+- **Konfirmasi merusak berupa modal fokus, bukan kartu inline.** Membatalkan pembayaran (layar tunggu
+  checkout dan tabel pembayaran atau langganan) dikonfirmasi di `Modal` terpusat (backdrop redup,
+  focus-trap, esc, scroll-lock), bukan blok merah inline yang mendorong konten. Tindakan merusak yang
+  disengaja pantas mendapat fokus, dan modal tidak pernah menggeser tata letak. Konfirmasi inline
+  disimpan untuk toggle kontekstual yang risikonya rendah. Satu `CancelPaymentDialog` bersama menjaga
+  checkout dan tabel tetap konsisten.
+- **Setiap overlay dirender lewat portal ke `document.body`.** Overlay `position:fixed` yang
+  ditaruh di dalam elemen leluhur ber-`transform` (`Reveal`/`animate-rise` kami menjaga transform
+  lewat fill-mode `both`) diposisikan relatif terhadap leluhur itu, bukan terhadap viewport, sehingga
+  terjebak dan terpotong di dalam kartu. Semua modal atau dialog (`Modal` bersama, `AddCardDialog`,
+  `ThreeDsModal`) memakai `createPortal` dengan mount guard. Jangan pernah membuat overlay
+  `fixed inset-0` secara inline di dalam konten halaman; portal-kan, atau wrapper `Reveal` berikutnya
+  diam-diam merusaknya.
+- **Sukses pembayaran adalah konfirmasi layar penuh, bukan baris status.** Saat pembayaran menjadi
+  lunas, kartu instruksi diganti oleh centang lime terpusat plus "Pembayaran berhasil" plus spinner
+  pengalihan, ditahan sekitar 2 detik sebelum menuju dashboard (`/akses` untuk yang login,
+  `/terima-kasih` untuk tamu). Momen uang yang berakhir baik pantas mendapat puncak yang jelas, bukan
+  pergantian status yang senyap.
+- **Metode kartu memakai ikon kartu netral, bukan logo satu jaringan.** Tile metode kartu (picker dan
+  header instruksi) menampilkan glif kartu generik. Semua penerbit atau jaringan diterima, jadi
+  menonjolkan Visa saja akan menyesatkan. Tanda Visa, Mastercard, dan JCB muncul hanya di dalam
+  formulir kartu sebagai indikator deteksi BIN langsung (jaringan kartu yang diketik menyala; yang
+  lain meredup).
+- **Sebaris logo dengan rasio berbeda duduk di kotak tetap yang identik, bukan tinggi yang sama.**
+  `height` sama plus `w-auto` membuat wordmark lebar (Visa sekitar 3:1) mengerdilkan tanda yang lebih
+  kotak (Mastercard, JCB). Beri tiap tanda kotak tetap yang sama (`h-5 w-9`, `object-contain`) supaya
+  semuanya menempati satu ruang dan wordmark mengecil agar pas. Ini aturan di mana pun tanda jaringan
+  atau merek berjajar (header formulir kartu, dan strip logo mana pun di masa depan), berbeda dari
+  satu wordmark lebar di satu chip (bank, di bawah).
+- **Pengalihan pakai allowlist.** Navigasi pasca-aksi yang targetnya bisa datang dari query param
+  (`?redirect=` di checkout, login) melewati `safeInternalPath()`, hanya path internal, menolak URL
+  absolut, `//` yang protocol-relative, dan skema. Tidak ada open redirect dari permukaan uang atau
+  auth.
+- **Checkout dua kolom di desktop, satu di mobile.** Fase pilih memakai split
+  `lg:grid-cols-[0.9fr_1fr]`: kiri = ringkasan pesanan plus kepercayaan (sticky), kanan = formulir
+  pembeli plus picker metode plus tombol bayar. Ini menjaga setiap metode (termasuk Kartu di bawah)
+  tetap terjangkau tanpa scroll panjang melewati seluruh daftar. Di bawah `lg` ia menyusut jadi satu
+  kolom (ringkasan lalu formulir). Fase instruksi atau sukses tetap satu kolom sempit `max-w-md`
+  (tugas yang fokus).
+- **Logo merek pembayaran adalah wordmark lebar di chip lebar yang tetap.** Tanda bank atau e-wallet
+  (dari idn-finlogos, varian terbaru saat sebuah bank berganti merek) berupa wordmark, jadi chip
+  logonya adalah slot tetap 56x36 dengan `object-contain`, bukan kotak kecil yang mengecilkan
+  wordmark. Logo diraster ke PNG transparan (andal lintas-browser sebagai gambar biasa); metode kartu
+  tetap ikon kartu netral.
+- **Kartu kredit adalah objek hidup yang on-brand, bukan template ungu.**
+  `shared-assets/credit-card` mengikuti API Untitled UI (`type`, `company`, `cardNumber`,
+  `cardHolder`, `cardExpiration`, `width`) tapi ditema dengan gradasi nav (`brand-500` ke
+  `brand-700`), wordmark Maubisa, chip emas, dan glif contactless. Ia berubah saat pembeli mengetik
+  dan mendeteksi otomatis logo jaringan dari BIN. Dipakai ulang di checkout (pratinjau langsung di
+  atas field) dan di kartu metode tersimpan (masker `•••• •••• •••• 1234`). Satu objek kartu di semua
+  produk berarti momen uang yang konsisten dan tepercaya.
+- **Metode pembayaran tersimpan dibaca sebagai pengelola, bukan log.** `/metode-pembayaran`
+  menampilkan kartu tersimpan asli dengan satu **primary** (berbintang, bercincin) dan yang lain
+  sekunder, masing-masing dengan set-primary plus hapus, ditambah dialog **Tambah kartu** (Midtrans
+  Card Registration, tanpa penagihan). Yang disimpan adalah token Midtrans plus merek, last4, dan
+  masa berlaku, bukan PAN. Daftar "pernah dipakai" adalah model yang salah di sini; pengguna
+  mengharapkan bisa menambah, menetapkan default, dan menghapus, seperti aplikasi langganan mana pun.
+- **Jaminan 3DS bersifat per-kartu.** Modal verifikasi menampilkan tanda program dari jaringan yang
+  *diketik* (Visa ke Verified by Visa, Mastercard ke SecureCode), atau logo kartu itu sendiri plus
+  badge netral "3-D Secure" untuk yang lain, di sebelah tanda gateway Midtrans. Menampilkan semua
+  merek tanpa peduli kartu yang dipegang hanya jadi kebisingan; cocokkan dengan instrumen yang benar-
+  benar dipakai pembeli.
 
 ## Motion
 
-One authored moment per surface, exponential ease-out from an already-visible default.
-- Tokens: `--ease-out-quint` (`cubic-bezier(0.16,1,0.3,1)`), `--ease-fluid`.
-- Entrances: `animate-rise` / `animate-fade` (dashboard), staggered auth entrances.
-- Interactions: 200–500ms color/transform transitions; `active:scale-[0.98]` on buttons.
-- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` neutralizes entrances (state
-  preserved). Honor it — never a global `0.01ms` kill of useful feedback.
+Satu momen bergerak per permukaan, ease-out eksponensial dari default yang sudah terlihat.
+- Token: `--ease-out-quint` (`cubic-bezier(0.16,1,0.3,1)`), `--ease-fluid`.
+- Masuk: `animate-rise` dan `animate-fade` (dashboard), entrance auth yang berjenjang.
+- Interaksi: transisi warna atau transform 200-500ms; `active:scale-[0.98]` pada tombol.
+- **Reduced motion:** `@media (prefers-reduced-motion: reduce)` menetralkan entrance (state tetap
+  terjaga). Hormati ini; jangan pernah mematikan semua feedback berguna dengan `0.01ms` global.
 
-### Named Rules
-- Motion conveys **state**, not decoration. No bounce/elastic easing (the ease-out curve is
-  named `--ease-out-quint`, not "spring", to keep intent honest).
+### Aturan Bernama
+- Motion menyampaikan **state**, bukan dekorasi. Tidak ada easing bounce atau elastic (kurva
+  ease-out-nya bernama `--ease-out-quint`, bukan "spring", supaya niatnya jujur).

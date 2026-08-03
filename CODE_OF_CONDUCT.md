@@ -1,53 +1,55 @@
-# Contributor Covenant Code of Conduct
+# Kode Etik Contributor Covenant
 
-## Our Pledge
+## Janji Kami
 
-We as members, contributors, and leaders pledge to make participation in our community a
-harassment-free experience for everyone, regardless of age, body size, visible or invisible
-disability, ethnicity, sex characteristics, gender identity and expression, level of
-experience, education, socio-economic status, nationality, personal appearance, race,
-religion, or sexual identity and orientation.
+Kami sebagai anggota, kontributor, dan pemimpin berjanji menjadikan partisipasi dalam
+komunitas kami sebagai pengalaman yang bebas dari pelecehan bagi semua orang, tanpa
+memandang usia, ukuran tubuh, disabilitas yang terlihat maupun tidak terlihat, etnis,
+karakteristik seks, identitas dan ekspresi gender, tingkat pengalaman, pendidikan, status
+sosial ekonomi, kebangsaan, penampilan pribadi, ras, agama, atau identitas serta orientasi
+seksual.
 
-We pledge to act and interact in ways that contribute to an open, welcoming, diverse,
-inclusive, and healthy community.
+Kami berjanji untuk bertindak dan berinteraksi dengan cara yang mendukung komunitas yang
+terbuka, ramah, beragam, inklusif, dan sehat.
 
-## Our Standards
+## Standar Kami
 
-Examples of behavior that contributes to a positive environment:
+Contoh perilaku yang mendukung lingkungan positif:
 
-- Demonstrating empathy and kindness toward other people
-- Being respectful of differing opinions, viewpoints, and experiences
-- Giving and gracefully accepting constructive feedback
-- Accepting responsibility and apologizing to those affected by our mistakes
-- Focusing on what is best for the overall community
+- Menunjukkan empati dan kebaikan kepada orang lain
+- Menghormati perbedaan pendapat, sudut pandang, dan pengalaman
+- Memberi serta menerima masukan yang membangun dengan sikap baik
+- Menerima tanggung jawab dan meminta maaf kepada pihak yang terdampak oleh kesalahan kita
+- Berfokus pada hal yang terbaik bagi komunitas secara keseluruhan
 
-Examples of unacceptable behavior:
+Contoh perilaku yang tidak dapat diterima:
 
-- The use of sexualized language or imagery, and sexual attention or advances of any kind
-- Trolling, insulting or derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information without their explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+- Penggunaan bahasa atau gambar bernuansa seksual, serta perhatian atau pendekatan seksual
+  dalam bentuk apa pun
+- Trolling, komentar yang menghina atau merendahkan, serta serangan pribadi atau politik
+- Pelecehan di ruang publik maupun privat
+- Mempublikasikan informasi pribadi orang lain tanpa izin yang jelas dari pihak tersebut
+- Perilaku lain yang secara wajar dapat dianggap tidak pantas dalam lingkungan profesional
 
-## Enforcement Responsibilities
+## Tanggung Jawab Penegakan
 
-Community leaders are responsible for clarifying and enforcing our standards of acceptable
-behavior and will take appropriate and fair corrective action in response to any behavior
-that they deem inappropriate, threatening, offensive, or harmful.
+Pemimpin komunitas bertanggung jawab menjelaskan dan menegakkan standar perilaku yang dapat
+diterima, serta akan mengambil tindakan korektif yang tepat dan adil atas perilaku yang
+mereka anggap tidak pantas, mengancam, menyinggung, atau membahayakan.
 
-## Scope
+## Ruang Lingkup
 
-This Code of Conduct applies within all community spaces, and also applies when an
-individual is officially representing the community in public spaces.
+Kode Etik ini berlaku di semua ruang komunitas, dan juga berlaku ketika seseorang secara
+resmi mewakili komunitas di ruang publik.
 
-## Enforcement
+## Penegakan
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the
-community leaders responsible for enforcement at **conduct@maubisa.id**. All complaints will
-be reviewed and investigated promptly and fairly.
+Peristiwa berupa perilaku kasar, pelecehan, atau perilaku lain yang tidak dapat diterima
+dapat dilaporkan kepada pemimpin komunitas yang bertanggung jawab atas penegakan melalui
+**conduct@maubisa.id**. Semua laporan akan ditinjau dan diselidiki dengan segera dan adil.
 
-## Attribution
+## Atribusi
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
-version 2.1, available at
+Kode Etik ini diadaptasi dari [Contributor Covenant](https://www.contributor-covenant.org),
+versi 2.1, tersedia di
 https://www.contributor-covenant.org/version/2/1/code_of_conduct.html.
