@@ -51,7 +51,7 @@ sesuai merek Anda dan dipakai ulang di web, aplikasi, maupun kelas.
 
 > [!TIP]
 > **Coba dulu sebelum pakai → [demo-akun.maubisa.id](https://demo-akun.maubisa.id)**
-> Masuk sebagai **user** `budi@example.com` atau **admin** `admin@maubisa.id` (sandi `password123` untuk keduanya), atau daftar akun baru lalu cek email yang
+> Masuk sebagai **user** `budi@example.com` atau **admin** `admin@example.com` (sandi `password123` untuk keduanya), atau daftar akun baru lalu cek email yang
 > masuk (kode OTP, email selamat datang) langsung di **[kotak email demo](https://demo-akun.maubisa.id/demo/kotak)**.
 > Semua pembayaran memakai mode sandbox, jadi aman dicoba tanpa uang asli.
 
@@ -147,7 +147,7 @@ npm run seed                  # data contoh + akun demo
 npm run dev                   # http://localhost:3000
 ```
 
-**Akun demo:** user `budi@example.com` (punya langganan, tagihan, hak akses contoh) atau admin `admin@maubisa.id` (login → mendarat di `/admin`) — sandi `password123`.
+**Akun demo:** user `budi@example.com` (punya langganan, tagihan, hak akses contoh) atau admin `admin@example.com` (login → mendarat di `/admin`) — sandi `password123`.
 
 Butuh Node 22 (lihat [`.nvmrc`](./.nvmrc)). Tanpa kunci Midtrans pun aplikasi tetap jalan —
 fitur pembayaran menampilkan status "belum tersedia" alih-alih error.

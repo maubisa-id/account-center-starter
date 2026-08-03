@@ -13,7 +13,7 @@ export function DemoBanner() {
         </span>
         <span className="text-amber-900">
           Masuk sebagai <strong>user</strong> <code className={code}>budi@example.com</code> atau{" "}
-          <strong>admin</strong> <code className={code}>admin@maubisa.id</code> — sandi{" "}
+          <strong>admin</strong> <code className={code}>admin@example.com</code> — sandi{" "}
           <code className={code}>password123</code>. Bisa juga{" "}
           <a href="/demo/kotak" className="font-semibold underline underline-offset-2 hover:text-amber-950">
             lihat kotak email demo
