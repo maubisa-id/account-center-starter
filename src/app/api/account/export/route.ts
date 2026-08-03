@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logAudit } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
 import { idr, tanggal } from "@/lib/format";
 import { LOGO_URL } from "@/lib/brand";
@@ -40,6 +41,15 @@ export async function GET(req: Request) {
   });
   if (!user) return NextResponse.json({ error: "not found" }, { status: 404 });
 
+  const format = normalizeFormat(new URL(req.url).searchParams.get("format"));
+  // Audit (UU PDP Pasal 5-15 / akuntabilitas Pasal 20): catat ekspor data pribadi.
+  await logAudit({
+    action: "data_export",
+    target: `user:${user.uuid}`,
+    metadata: { format },
+    actorEmail: email,
+  });
+
   const data = {
     exportedAt: new Date().toISOString(),
     account: {
@@ -67,7 +77,6 @@ export async function GET(req: Request) {
     preferences: user.preferences,
   };
 
-  const format = normalizeFormat(new URL(req.url).searchParams.get("format"));
   const slug = user.uuid.slice(0, 8);
 
   if (format === "csv") {

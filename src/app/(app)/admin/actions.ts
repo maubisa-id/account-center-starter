@@ -2,6 +2,7 @@
 
 import { getSessionEmail } from "@/lib/account";
 import { isAdminEmail } from "@/lib/admin";
+import { logAudit } from "@/lib/audit";
 import { createPaymentLinkOrder } from "@/lib/payment-link-order";
 
 // Server action untuk /admin. Gerbang: sesi login (layout app) + email admin (allowlist).
@@ -21,5 +22,13 @@ export async function generateLink(
     amount: input.amount || undefined,
   });
   if (!res.ok) return { error: res.error };
+
+  await logAudit({
+    action: "create_payment_link",
+    target: input.email,
+    metadata: { orderId: res.orderId, productCode: input.productCode ?? null, amount: input.amount ?? null, itemName: input.itemName ?? null },
+    actorEmail: email,
+  });
+
   return { ok: true, orderId: res.orderId, paymentUrl: res.paymentUrl };
 }

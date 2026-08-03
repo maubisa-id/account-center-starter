@@ -14,6 +14,7 @@ import {
   IconGrid,
   IconUser,
   IconShield,
+  IconShieldCheck,
   IconSparkle,
   IconAccess,
   IconReceipt,
@@ -58,6 +59,22 @@ const NAV: NavGroup[] = [
 ];
 
 const ALL_ITEMS = NAV.flatMap((g) => g.items);
+
+// Nav mode ADMIN: saat berada di /admin/*, sidebar berganti konteks jadi menu operator saja
+// (bukan tercampur menu pelanggan). Item ini sengaja DI LUAR ALL_ITEMS supaya tak bocor ke
+// pencarian/breadcrumb pelanggan. Aktif hanya untuk admin (isAdmin) di path /admin.
+const ADMIN_NAV: NavItem[] = [
+  { href: "/admin", label: "Ringkasan", icon: IconGrid },
+  { href: "/admin/pengguna", label: "Pengguna", icon: IconUser },
+  { href: "/admin/payment-link", label: "Payment Link", icon: IconCard },
+  { href: "/admin/acara", label: "Pendaftar Acara", icon: IconCalendar },
+  { href: "/admin/audit", label: "Jejak Audit", icon: IconShieldCheck },
+];
+
+function adminItemActive(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname === href || pathname.startsWith(href + "/");
+}
 
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
@@ -113,7 +130,48 @@ function BrandMark() {
   );
 }
 
-function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+function NavList({ pathname, isAdmin, onNavigate }: { pathname: string; isAdmin?: boolean; onNavigate?: () => void }) {
+  const adminMode = Boolean(isAdmin) && pathname.startsWith("/admin");
+
+  // Konteks ADMIN: tampilkan menu operator + tautan kembali ke akun. Sembunyikan menu pelanggan.
+  if (adminMode) {
+    return (
+      <nav className="flex-1 space-y-1.5 px-4">
+        <Link
+          href="/"
+          onClick={onNavigate}
+          className="group mb-2 flex items-center gap-2 rounded-2xl px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
+        >
+          <span aria-hidden className="text-base leading-none">&larr;</span>
+          Kembali ke akun
+        </Link>
+        <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+          Operator
+        </div>
+        {ADMIN_NAV.map((item) => {
+          const active = adminItemActive(pathname, item.href);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onNavigate}
+              className={`group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-[background-color,color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                active
+                  ? "bg-white/[0.14] text-white ring-1 ring-inset ring-white/15"
+                  : "text-white/85 hover:bg-white/[0.08] hover:text-white"
+              }`}
+            >
+              <Icon className={`h-5 w-5 transition-colors duration-300 ${active ? "text-white" : "text-white/75 group-hover:text-white"}`} />
+              {item.label}
+              {active ? <span className="ml-auto h-1.5 w-1.5 rounded-full bg-sky" /> : null}
+            </Link>
+          );
+        })}
+      </nav>
+    );
+  }
+
   return (
     <nav className="flex-1 space-y-7 px-4">
       {NAV.map((group) => (
@@ -149,6 +207,21 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
           })}
         </div>
       ))}
+      {isAdmin ? (
+        <div className="space-y-1.5">
+          <div className="px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+            Operator
+          </div>
+          <Link
+            href="/admin"
+            onClick={onNavigate}
+            className="group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-white/85 transition-[background-color,color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-white/[0.08] hover:text-white"
+          >
+            <IconShieldCheck className="h-5 w-5 text-white/75 transition-colors duration-300 group-hover:text-white" />
+            Admin
+          </Link>
+        </div>
+      ) : null}
     </nav>
   );
 }
@@ -271,10 +344,12 @@ function TopSearch() {
 function SidebarBody({
   pathname,
   user,
+  isAdmin,
   onNavigate,
 }: {
   pathname: string;
   user: { name: string; email: string; avatarUrl?: string | null } | null;
+  isAdmin?: boolean;
   onNavigate?: () => void;
 }) {
   return (
@@ -282,7 +357,7 @@ function SidebarBody({
       <div className="px-6 pb-6 pt-6">
         <BrandMark />
       </div>
-      <NavList pathname={pathname} onNavigate={onNavigate} />
+      <NavList pathname={pathname} isAdmin={isAdmin} onNavigate={onNavigate} />
       <UserFooter user={user} />
     </>
   );
@@ -291,10 +366,12 @@ function SidebarBody({
 export function AppShell({
   user,
   alerts = [],
+  isAdmin = false,
   children,
 }: {
   user: { name: string; email: string; uuid?: string; avatarUrl?: string | null } | null;
   alerts?: Alert[];
+  isAdmin?: boolean;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -305,7 +382,7 @@ export function AppShell({
     <div className="min-h-[100dvh] lg:grid lg:grid-cols-[18rem_1fr]">
       {/* Sidebar (desktop) */}
       <aside className="sticky top-0 hidden h-[100dvh] flex-col bg-gradient-to-b from-brand-500 to-brand-700 lg:flex">
-        <SidebarBody pathname={pathname} user={user} />
+        <SidebarBody pathname={pathname} user={user} isAdmin={isAdmin} />
       </aside>
 
       {/* Mobile drawer */}
@@ -332,7 +409,7 @@ export function AppShell({
           >
             <IconClose className="h-5 w-5" />
           </button>
-          <SidebarBody pathname={pathname} user={user} onNavigate={() => setOpen(false)} />
+          <SidebarBody pathname={pathname} user={user} isAdmin={isAdmin} onNavigate={() => setOpen(false)} />
         </div>
       </div>
 

@@ -54,27 +54,42 @@ function toRow(r: SelectedRow): AdminInvoiceRow {
   };
 }
 
-export async function getAdminOverview(): Promise<{ data?: AdminOverview; error?: string }> {
+export async function getAdminOverview(scope?: string): Promise<{ data?: AdminOverview; error?: string }> {
   try {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Filter lini layanan (opsional). Invoice punya kolom scope langsung. Subscription TIDAK
+    // punya scope -> disaring via productCode yang produknya ber-scope tsb. User bersifat
+    // lintas-lini -> "punya" sebuah lini bila ada invoice/entitlement pada scope itu.
+    const invScope = scope ? { scope } : {};
+    const subCodes = scope
+      ? (await prisma.product.findMany({ where: { scope }, select: { code: true } })).map((p) => p.code)
+      : null;
+    const subWhere = subCodes ? { status: "active", productCode: { in: subCodes } } : { status: "active" };
+    const userWhere = scope
+      ? { OR: [{ invoices: { some: { scope } } }, { entitlements: { some: { scope } } }] }
+      : {};
+    const userMonthWhere = scope
+      ? { AND: [{ createdAt: { gte: monthStart } }, userWhere] }
+      : { createdAt: { gte: monthStart } };
 
     const [revAgg, pendAgg, totalUsers, newUsersMonth, activeSubs, recent, pending] = await Promise.all([
       prisma.invoice.aggregate({
         _sum: { grossAmount: true },
         _count: true,
-        where: { status: { in: PAID }, paidAt: { gte: monthStart } },
+        where: { status: { in: PAID }, paidAt: { gte: monthStart }, ...invScope },
       }),
       prisma.invoice.aggregate({
         _sum: { grossAmount: true },
         _count: true,
-        where: { status: "pending" },
+        where: { status: "pending", ...invScope },
       }),
-      prisma.user.count(),
-      prisma.user.count({ where: { createdAt: { gte: monthStart } } }),
-      prisma.subscription.count({ where: { status: "active" } }),
-      prisma.invoice.findMany({ orderBy: { createdAt: "desc" }, take: 10, select: rowSelect }),
-      prisma.invoice.findMany({ where: { status: "pending" }, orderBy: { createdAt: "desc" }, take: 8, select: rowSelect }),
+      prisma.user.count({ where: userWhere }),
+      prisma.user.count({ where: userMonthWhere }),
+      prisma.subscription.count({ where: subWhere }),
+      prisma.invoice.findMany({ where: invScope, orderBy: { createdAt: "desc" }, take: 10, select: rowSelect }),
+      prisma.invoice.findMany({ where: { status: "pending", ...invScope }, orderBy: { createdAt: "desc" }, take: 8, select: rowSelect }),
     ]);
 
     return {
