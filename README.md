@@ -14,8 +14,8 @@ kelola langganan dan hak akses, plus sistem pembayaran (Midtrans) yang tampilann
 sesuai merek Anda dan dipakai ulang di web, aplikasi, maupun kelas.
 
 <p>
-  <a href="https://demo-akun.maubisa.id"><img alt="Demo langsung" src="https://img.shields.io/badge/Demo%20langsung-demo--akun.maubisa.id-0a48b7?style=for-the-badge&logo=vercel&logoColor=white"></a>
-  <a href="https://github.com/maubisa-id/account-center-starter/generate"><img alt="Gunakan template ini" src="https://img.shields.io/badge/Gunakan%20template%20ini-2ea44f?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://demo-akun.maubisa.id"><img alt="Demo langsung" src="https://img.shields.io/badge/Demo%20langsung-demo--akun.maubisa.id-0a48b7?logo=vercel&logoColor=white"></a>
+  <a href="https://github.com/maubisa-id/account-center-starter/generate"><img alt="Gunakan template ini" src="https://img.shields.io/badge/Gunakan%20template%20ini-2ea44f?logo=github&logoColor=white"></a>
   <a href="https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter&env=DB_PROVIDER,DATABASE_URL,BETTER_AUTH_SECRET,TURNSTILE_SECRET_KEY&envDescription=Provider%20%2B%20koneksi%20database%2C%20rahasia%20Better%20Auth%2C%20dan%20kunci%20Turnstile%20anti-bot%20%28wajib%20di%20produksi%29&envLink=https://github.com/maubisa-id/account-center-starter/blob/main/.env.example&project-name=account-center&repository-name=account-center-starter"><img alt="Deploy with Vercel" src="https://vercel.com/button"></a>
 </p>
 
@@ -23,22 +23,22 @@ sesuai merek Anda dan dipakai ulang di web, aplikasi, maupun kelas.
      "compatibility" Dependabot) — status CI, rilis terbaru, lisensi, dan commit terakhir
      ikut ter-update sendiri. Hanya bekerja pada repositori publik. -->
 <p>
-  <a href="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml"><img alt="Status CI" src="https://img.shields.io/github/actions/workflow/status/maubisa-id/account-center-starter/ci.yml?branch=main&style=for-the-badge&label=CI&logo=githubactions&logoColor=white"></a>
-  <a href="https://github.com/maubisa-id/account-center-starter/releases/latest"><img alt="Rilis terbaru" src="https://img.shields.io/github/v/release/maubisa-id/account-center-starter?style=for-the-badge&color=3FB950&label=rilis"></a>
-  <a href="./LICENSE"><img alt="Lisensi" src="https://img.shields.io/github/license/maubisa-id/account-center-starter?style=for-the-badge&color=3FB950"></a>
-  <a href="https://github.com/maubisa-id/account-center-starter/commits/main"><img alt="Commit terakhir" src="https://img.shields.io/github/last-commit/maubisa-id/account-center-starter?style=for-the-badge"></a>
+  <a href="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml"><img alt="Status CI" src="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/maubisa-id/account-center-starter/releases/latest"><img alt="Rilis terbaru" src="https://img.shields.io/github/v/release/maubisa-id/account-center-starter?color=3FB950&label=rilis"></a>
+  <a href="./LICENSE"><img alt="Lisensi" src="https://img.shields.io/github/license/maubisa-id/account-center-starter?color=3FB950"></a>
+  <a href="https://github.com/maubisa-id/account-center-starter/commits/main"><img alt="Commit terakhir" src="https://img.shields.io/github/last-commit/maubisa-id/account-center-starter"></a>
 </p>
 
 <p>
-  <a href="https://nextjs.org/"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"></a>
-  <a href="https://react.dev/"><img alt="React" src="https://img.shields.io/badge/React-19-149ECA?style=for-the-badge&logo=react&logoColor=white"></a>
-  <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white"></a>
-  <a href="https://tailwindcss.com/"><img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-v4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white"></a>
-  <a href="https://www.prisma.io/"><img alt="Prisma" src="https://img.shields.io/badge/Prisma-6-2D3748?style=for-the-badge&logo=prisma&logoColor=white"></a>
+  <a href="https://nextjs.org/"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white"></a>
+  <a href="https://react.dev/"><img alt="React" src="https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white"></a>
+  <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white"></a>
+  <a href="https://tailwindcss.com/"><img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white"></a>
+  <a href="https://www.prisma.io/"><img alt="Prisma" src="https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma&logoColor=white"></a>
 </p>
 <p>
-  <a href="https://www.better-auth.com/"><img alt="Better Auth" src="https://img.shields.io/badge/Better%20Auth-1.6-000000?style=for-the-badge"></a>
-  <a href="https://docs.midtrans.com/"><img alt="Midtrans" src="https://img.shields.io/badge/Midtrans-Core%20API-0B7BE9?style=for-the-badge"></a>
+  <a href="https://www.better-auth.com/"><img alt="Better Auth" src="https://img.shields.io/badge/Better%20Auth-1.6-000000"></a>
+  <a href="https://docs.midtrans.com/"><img alt="Midtrans" src="https://img.shields.io/badge/Midtrans-Core%20API-0B7BE9"></a>
 </p>
 
 <br/>

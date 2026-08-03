@@ -114,3 +114,15 @@ export async function cancelSubscription(id: string): Promise<boolean> {
     return false;
   }
 }
+
+// Baca status langganan LANGSUNG dari Midtrans (server-authoritative). Dipakai webhook untuk
+// MEMVERIFIKASI notifikasi lifecycle subscription yang TIDAK ber-signature (active/inactive)
+// sebelum menyentuh DB. Mengembalikan null bila Midtrans tak menjawab / langganan tak ada.
+export async function getSubscription(id: string): Promise<SubscriptionResult | null> {
+  try {
+    const data = await subFetch(`/${encodeURIComponent(id)}`, { method: "GET" });
+    return { id: String(data.id ?? id), status: String(data.status ?? "") };
+  } catch {
+    return null;
+  }
+}

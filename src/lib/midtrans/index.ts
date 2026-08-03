@@ -19,6 +19,7 @@ export {
   disableSubscription,
   enableSubscription,
   cancelSubscription,
+  getSubscription,
   type CreateSubscriptionParams,
   type SubscriptionResult,
 } from "./subscription";

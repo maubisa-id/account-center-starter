@@ -8,6 +8,7 @@ import {
   fetchTransactionStatus,
   createSubscription,
   cancelSubscription,
+  getSubscription,
 } from "@/lib/midtrans";
 import { sendEmail } from "@/lib/email";
 import { receiptEmail, paymentFailedEmail } from "@/lib/email-templates";
@@ -55,6 +56,37 @@ type Notif = {
   custom_field3?: string;
 };
 
+// Notifikasi LIFECYCLE subscription (Recurring Notification URL): Midtrans mengabari perubahan
+// status langganan (active/inactive) dengan payload ber-`subscription_id` TANPA order_id /
+// signature_key / status_code. Ini BEDA dari notifikasi CHARGE berulang (ber-order_id +
+// signature) yang ditangani jalur utama POST. Tanpa penanganan khusus, payload ini jatuh ke
+// cek signature dan ditolak 403 -> dashboard Midtrans menandai Recurring Notification URL
+// "error". Payload TAK ber-signature, jadi JANGAN percaya isinya: verifikasi status resmi ke
+// Get Subscription API (server key) dulu, dan hanya untuk langganan yang benar-benar milik kita
+// (cegah probing subscription_id acak).
+async function handleSubscriptionNotification(subscriptionId: string): Promise<NextResponse> {
+  const sub = await prisma.subscription.findFirst({ where: { providerRef: subscriptionId } });
+  // Bukan langganan kita (atau provider_ref sudah dilepas) -> akui saja, jangan bocorkan apa pun.
+  if (!sub) return NextResponse.json({ ok: true, ignored: "unknown-subscription" });
+
+  const remote = await getSubscription(subscriptionId);
+  // Midtrans tak menjawab (jaringan/5xx): akui 200 tanpa mengubah apa pun. Sumber kebenaran
+  // perpanjangan tetap notifikasi CHARGE ber-signature; retry Midtrans bisa datang lagi.
+  if (!remote) return NextResponse.json({ ok: true, unverified: true });
+
+  // Status Midtrans hanya "active"/"inactive". inactive = berhenti menagih (retry dunning habis,
+  // max_interval tercapai, atau di-disable). JANGAN cabut akses yang sudah dibayar: cukup setel
+  // cancelAtPeriodEnd supaya UI benar & sistem tak menanti charge yang takkan datang. Akses tetap
+  // sampai currentPeriodEnd (invoice renewal yang gagal memang tak pernah "paid"). Idempoten.
+  if (remote.status === "inactive" && sub.status === "active" && !sub.cancelAtPeriodEnd) {
+    await prisma.subscription.update({
+      where: { id: sub.id },
+      data: { cancelAtPeriodEnd: true, updatedAt: new Date() },
+    });
+  }
+  return NextResponse.json({ ok: true, subscription: sub.id, status: remote.status });
+}
+
 // Webhook Midtrans. Satu-satunya jalur yang boleh mengaktifkan akses (ADR-002).
 // Wajib: verifikasi signature + idempotent (aman diproses berkali-kali).
 export async function POST(req: Request) {
@@ -71,6 +103,12 @@ export async function POST(req: Request) {
   const signatureKey = String(n.signature_key ?? "");
   const transactionStatus = String(n.transaction_status ?? "");
   const fraudStatus = n.fraud_status ? String(n.fraud_status) : null;
+
+  // Cabang lifecycle subscription (recurring status) — ditangani SEBELUM cek signature karena
+  // payload ini sengaja tak ber-order_id/signature. Verifikasi keaslian via Get Subscription API.
+  if (!orderId && n.subscription_id) {
+    return handleSubscriptionNotification(String(n.subscription_id));
+  }
 
   if (!orderId || !verifySignature({ orderId, statusCode, grossAmount, signatureKey })) {
     return NextResponse.json({ error: "signature tidak valid" }, { status: 403 });
