@@ -2,6 +2,8 @@ import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isAdminEmail } from "@/lib/admin";
+import { adminMfaRequired } from "@/lib/admin-mfa";
 import { idr, tanggal, namaProduk, namaLayanan, metodeBayar } from "@/lib/format";
 import { LOGO_URL } from "@/lib/brand";
 import { PrintButton } from "@/components/dashboard/print-button";
@@ -25,11 +27,25 @@ export default async function InvoicePage({ params }: { params: Promise<{ orderI
   const email = session?.user?.email;
   if (!email) redirect(`/masuk?redirect=${encodeURIComponent(`/invoice/${orderId}`)}`);
 
-  const user = await prisma.user.findFirst({ where: { email } });
-  const invoice = user
-    ? await prisma.invoice.findFirst({ where: { orderId, userId: user.id } })
-    : null;
-  if (!user || !invoice) notFound();
+  // Invoice diambil per orderId; akses diizinkan bila pemiliknya sendiri ATAU admin
+  // (allowlist). "Ditagihkan kepada" selalu memakai pemilik invoice, bukan sesi aktif,
+  // supaya admin yang mencetak invoice pelanggan tetap menampilkan identitas pelanggan.
+  const invoice = await prisma.invoice.findFirst({ where: { orderId } });
+  if (!invoice) notFound();
+  const admin = isAdminEmail(email);
+  const viewer = await prisma.user.findFirst({ where: { email } });
+  const isOwner = Boolean(viewer && viewer.id === invoice.userId);
+  if (!isOwner && !admin) notFound();
+  // Admin membuka invoice pelanggan LAIN = permukaan admin -> tunduk pada gerbang MFA yang sama
+  // seperti /admin (menutup bypass deep-link di luar admin layout). Pemilik sendiri tak terpengaruh.
+  if (admin && !isOwner && adminMfaRequired()) {
+    const twoFactorEnabled = Boolean(
+      (session?.user as { twoFactorEnabled?: boolean } | undefined)?.twoFactorEnabled,
+    );
+    if (!twoFactorEnabled) redirect("/keamanan?mfa=required");
+  }
+  const user = isOwner ? viewer : await prisma.user.findFirst({ where: { id: invoice.userId } });
+  if (!user) notFound();
 
   const paid = invoice.status === "paid" || invoice.status === "settlement";
   const statusLabel: Record<string, string> = {

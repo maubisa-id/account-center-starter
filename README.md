@@ -95,6 +95,13 @@ di sini, siap Anda pakai ulang.
 - **Privasi (UU PDP).** Pengguna bisa mengunduh datanya (JSON) dan menghapus akun.
 - **Buat akun dari sistem lain.** Jalur aman agar website atau aplikasi lain bisa membuatkan akun
   setelah pembelian.
+- **Panel admin.** Dibuka lewat allowlist email (`ADMIN_EMAILS`): ringkasan pendapatan dan tunggakan,
+  telusuri pengguna beserta langganan/tagihan/akses, buat Payment Link, pendaftar acara (gabungan
+  gratis dari CMS dan berbayar) dengan ekspor CSV, cetak invoice pelanggan, pencarian global, dan
+  filter per lini layanan. Bisa beri/cabut hak akses manual, semua tercatat di **jejak audit**.
+- **Keamanan operator.** Verifikasi dua langkah (2FA) untuk akses admin bersifat fail-closed di
+  produksi (`ADMIN_REQUIRE_MFA`), dan jejak audit mencatat aksi sensitif (beri/cabut akses, buat
+  Payment Link, ekspor data, hapus akun) selaras dengan PCI DSS, ISO 27001, SOC 2, dan UU PDP.
 
 ## Cara kerjanya
 

@@ -3,20 +3,27 @@ import { getSessionEmail } from "@/lib/account";
 import { isAdminEmail } from "@/lib/admin";
 import { getAdminOverview, type AdminInvoiceRow } from "@/lib/admin-stats";
 import { idr, tanggal } from "@/lib/format";
+import { lineName } from "@/lib/service-lines";
 import { SectionTitle, StatCard, Panel, Badge, ButtonLink, EmptyState } from "@/components/ui";
 import { DbError } from "@/components/states";
 import { AdminTabs } from "@/components/admin/admin-tabs";
-import { IconReceipt, IconClock, IconUser, IconSparkle, IconCalendar, IconCheck } from "@/components/icons";
+import { ScopeFilter } from "@/components/admin/scope-filter";
+import { IconReceipt, IconClock, IconUser, IconSparkle, IconCalendar, IconCheck, IconSearch } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
 
 // Dashboard admin (landing setelah login untuk email di ADMIN_EMAILS). Ikhtisar pembayaran,
 // pengguna, langganan + daftar yang perlu ditindak. Read-only. Gerbang: sesi + email admin.
-export default async function AdminOverviewPage() {
+export default async function AdminOverviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ scope?: string }>;
+}) {
   const email = await getSessionEmail();
   if (!isAdminEmail(email)) notFound();
 
-  const { data, error } = await getAdminOverview();
+  const { scope } = await searchParams;
+  const { data, error } = await getAdminOverview(scope);
   if (error) {
     return (
       <div className="space-y-8">
@@ -26,6 +33,7 @@ export default async function AdminOverviewPage() {
     );
   }
   const o = data!;
+  const lini = scope ? lineName(scope) : "semua layanan";
 
   return (
     <div className="space-y-8">
@@ -33,8 +41,26 @@ export default async function AdminOverviewPage() {
       <SectionTitle
         eyebrow="Admin"
         title="Ringkasan"
-        desc="Ikhtisar pembayaran, pengguna, dan langganan Maubisa. Halaman ini hanya untuk dilihat."
+        desc={`Ikhtisar pembayaran, pengguna, dan langganan Maubisa (${lini}). Halaman ini hanya untuk dilihat.`}
       />
+
+      <form method="get" action="/admin/cari" className="flex max-w-xl items-center gap-2">
+        <div className="flex flex-1 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm shadow-soft ring-1 ring-black/[0.08] focus-within:ring-brand-300">
+          <IconSearch className="h-4 w-4 text-zinc-400" />
+          <input
+            type="search"
+            name="q"
+            placeholder="Cari pengguna (nama/email) atau order ID..."
+            aria-label="Pencarian admin"
+            className="w-full bg-transparent text-ink placeholder:text-zinc-400 focus:outline-none"
+          />
+        </div>
+        <button type="submit" className="rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-brand transition-colors hover:bg-brand-600">
+          Cari
+        </button>
+      </form>
+
+      <ScopeFilter basePath="/admin" current={scope} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard

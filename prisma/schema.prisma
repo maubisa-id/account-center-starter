@@ -120,6 +120,7 @@ model EventRegistration {
   userId      Int      @map("user_id")
   eventRef    String   @map("event_ref")
   eventTitle  String?  @map("event_title")
+  scope       String?
   institution String?
   note        String?
   paid        Boolean  @default(false)
@@ -267,6 +268,22 @@ model PaymentEvent {
 
   @@map("payment_events")
   @@index([orderId])
+}
+
+// Jejak audit aksi admin sensitif (suspend, grant/revoke akses, dll). Mengikuti tabel kanonik
+// maubisa_core.audit_logs. actorId = users.id admin pelaku (nullable utk aksi sistem). metadata
+// JSON disimpan sebagai String di SQLite (dev), native JSON di MySQL prod. Append-only.
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  actorId   Int?     @map("actor_id")
+  action    String
+  target    String?
+  metadata  String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+  @@index([actorId])
+  @@index([action])
 }
 
 // ── Better Auth (tabel identitas/sesi dikelola library) ──────────────

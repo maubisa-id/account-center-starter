@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getSessionEmail } from "@/lib/account";
+import { logAudit } from "@/lib/audit";
 import { isValidEmail } from "@/lib/is-email";
 import { secureEqual } from "@/lib/secure-compare";
 import { sendEmail } from "@/lib/email";
@@ -213,6 +214,14 @@ export async function deleteAccount(): Promise<{ ok?: boolean; error?: string }>
       await prisma.authTwoFactor.deleteMany({ where: { userId: user.authUserId } });
       await prisma.authUser.delete({ where: { id: user.authUserId } }).catch(() => {});
     }
+    // Audit (UU PDP Pasal 20): catat penghapusan akun. actorEmail eksplisit karena sesi
+    // sudah dihapus di atas; baris users masih ada (soft-delete) sehingga actor teresolusi.
+    await logAudit({
+      action: "account_deletion",
+      target: `user:${user.uuid}`,
+      metadata: { email: user.email, mode: "self-service", soft: true },
+      actorEmail: user.email,
+    });
     return { ok: true };
   } catch (e) {
     return { error: String(e) };

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { getAccount, getSessionEmail } from "@/lib/account";
+import { isAdminEmail } from "@/lib/admin";
 import { getAlerts } from "@/lib/alerts";
 import { AppShell } from "@/components/shell";
 import { ToastProvider } from "@/components/toast";
@@ -13,6 +14,7 @@ export default async function AppGroupLayout({ children }: { children: ReactNode
   const email = await getSessionEmail();
   if (!email) redirect("/masuk");
 
+  const isAdmin = isAdminEmail(email);
   const { user } = await getAccount();
   const session = await auth.api.getSession({ headers: await headers() });
   const twoFactorEnabled = Boolean(
@@ -29,6 +31,7 @@ export default async function AppGroupLayout({ children }: { children: ReactNode
             : null
         }
         alerts={alerts}
+        isAdmin={isAdmin}
       >
         {children}
       </AppShell>
