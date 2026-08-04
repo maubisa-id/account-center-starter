@@ -78,10 +78,20 @@ export async function POST(req: Request) {
   if (usingSavedCard) {
     const pm = await prisma.paymentMethod.findFirst({
       where: { id: payload.savedMethodId, userId: user.id },
-      select: { savedToken: true },
+      select: { savedToken: true, verified: true },
     });
     if (!pm) {
       return NextResponse.json({ error: "Kartu tersimpan tidak ditemukan." }, { status: 404 });
+    }
+    // A-1 (anti card-grafting): kartu 'unverified' (registrasi mandiri, BELUM terbukti lewat
+    // transaksi 3DS lunas milik user) TIDAK boleh dipakai bayar sekali-klik tanpa CVV. Bila token
+    // kartu orang lain bocor lalu didaftarkan, ia tetap unverified -> ditolak di sini. Untuk
+    // mengaktifkannya, user bayar sekali dgn kartu tsb (3DS) -> webhook menandai verified.
+    if (!pm.verified) {
+      return NextResponse.json(
+        { error: "Kartu ini belum bisa dipakai bayar sekali-klik. Lakukan satu pembayaran dengan kartu ini dulu (verifikasi 3DS) untuk mengaktifkannya." },
+        { status: 403 },
+      );
     }
     savedCardToken = pm.savedToken;
   }

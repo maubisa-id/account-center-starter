@@ -34,13 +34,15 @@ if (!re.test(before)) {
 }
 let out = before.replace(re, `$1${provider}$3`);
 
-// Kolom JSON/payload PANJANG: di MySQL, `String` default = VARCHAR(191). Payload webhook Midtrans
-// (JSON penuh) MELEBIHI 191 char -> INSERT paymentEvent gagal -> transaksi webhook rollback ->
-// PEMBAYARAN TAK PERNAH TERKONFIRMASI. Perbaikan: native type TEXT. Tapi konektor sqlite TIDAK
-// mendukung @db.Text (dev lokal nol-setup pakai sqlite). Jadi: SUNTIK @db.Text hanya untuk
-// non-sqlite, dan LEPAS untuk sqlite. Idempoten (aman dijalankan berulang). Postgres: `String`
-// sudah `text`, jadi @db.Text hanya penegasan (tetap valid).
-const LONG_TEXT_FIELDS = ["payload", "rawPayload", "chargePayload", "metadata"];
+// Kolom PANJANG: di MySQL, `String` default = VARCHAR(191). Dua kelompok melebihi batas ini:
+//   1) Payload JSON webhook Midtrans (payload/rawPayload/chargePayload/metadata) -> INSERT gagal
+//      -> transaksi webhook rollback -> PEMBAYARAN TAK PERNAH TERKONFIRMASI.
+//   2) Blob 2FA better-auth (secret & backupCodes) = hasil enkripsi; `backupCodes` (10 kode
+//      terenkripsi) MELEBIHI 191 char -> `enable 2FA` gagal (P2000 "value too long").
+// Perbaikan: native type TEXT. Konektor sqlite TIDAK mendukung @db.Text (dev lokal nol-setup pakai
+// sqlite). Jadi: SUNTIK @db.Text hanya untuk non-sqlite, dan LEPAS untuk sqlite. Idempoten. Postgres:
+// `String` sudah `text`, jadi @db.Text hanya penegasan (tetap valid).
+const LONG_TEXT_FIELDS = ["payload", "rawPayload", "chargePayload", "metadata", "secret", "backupCodes"];
 const wantText = provider !== "sqlite";
 for (const field of LONG_TEXT_FIELDS) {
   // ^<indent><field> String[?] [ @db.Text] <sisa (mis. @map)>  -> pertahankan @map, atur @db.Text.
@@ -52,7 +54,7 @@ if (out !== before) {
   writeFileSync(schemaPath, out);
   console.log(
     `schema.prisma: datasource.provider -> "${provider}"` +
-      (wantText ? " + @db.Text pada kolom JSON panjang (payload/rawPayload/chargePayload/metadata)" : ""),
+      (wantText ? " + @db.Text pada kolom panjang (payload/rawPayload/chargePayload/metadata + 2FA secret/backupCodes)" : ""),
   );
 } else {
   console.log(`schema.prisma: sudah sesuai provider "${provider}" (tidak diubah)`);

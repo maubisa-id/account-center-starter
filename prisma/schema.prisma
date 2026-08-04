@@ -81,6 +81,7 @@ model PaymentMethod {
   savedToken     String    @map("saved_token")
   savedTokenExpiresAt DateTime? @map("saved_token_expires_at")
   isPrimary      Boolean   @default(false) @map("is_primary")
+  verified       Boolean   @default(false) // true HANYA bila token terbukti dari transaksi 3DS lunas milik user (webhook). Kartu 'unverified' (registrasi mandiri) TIDAK boleh dipakai one-click.
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
 
@@ -312,6 +313,11 @@ model AuthTwoFactor {
   backupCodes             String
   verified                Boolean  @default(false)
   failedVerificationCount Int      @default(0)
+  // Kunci akun sementara setelah gagal verifikasi berulang (NIST SP 800-63B). WAJIB ada:
+  // better-auth 1.6 menulis kolom ini saat verifikasi 2FA sign-in (reset saat sukses / set saat
+  // gagal). Tanpa kolom ini, verifyTotp login melempar "Unknown argument lockedUntil" -> 2FA login
+  // gagal & pengguna terkunci walau enable-nya sukses.
+  lockedUntil             DateTime?
   userId                  String
   user                    AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
