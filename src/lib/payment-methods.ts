@@ -31,6 +31,9 @@ export type SavedCardInput = {
   expMonth?: number | null;
   expYear?: number | null;
   savedTokenExpiresAt?: Date | null;
+  // true HANYA bila token terbukti dari transaksi 3DS lunas milik user (jalur webhook). Registrasi
+  // kartu mandiri (POST /api/payment-methods) = false -> tak boleh one-click (cegah card-grafting A-1).
+  verified?: boolean;
 };
 
 // Simpan/segarkan metode pembayaran kartu untuk pengguna. Idempoten per (userId, savedToken).
@@ -59,6 +62,8 @@ export async function upsertSavedCard(
         expMonth: input.expMonth ?? undefined,
         expYear: input.expYear ?? undefined,
         savedTokenExpiresAt: input.savedTokenExpiresAt ?? undefined,
+        // Naikkan ke verified bila transaksi ini membuktikannya; JANGAN turunkan kembali.
+        verified: input.verified ? true : undefined,
         updatedAt: new Date(),
       },
     });
@@ -79,6 +84,7 @@ export async function upsertSavedCard(
       savedToken: input.savedToken,
       savedTokenExpiresAt: input.savedTokenExpiresAt ?? null,
       isPrimary: count === 0,
+      verified: input.verified ?? false,
     },
     select: { id: true },
   });

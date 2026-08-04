@@ -272,6 +272,8 @@ export async function POST(req: Request) {
             maskedCard: n.masked_card ?? null,
             bankCode: savedCardBankCode,
             savedTokenExpiresAt: n.saved_token_id_expired_at ? new Date(n.saved_token_id_expired_at) : null,
+            // Token dari transaksi 3DS LUNAS milik user -> tepercaya untuk one-click (A-1).
+            verified: true,
           });
         }
 
