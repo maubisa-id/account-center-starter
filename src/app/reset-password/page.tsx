@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ResetPasswordForm } from "@/components/auth/recovery-forms";
 
-export const metadata: Metadata = { title: "Atur ulang kata sandi · Maubisa" };
+export const metadata: Metadata = { title: "Atur ulang kata sandi - Account Center Starter" };
 export const dynamic = "force-dynamic";
 
 export default async function ResetPasswordPage({

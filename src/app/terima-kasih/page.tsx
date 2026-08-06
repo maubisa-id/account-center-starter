@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { idr } from "@/lib/format";
 import { ResendAccessEmail } from "@/components/pay/resend-access-email";
 
-export const metadata = { title: "Pembayaran diterima · Maubisa" };
+export const metadata = { title: "Pembayaran diterima - Account Center Starter" };
 
 export const dynamic = "force-dynamic";
 
-// Domain utama Maubisa untuk tombol "pulang". Bisa ditimpa lewat env bila domain berbeda.
+// Domain utama untuk tombol "pulang". Bisa ditimpa lewat env bila domain berbeda.
 const MAIN_SITE = process.env.NEXT_PUBLIC_MAIN_SITE_URL ?? "https://maubisa.id";
 
 // Samarkan email untuk reassurance ("b•••@email.com"): cukup untuk pembeli mengenali
@@ -78,7 +78,7 @@ export default async function TerimaKasih({
             href={MAIN_SITE}
             className="group inline-flex items-center gap-3 rounded-full bg-brand-500 py-2.5 pl-5 pr-2 text-sm font-semibold text-white shadow-brand transition-[transform,background-color] duration-300 hover:-translate-y-[1px] hover:bg-brand-600"
           >
-            <span>Kembali ke Maubisa</span>
+            <span>Kembali ke situs utama</span>
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
               <IconArrow className="h-4 w-4" />
             </span>

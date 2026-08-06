@@ -6,7 +6,7 @@ import { createPaymentLinkOrder, type PaymentLinkInput } from "@/lib/payment-lin
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// PAYMENT LINK (Motion C — bimbingan skripsi, ADR-001 §2.4 / ADR-002).
+// PAYMENT LINK (Motion C — konsultasi, ADR-001 §2.4 / ADR-002).
 // Dipanggil server-to-server oleh admin/web-utama SETELAH konsultasi WhatsApp.
 // Gerbang shared secret; alur inti dibagi dgn /admin lewat createPaymentLinkOrder.
 export async function POST(req: NextRequest) {

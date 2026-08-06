@@ -11,14 +11,14 @@ const SERVICE_ICON: Record<ServiceKey, IconType> = {
 };
 
 // Peluncur "Layanan saya" — kartu ke dashboard produk yang AKTIF dimiliki user, memakai nama
-// lini produk resmi (Maubisa Lulus/Berkembang/Mahir). SATU sumber = lib/services.activeServices,
+// lini produk resmi (Bimbingan/Berkembang/Mahir). SATU sumber = lib/services.activeServices,
 // dipakai bersama Ringkasan & /akses (hindari duplikasi). Cookie Better Auth domain-wide
 // `.maubisa.id` membawa sesi, jadi "Buka" cukup tautan biasa. Dashboard yang belum live tampil
 // "segera hadir" (tanpa tautan mati); tombol komunitas (Discord) tetap aktif karena eksternal.
 export function ServiceLauncher({
   services,
   heading = "Layanan saya",
-  subheading = "Lanjutkan dari tempat kamu berhenti. Satu login untuk semua layanan Maubisa.",
+  subheading = "Lanjutkan dari tempat kamu berhenti. Satu login untuk semua layanan.",
   onlyEnabled = false,
 }: {
   services: LaunchTarget[];

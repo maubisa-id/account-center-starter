@@ -26,20 +26,19 @@ const SCOPE_ICON: Record<CatalogItem["scope"], IconType> = {
 };
 
 // Kategori filter = LINI layanan (scope), nama & urutannya dari sumber tunggal service-lines,
-// jadi SAMA dengan launcher & /akses. Produk (MBG+, dst.) muncul sebagai kartu di dalam lininya.
+// jadi SAMA dengan launcher & /akses. Produk muncul sebagai kartu di dalam lininya.
 const CATEGORIES: { id: "all" | CatalogItem["scope"]; label: string }[] = [
   { id: "all", label: "Semua" },
   ...SERVICE_LINE_ORDER.map((scope) => ({ id: scope, label: lineName(scope) })),
 ];
 
-// "Cocok untuk…" — menerjemahkan brand MBG ke TUJUAN user (persona Rina/Damar/Bu Sari
-// menilai layanan dari outcome, bukan nama produk). Presentasional, dipetakan per item.
+// "Cocok untuk…" — menerjemahkan produk ke tujuan pengguna. Presentasional, dipetakan per item.
 const BEST_FOR: Record<string, string> = {
-  "mbg-plus": "Pengembangan diri & komunitas",
-  "mbg-forge": "Webinar bersama praktisi",
-  "mbg-space": "Belajar gratis",
-  kelas: "Sertifikasi & karier",
-  thesis: "Bimbingan skripsi/tesis",
+  "membership-pro": "Langganan & komunitas",
+  "webinar-sample": "Webinar bersama praktisi",
+  "webinar-free": "Acara gratis",
+  "course-sample": "Kursus & sertifikasi",
+  "consult-basic": "Konsultasi 1-on-1",
   book: "Referensi belajar",
 };
 
@@ -60,7 +59,7 @@ function MutedPill({ children }: { children: React.ReactNode }) {
 }
 
 function Cta({ item, active, hasPlus }: { item: BrowserItem; active: boolean; hasPlus: boolean }) {
-  // Acara (mis. MBG Forge) dijual per-webinar, bukan paket langganan. Kartu katalog jadi
+  // Acara berbayar dijual per-webinar, bukan paket langganan. Kartu katalog jadi
   // penunjuk ke /acara agar user memilih sesi spesifik, bukan tombol "Beli"/"Kelola paket".
   if (item.itemType === "event") {
     return (
@@ -100,7 +99,7 @@ function Cta({ item, active, hasPlus }: { item: BrowserItem; active: boolean; ha
         <ComingSoonPill />
       );
     case "included":
-      return <MutedPill>{hasPlus ? "Aktif via MBG+" : "Termasuk MBG+"}</MutedPill>;
+      return <MutedPill>{hasPlus ? "Aktif via langganan" : "Termasuk langganan"}</MutedPill>;
     default:
       return null;
   }

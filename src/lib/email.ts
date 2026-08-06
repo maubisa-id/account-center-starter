@@ -1,9 +1,7 @@
 ﻿import nodemailer, { type Transporter } from "nodemailer";
 import { demoMailboxEnabled, captureDemoEmail } from "@/lib/demo/mailbox";
 
-// Pengiriman email transaksional Maubisa. Konfigurasi SMTP DISAMAKAN dengan
-// thesis.maubisa.id (Laravel MAIL_*): smtp.gmail.com:587 TLS, from no-reply@maubisa.id.
-// Cukup salin MAIL_USERNAME/MAIL_PASSWORD yang sama ke .env repo ini.
+// Pengiriman email transaksional. Isi MAIL_* di .env sesuai SMTP yang Anda pakai.
 // Kalau SMTP belum diisi (dev), email dicetak ringkas ke konsol supaya alur tetap jalan.
 
 type SendArgs = { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string };
@@ -27,8 +25,8 @@ function getTransport(): Transporter | null {
 }
 
 export function mailFrom(): string {
-  const addr = process.env.MAIL_FROM_ADDRESS ?? "no-reply@maubisa.id";
-  const name = process.env.MAIL_FROM_NAME ?? "Maubisa";
+  const addr = process.env.MAIL_FROM_ADDRESS ?? "no-reply@example.com";
+  const name = process.env.MAIL_FROM_NAME ?? "Pusat Akun";
   return `${name} <${addr}>`;
 }
 

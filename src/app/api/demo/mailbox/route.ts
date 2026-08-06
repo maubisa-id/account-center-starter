@@ -51,19 +51,19 @@ export async function POST() {
   const off = offIfNotDemo();
   if (off) return off;
 
-  const base = (process.env.BETTER_AUTH_URL || "https://demo-akun.maubisa.id").replace(/\/+$/, "");
+  const base = (process.env.BETTER_AUTH_URL || "https://account-center-starter-demo.vercel.app").replace(/\/+$/, "");
   const login = `${base}/masuk`;
   const to = "kamu@contoh.id";
   const cap = (out: { subject: string; html: string }) =>
     captureDemoEmail({ to, subject: out.subject, html: out.html });
 
-  cap(welcomeEmail({ name: "Teman Maubisa", loginUrl: login }));
+  cap(welcomeEmail({ name: "Teman Demo", loginUrl: login }));
   cap(otpEmail("482913", "email-verification"));
   cap(
     orderPendingEmail({
-      name: "Teman Maubisa",
-      orderId: "MB-mbg-plus-a1b2c3",
-      itemName: "MBG+ (langganan bulanan)",
+      name: "Teman Demo",
+      orderId: "MB-membership-pro-a1b2c3",
+      itemName: "Keanggotaan Pro (langganan bulanan)",
       amount: "Rp75.000",
       payUrl: login,
       dueDate: "besok, 23.59 WIB",
@@ -71,9 +71,9 @@ export async function POST() {
   );
   cap(
     receiptEmail({
-      name: "Teman Maubisa",
-      orderId: "MB-mbg-plus-a1b2c3",
-      itemName: "MBG+ (langganan bulanan)",
+      name: "Teman Demo",
+      orderId: "MB-membership-pro-a1b2c3",
+      itemName: "Keanggotaan Pro (langganan bulanan)",
       amount: "Rp75.000",
       method: "QRIS",
       date: "hari ini",
@@ -82,15 +82,15 @@ export async function POST() {
   );
   cap(
     subscriptionActiveEmail({
-      name: "Teman Maubisa",
-      planName: "MBG+",
+      name: "Teman Demo",
+      planName: "Keanggotaan Pro",
       periodEnd: "30 hari lagi",
       manageUrl: login,
     }),
   );
   cap(
     eventRegisteredEmail({
-      name: "Teman Maubisa",
+      name: "Teman Demo",
       title: "Webinar: Skripsi Anti-Revisi",
       date: "Sabtu, 12 Okt",
       time: "19.00 WIB",

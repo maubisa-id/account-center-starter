@@ -9,8 +9,8 @@ import { PaymentClient, type SavedCardLite } from "@/components/pay/payment-clie
 import { BrandWordmark } from "@/components/auth/auth-ui";
 
 export const metadata: Metadata = {
-  title: "Pembayaran · Maubisa",
-  description: "Selesaikan pembayaran layanan Maubisa.",
+  title: "Pembayaran - Account Center Starter",
+  description: "Selesaikan pembayaran.",
 };
 
 export const dynamic = "force-dynamic";

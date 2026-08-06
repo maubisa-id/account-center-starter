@@ -38,8 +38,8 @@ export default async function Acara() {
     <div className="space-y-8">
       <SectionTitle
         eyebrow="Acara"
-        title="Acara Maubisa"
-        desc="Daftar acara gratis (MBG Space) dan berbayar (MBG Forge). Riwayat keikutsertaanmu tercatat otomatis."
+        title="Acara"
+        desc="Daftar acara gratis dan berbayar. Riwayat keikutsertaanmu tercatat otomatis."
       />
 
       {source === "sample" && process.env.NODE_ENV !== "production" ? (

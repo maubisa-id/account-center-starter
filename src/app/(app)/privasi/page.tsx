@@ -90,7 +90,7 @@ export default async function Privasi() {
           rel="noopener noreferrer"
           className="font-medium text-brand-600 hover:underline"
         >
-          Pusat Kepercayaan Maubisa
+          Pusat Kepercayaan
         </a>
         .
       </p>

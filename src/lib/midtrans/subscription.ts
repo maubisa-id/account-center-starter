@@ -1,7 +1,7 @@
 import { API_BASE, authHeader, isConfigured } from "./config";
 
 // ── Subscription API (Midtrans-managed recurring) ───────────────────────────
-// Untuk MBG+ (langganan bulanan). Model: Midtrans yang menjadwalkan & menagih ulang
+// Untuk langganan bulanan. Model: Midtrans yang menjadwalkan & menagih ulang
 // memakai saved_token_id kartu (dari charge pertama dengan save_token_id:true).
 // PENTING (skill "Subscription owner"): pilih SATU model — Midtrans-managed ATAU
 // merchant-cron. Kita pakai Midtrans-managed, jadi JANGAN juga menagih via cron.

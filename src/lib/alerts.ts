@@ -39,7 +39,7 @@ export function getAlerts(user: AccountUser, emailVerified: boolean, twoFactorEn
         id: `sub-cancel-${sub.id}`,
         tone: "warning",
         title: "Langganan dijadwalkan berhenti",
-        desc: `MBG+ akan nonaktif pada akhir periode (${days} hari lagi).`,
+        desc: `Keanggotaan Pro akan nonaktif pada akhir periode (${days} hari lagi).`,
         href: "/langganan",
         cta: "Lanjutkan",
       });
@@ -48,7 +48,7 @@ export function getAlerts(user: AccountUser, emailVerified: boolean, twoFactorEn
         id: `sub-exp-${sub.id}`,
         tone: "warning",
         title: "Perpanjangan sebentar lagi",
-        desc: `Langganan MBG+ diperpanjang dalam ${Math.max(days, 0)} hari.`,
+        desc: `Langganan Keanggotaan Pro diperpanjang dalam ${Math.max(days, 0)} hari.`,
         href: "/langganan",
         cta: "Kelola",
       });

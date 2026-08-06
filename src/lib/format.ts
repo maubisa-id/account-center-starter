@@ -93,10 +93,13 @@ export function sisaHari(d?: Date | null): number | null {
 }
 
 const PRODUK: Record<string, string> = {
-  "mbg-plus": "MBG+",
-  "mbg-forge": "MBG Forge",
-  "mbg-space": "MBG Space",
-  "mbg-circle": "MBG Circle",
+  "membership-pro": "Keanggotaan Pro",
+  "webinar-sample": "Webinar Contoh",
+  "webinar-free": "Webinar Gratis",
+  "community-hub": "Komunitas",
+  "consult-basic": "Konsultasi - Basic",
+  "consult-plus": "Konsultasi - Plus",
+  "course-sample": "Kelas Contoh",
 };
 
 export function namaProduk(code?: string | null): string {
@@ -106,10 +109,10 @@ export function namaProduk(code?: string | null): string {
 
 // Nama layanan (per scope) yang enak dibaca.
 const LAYANAN: Record<string, string> = {
-  app: "MBG+ & Komunitas",
-  kelas: "Kelas & Sertifikasi",
-  thesis: "Bimbingan Skripsi",
-  book: "Book Universe",
+  app: "Keanggotaan & Komunitas",
+  kelas: "Kelas",
+  thesis: "Bimbingan",
+  book: "Buku",
 };
 
 export function namaLayanan(scope?: string | null): string {
@@ -132,7 +135,7 @@ export function jenisAkses(itemType?: string | null): string {
   return JENIS[itemType] ?? itemType;
 }
 
-// Ubah slug jadi label manusiawi: "mbg-space-produktif" -> "MBG Space Produktif".
+// Ubah slug jadi label manusiawi: "webinar-free-produktif" -> "Webinar Gratis Produktif".
 // Akronim tertentu di-uppercase. Dipakai sbg fallback terakhir judul entitlement/acara.
 const ACRONYMS = new Set(["mbg", "ai", "id", "pdf", "hr", "ux", "ui"]);
 export function humanizeSlug(slug?: string | null): string {
@@ -159,7 +162,7 @@ export function judulEntitlement(opts: {
   return "Akses";
 }
 
-// Subjudul entitlement: "{jenis} · {nama produk / layanan}", mis. "Langganan · MBG+".
+// Subjudul entitlement: "{jenis} · {nama produk / layanan}", mis. "Langganan · Keanggotaan Pro".
 // Kalau produk/layanan tak dikenal (mis. scope 'event'), cukup tampilkan jenisnya saja
 // supaya tidak muncul "Acara · event" yang janggal.
 export function subjudulEntitlement(opts: {

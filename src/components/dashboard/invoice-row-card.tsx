@@ -6,7 +6,7 @@ import { PendingInvoiceActions } from "./pending-invoice-actions";
 
 // Kartu invoice untuk tampilan MOBILE (<md). Tabel 7-kolom di /pembayaran (dan tabel
 // tagihan di /langganan) memaksa scroll horizontal di ponsel sehingga aksi "Bayar"
-// tersembunyi — persona inti Maubisa mobile-first. Satu komponen dipakai kedua halaman
+// tersembunyi — persona mobile-first. Satu komponen dipakai kedua halaman
 // (hindari duplikasi markup). Server component; merender PendingInvoiceActions (client).
 type InvoiceLike = {
   orderId: string;

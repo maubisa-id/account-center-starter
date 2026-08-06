@@ -32,9 +32,9 @@ const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === "1";
 // Lini acara di CMS memakai field `events.service`. Nilainya dipetakan ke scope hub supaya
 // filter lini di /admin/acara konsisten dengan invoice berbayar (yang sudah ber-scope).
 const EVENT_SERVICE_TO_SCOPE: Record<string, string> = {
-  akademik: "thesis", // Maubisa Lulus
-  "pengembangan-diri": "app", // Maubisa Berkembang
-  sertifikasi: "kelas", // Maubisa Mahir
+  akademik: "thesis", // Bimbingan
+  "pengembangan-diri": "app", // Keanggotaan
+  sertifikasi: "kelas", // Kelas
 };
 
 // Ambil peta lini per acara dari koleksi `events` (id -> scope hub). event_registrations tidak

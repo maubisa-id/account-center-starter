@@ -1,8 +1,8 @@
 import { API_BASE, authHeader, isConfigured } from "./config";
 import type { PayMethodId } from "./types";
 
-// ── Payment Link API (Motion C: bimbingan skripsi) ──────────────────────────
-// ADR-001 §2.4 / ADR-002 §Motion C: bimbingan skripsi diawali konsultasi WhatsApp,
+// ── Payment Link API (Payment Link) ──────────────────────────
+// ADR-001 §2.4 / ADR-002 §Payment Link diawali konsultasi WhatsApp,
 // lalu admin men-generate Payment Link VIA API (bukan manual di dashboard) supaya
 // order_id + data pembeli tercatat dan webhook mengaktifkan akun otomatis — sama
 // seperti Snap/Core API. Notifikasi memakai format & signature yang sama.

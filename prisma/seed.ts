@@ -40,13 +40,11 @@ async function cleanup() {
 
 async function seedProducts() {
   const products = [
-    { code: "mbg-plus", name: "MBG+ (Langganan)", scope: "app", type: "subscription", billingInterval: "monthly", price: 75000 },
-    { code: "mbg-forge", name: "MBG Forge (Webinar)", scope: "app", type: "event", billingInterval: "once", price: 29000 },
-    { code: "thesis-mulai", name: "Bimbingan Skripsi — Mulai", scope: "thesis", type: "service", billingInterval: "once", price: 150000 },
-    { code: "thesis-sempro", name: "Bimbingan Skripsi — Sempro", scope: "thesis", type: "service", billingInterval: "once", price: 850000 },
-    { code: "thesis-wisuda", name: "Bimbingan Skripsi — Wisuda", scope: "thesis", type: "service", billingInterval: "once", price: 1550000 },
-    { code: "kelas-uiux", name: "Kelas UI/UX Fundamental", scope: "kelas", type: "course", billingInterval: "once", price: 349000 },
-    { code: "kelas-data", name: "Kelas Data Analyst Pemula", scope: "kelas", type: "course", billingInterval: "once", price: 399000 },
+    { code: "membership-pro", name: "Keanggotaan Pro", scope: "app", type: "subscription", billingInterval: "monthly", price: 75000 },
+    { code: "webinar-sample", name: "Webinar Contoh", scope: "app", type: "event", billingInterval: "once", price: 29000 },
+    { code: "consult-basic", name: "Konsultasi - Basic", scope: "thesis", type: "service", billingInterval: "once", price: 150000 },
+    { code: "consult-plus", name: "Konsultasi - Plus", scope: "thesis", type: "service", billingInterval: "once", price: 850000 },
+    { code: "course-sample", name: "Kelas Contoh", scope: "kelas", type: "course", billingInterval: "once", price: 349000 },
   ];
   for (const p of products) {
     await prisma.product.upsert({
@@ -234,39 +232,39 @@ async function main() {
   await cleanup();
   await seedProducts();
 
-  // 1) Budi — pelanggan aktif kaya: MBG+ aktif, 1 webinar berbayar, 1 acara gratis.
+  // 1) Budi - pelanggan aktif: langganan aktif, 1 webinar berbayar, 1 acara gratis.
   const budi = await createUser({ name: "Budi Santoso", email: "budi@example.com", phone: "081234567890", city: "Jakarta" });
-  await addSubscription(budi.id, { productCode: "mbg-plus", amount: 75000, scope: "app" });
-  await addPurchase(budi.id, { itemType: "event", itemRef: "mbg-forge-2026-07", itemName: "MBG Forge: Personal Branding", amount: 29000, scope: "app", productCode: "mbg-forge", paymentType: "gopay", daysAgo: 10 });
+  await addSubscription(budi.id, { productCode: "membership-pro", amount: 75000, scope: "app" });
+  await addPurchase(budi.id, { itemType: "event", itemRef: "webinar-sample-2026-07", itemName: "Webinar Contoh: Personal Branding", amount: 29000, scope: "app", productCode: "webinar-sample", paymentType: "gopay", daysAgo: 10 });
   await addFreeEvent(budi.id, { eventRef: "3", eventTitle: "Synthesis of Thinking", scope: "app", institution: "Universitas Indonesia", daysAgo: 5 });
 
-  // 2) Siti — jalur skripsi (Maubisa Lulus): beli paket Sempro + 1 acara gratis akademik.
+  // 2) Siti - jalur konsultasi: beli paket Plus + 1 acara gratis.
   const siti = await createUser({ name: "Siti Nurhaliza", email: "siti@example.com", phone: "081298765432", city: "Bandung", createdAt: daysFromNow(-40) });
-  await addPurchase(siti.id, { itemType: "service", itemRef: "thesis-sempro", itemName: "Bimbingan Skripsi — Sempro", amount: 850000, scope: "thesis", productCode: "thesis-sempro", paymentType: "bank_transfer", daysAgo: 20 });
+  await addPurchase(siti.id, { itemType: "service", itemRef: "consult-plus", itemName: "Konsultasi - Plus", amount: 850000, scope: "thesis", productCode: "consult-plus", paymentType: "bank_transfer", daysAgo: 20 });
   await addFreeEvent(siti.id, { eventRef: "akademik-riset-2026", eventTitle: "Webinar Metodologi Riset", scope: "thesis", institution: "ITB", daysAgo: 8 });
 
-  // 3) Andi — MBG+ aktif + dua webinar berbayar + acara gratis.
+  // 3) Andi - langganan aktif + dua webinar berbayar + acara gratis.
   const andi = await createUser({ name: "Andi Pratama", email: "andi@example.com", phone: "081211112222", city: "Surabaya", createdAt: daysFromNow(-25) });
-  await addSubscription(andi.id, { productCode: "mbg-plus", amount: 75000, scope: "app" });
-  await addPurchase(andi.id, { itemType: "event", itemRef: "mbg-forge-2026-06", itemName: "MBG Forge: Public Speaking", amount: 29000, scope: "app", productCode: "mbg-forge", paymentType: "qris", daysAgo: 30 });
-  await addPurchase(andi.id, { itemType: "event", itemRef: "mbg-forge-2026-07", itemName: "MBG Forge: Personal Branding", amount: 29000, scope: "app", productCode: "mbg-forge", paymentType: "credit_card", daysAgo: 9 });
+  await addSubscription(andi.id, { productCode: "membership-pro", amount: 75000, scope: "app" });
+  await addPurchase(andi.id, { itemType: "event", itemRef: "webinar-sample-2026-06", itemName: "Webinar Contoh: Public Speaking", amount: 29000, scope: "app", productCode: "webinar-sample", paymentType: "qris", daysAgo: 30 });
+  await addPurchase(andi.id, { itemType: "event", itemRef: "webinar-sample-2026-07", itemName: "Webinar Contoh: Personal Branding", amount: 29000, scope: "app", productCode: "webinar-sample", paymentType: "credit_card", daysAgo: 9 });
   await addFreeEvent(andi.id, { eventRef: "4", eventTitle: "Readverse: Read Beyond Information", scope: "app", daysAgo: 3 });
 
   // 4) Dewi — langganan DIBATALKAN (di akhir periode) + 1 tagihan TERTUNDA (webinar).
   const dewi = await createUser({ name: "Dewi Lestari", email: "dewi@example.com", phone: "081233334444", city: "Yogyakarta", createdAt: daysFromNow(-60) });
-  await addSubscription(dewi.id, { productCode: "mbg-plus", amount: 75000, scope: "app", status: "active", cancelAtPeriodEnd: true });
-  await addPurchase(dewi.id, { itemType: "event", itemRef: "mbg-forge-2026-08", itemName: "MBG Forge: Negosiasi", amount: 29000, scope: "app", productCode: "mbg-forge", status: "pending" });
-  await addFreeEvent(dewi.id, { eventRef: "5", eventTitle: "Maubisa Thinklab", scope: "app", daysAgo: 2 });
+  await addSubscription(dewi.id, { productCode: "membership-pro", amount: 75000, scope: "app", status: "active", cancelAtPeriodEnd: true });
+  await addPurchase(dewi.id, { itemType: "event", itemRef: "webinar-sample-2026-08", itemName: "Webinar Contoh: Negosiasi", amount: 29000, scope: "app", productCode: "webinar-sample", status: "pending" });
+  await addFreeEvent(dewi.id, { eventRef: "5", eventTitle: "Sesi Diskusi Komunitas", scope: "app", daysAgo: 2 });
 
-  // 5) Rizki — jalur kelas (Maubisa Mahir): beli Kelas UI/UX + acara gratis sertifikasi.
+  // 5) Rizki - jalur kelas: beli kelas contoh + acara gratis sertifikasi.
   const rizki = await createUser({ name: "Rizki Ramadhan", email: "rizki@example.com", phone: "081255556666", city: "Medan", createdAt: daysFromNow(-15) });
-  await addPurchase(rizki.id, { itemType: "course", itemRef: "kelas-uiux", itemName: "Kelas UI/UX Fundamental", amount: 349000, scope: "kelas", productCode: "kelas-uiux", paymentType: "credit_card", daysAgo: 12 });
-  await addPurchase(rizki.id, { itemType: "event", itemRef: "mbg-forge-2026-07", itemName: "MBG Forge: Personal Branding", amount: 29000, scope: "app", productCode: "mbg-forge", paymentType: "shopeepay", daysAgo: 9 });
+  await addPurchase(rizki.id, { itemType: "course", itemRef: "course-sample", itemName: "Kelas Contoh", amount: 349000, scope: "kelas", productCode: "course-sample", paymentType: "credit_card", daysAgo: 12 });
+  await addPurchase(rizki.id, { itemType: "event", itemRef: "webinar-sample-2026-07", itemName: "Webinar Contoh: Personal Branding", amount: 29000, scope: "app", productCode: "webinar-sample", paymentType: "shopeepay", daysAgo: 9 });
   await addFreeEvent(rizki.id, { eventRef: "sertifikasi-karir-2026", eventTitle: "Webinar Persiapan Karier", scope: "kelas", institution: "Politeknik Negeri", daysAgo: 6 });
 
   // 6) Maya — pengguna baru, hanya daftar acara gratis (belum ada pembelian).
   const maya = await createUser({ name: "Maya Putri", email: "maya@example.com", phone: "081277778888", city: "Semarang", createdAt: daysFromNow(-3) });
-  await addFreeEvent(maya.id, { eventRef: "6", eventTitle: "Maubisa Voicecraft", scope: "app", institution: "Universitas Diponegoro", daysAgo: 1 });
+  await addFreeEvent(maya.id, { eventRef: "6", eventTitle: "Sesi Latihan Komunikasi", scope: "app", institution: "Universitas Diponegoro", daysAgo: 1 });
 
   const counts = {
     users: await prisma.user.count(),
@@ -279,7 +277,7 @@ async function main() {
 
   // 7) Akun admin demo (allowlist ADMIN_EMAILS -> mendarat di /admin).
   try {
-    await auth.api.signUpEmail({ body: { name: "Admin Maubisa", email: ADMIN_EMAIL, password: PASSWORD } });
+    await auth.api.signUpEmail({ body: { name: "Admin Demo", email: ADMIN_EMAIL, password: PASSWORD } });
     console.log(`Akun admin siap: ${ADMIN_EMAIL} / ${PASSWORD}`);
   } catch (e) {
     console.log("Lewati pembuatan akun admin:", String(e).slice(0, 100));

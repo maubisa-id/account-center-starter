@@ -87,7 +87,7 @@ export function CardForm({
         </span>
       </div>
 
-      {/* Pratinjau kartu hidup (aset Untitled UI, varian gradient navigasi Maubisa) */}
+      {/* Pratinjau kartu hidup (aset Untitled UI, varian gradient navigasi brand) */}
       <div className="flex justify-center">
         <CreditCard
           type="maubisa"

@@ -1,9 +1,9 @@
 /**
- * Sistem email transaksional & lifecycle Maubisa.
+ * Sistem email transaksional & lifecycle layanan ini.
  *
  * impeccable-disable design-system-font-size, design-system-radius, design-system-color, design-system-font, broken-image -- HTML EMAIL, bukan UI web: klien email (Gmail/Outlook) membuang CSS variabel/Tailwind, jadi ukuran/warna/radius WAJIB inline px+hex dari token yang disamakan manual. Medium render berbeda dari app.
  *
- * Bahasa desain: editorial Maubisa. Header band brand (biru gradasi) dengan wordmark
+ * Bahasa desain: editorial layanan ini. Header band brand (biru gradasi) dengan wordmark
  * putih, area konten putih, tipografi Cabinet Grotesk + Satoshi, panel double-bezel,
  * tombol button-in-button, footer kaya (kontak + sosial + legal).
  *
@@ -14,7 +14,7 @@
  * 'info' -> info@ supaya user bisa memfilter, bukan semua dari satu no-reply.
  */
 
-// ── Tokens (disamakan dengan token desain website utama maubisa.id) ───────────
+// ── Tokens (disamakan dengan token desain starter) ───────────
 const BRAND = "#0a48b7"; // brand-500
 const BRAND_LITE = "#3f6be0"; // brand-400 (untuk strip gradasi)
 const BRAND_DEEP = "#083a95"; // brand-600
@@ -54,8 +54,8 @@ const heroUrl = (k: string) => assetUrl(`hero-${k}`);
 const badgeUrl = (k: string) => assetUrl(`badge-${k}`);
 const HERO_FALLBACK: Record<string, string> = {
   "Keamanan Akun": "security", "Selamat Datang": "welcome",
-  "Tagihan": "payment", "Langganan": "payment", "Kabar Maubisa": "community",
-  "Acara": "event", "Kelas": "learning", "Bimbingan Skripsi": "thesis",
+  "Tagihan": "payment", "Langganan": "payment",
+  "Acara": "event", "Kelas": "learning", "Konsultasi": "thesis",
   "Komunitas": "community", "Pengumuman": "community", "Tantangan": "learning",
   "Belajar": "learning", "Kabar Produk": "community", "Promo": "community",
   "Pemberitahuan": "community",
@@ -70,14 +70,14 @@ export type Channel = "akun" | "tagihan" | "info";
 // (mis. tagihan@) lewat env MAIL_FROM_* tanpa ubah kode.
 const env = (k: string) => (typeof process !== "undefined" && process.env[k]) || "";
 const FROM: Record<Channel, string> = {
-  akun: env("MAIL_FROM_AKUN") || "Keamanan Maubisa <no-reply@maubisa.id>",
-  tagihan: env("MAIL_FROM_TAGIHAN") || "Tagihan Maubisa <notifikasi@maubisa.id>",
-  info: env("MAIL_FROM_INFO") || "Maubisa <notifikasi@maubisa.id>",
+  akun: env("MAIL_FROM_AKUN") || "Keamanan Akun <no-reply@example.com>",
+  tagihan: env("MAIL_FROM_TAGIHAN") || "Tagihan <notifikasi@example.com>",
+  info: env("MAIL_FROM_INFO") || "Pusat Akun <notifikasi@example.com>",
 };
 const REPLYTO: Record<Channel, string> = {
-  akun: env("MAIL_REPLYTO_AKUN") || "halo@maubisa.id",
-  tagihan: env("MAIL_REPLYTO_TAGIHAN") || "tagihan@maubisa.id",
-  info: env("MAIL_REPLYTO_INFO") || "halo@maubisa.id",
+  akun: env("MAIL_REPLYTO_AKUN") || "halo@example.com",
+  tagihan: env("MAIL_REPLYTO_TAGIHAN") || "tagihan@example.com",
+  info: env("MAIL_REPLYTO_INFO") || "halo@example.com",
 };
 
 const esc = (s: unknown): string =>
@@ -213,7 +213,7 @@ function layout(o: {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:${CARD};border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(20,20,20,.05),0 10px 26px -16px rgba(20,20,20,.14);border:1px solid #edf0f5">
       <tr><td height="6" bgcolor="${BRAND}" style="height:6px;line-height:6px;font-size:0;background:${BRAND};background-image:linear-gradient(90deg, ${BRAND} 0%, ${BRAND_LITE} 100%)">&nbsp;</td></tr>
       <tr><td class="mx" style="padding:28px 40px 0;background:${CARD}">
-        <img src="${LOGO_DARK}" alt="Maubisa" height="38" style="height:38px;width:auto;display:block;border:0;outline:none">
+        <img src="${LOGO_DARK}" alt="Logo" height="38" style="height:38px;width:auto;display:block;border:0;outline:none">
       </td></tr>
       <tr><td style="padding:22px 40px 0;text-align:center">
         <img src="${heroUrl(hero)}" width="180" alt="" style="width:180px;max-width:56%;height:auto;display:inline-block;border:0;outline:none">
@@ -230,11 +230,11 @@ function layout(o: {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
       <tr><td style="padding:22px 28px 4px;text-align:center">
         ${o.lifecycle ? `<p style="margin:0 0 14px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">Kamu menerima email ini sesuai preferensi notifikasi di akunmu. <a href="https://akun.maubisa.id/notifikasi" style="color:${SUBINK};text-decoration:underline">Kelola preferensi</a>.</p>` : ""}
-        <img src="${LOGO_DARK}" alt="Maubisa" height="20" style="height:20px;width:auto;display:inline-block;border:0;outline:none;margin:0 0 12px;opacity:.85">
-        <p style="margin:0 0 8px;font-family:${SANS};font-size:12px;line-height:1.7;color:${MUTED}">Butuh bantuan? <a href="mailto:halo@maubisa.id" style="color:${SUBINK};font-weight:700;text-decoration:none">halo@maubisa.id</a> &middot; <a href="https://wa.me/62811134069" style="color:${SUBINK};font-weight:700;text-decoration:none">WhatsApp</a></p>
+        <img src="${LOGO_DARK}" alt="Logo" height="20" style="height:20px;width:auto;display:inline-block;border:0;outline:none;margin:0 0 12px;opacity:.85">
+        <p style="margin:0 0 8px;font-family:${SANS};font-size:12px;line-height:1.7;color:${MUTED}">Butuh bantuan? <a href="mailto:halo@example.com" style="color:${SUBINK};font-weight:700;text-decoration:none">halo@example.com</a> &middot; <a href="https://wa.me/62811134069" style="color:${SUBINK};font-weight:700;text-decoration:none">WhatsApp</a></p>
         <p style="margin:0 0 8px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}"><a href="https://www.instagram.com/maubisa.official/" style="color:${MUTED};text-decoration:none">Instagram</a> &middot; <a href="https://www.linkedin.com/company/maubisa-id" style="color:${MUTED};text-decoration:none">LinkedIn</a> &middot; <a href="https://www.tiktok.com/@maubisa.id" style="color:${MUTED};text-decoration:none">TikTok</a></p>
         <p style="margin:0 0 10px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}"><a href="https://maubisa.id/pusat-kepercayaan/hukum/kebijakan-privasi" style="color:${MUTED};text-decoration:none">Kebijakan Privasi</a> &middot; <a href="https://maubisa.id/pusat-kepercayaan/hukum/syarat-ketentuan" style="color:${MUTED};text-decoration:none">Syarat &amp; Ketentuan</a> &middot; <a href="https://maubisa.id/pusat-kepercayaan/ringkasan" style="color:${MUTED};text-decoration:none">Pusat Kepercayaan</a></p>
-        <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">PT Litera Edu Solusi &middot; Jakarta, Indonesia<br>Email otomatis, mohon tidak membalas langsung. &copy; ${year} Maubisa.</p>
+        <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">PT Litera Edu Solusi &middot; Jakarta, Indonesia<br>Email otomatis, mohon tidak membalas langsung. &copy; ${year} layanan ini.</p>
       </td></tr>
     </table>
   </td></tr>
@@ -249,8 +249,8 @@ const build = (subject: string, l: { from: string; replyTo?: string; html: strin
 
 export function otpEmail(otp: string, type: "sign-in" | "email-verification" | "forget-password" | "change-email"): Out {
   const map = {
-    "sign-in": { subject: "Kode masuk Maubisa kamu", eyebrow: "Kode Masuk", heading: "Ini kode masuk kamu", intro: "Ada permintaan masuk ke akun Maubisa kamu. Pakai kode di bawah ini untuk melanjutkan." },
-    "email-verification": { subject: "Verifikasi email Maubisa kamu", eyebrow: "Verifikasi", heading: "Tinggal satu langkah lagi", intro: "Sedikit lagi akun kamu aktif. Masukkan kode di bawah untuk memverifikasi alamat email kamu." },
+    "sign-in": { subject: "Kode masuk akun kamu", eyebrow: "Kode Masuk", heading: "Ini kode masuk kamu", intro: "Ada permintaan masuk ke akun kamu. Pakai kode di bawah ini untuk melanjutkan." },
+    "email-verification": { subject: "Verifikasi email akun kamu", eyebrow: "Verifikasi", heading: "Tinggal satu langkah lagi", intro: "Sedikit lagi akun kamu aktif. Masukkan kode di bawah untuk memverifikasi alamat email kamu." },
     "forget-password": { subject: "Kode untuk atur ulang kata sandi", eyebrow: "Keamanan", heading: "Atur ulang kata sandi kamu", intro: "Mau bikin kata sandi baru? Masukkan kode di bawah untuk melanjutkan." },
     "change-email": { subject: "Kode konfirmasi email baru", eyebrow: "Verifikasi", heading: "Konfirmasi email baru kamu", intro: "Satu langkah kecil lagi. Masukkan kode di bawah untuk mengonfirmasi alamat email barumu." },
   }[type];
@@ -259,26 +259,26 @@ export function otpEmail(otp: string, type: "sign-in" | "email-verification" | "
 }
 
 export function setPasswordEmail(url: string, name?: string): Out {
-  return build("Selamat bergabung di Maubisa, atur kata sandi kamu", layout({
-    channel: "akun", category: "Keamanan Akun", hero: "welcome", preheader: "Yuk, atur kata sandi akun Maubisa kamu", eyebrow: "Akun Baru", heading: "Selamat bergabung di Maubisa",
-    intro: `${hi(name)} akun Maubisa kamu sudah kami siapkan. Demi keamanan, kami tidak pernah mengirim kata sandi lewat email. Yuk, atur kata sandi kamu sendiri lewat tombol di bawah.`,
+  return build("Selamat bergabung di sini, atur kata sandi kamu", layout({
+    channel: "akun", category: "Keamanan Akun", hero: "welcome", preheader: "Yuk, atur kata sandi akun kamu", eyebrow: "Akun Baru", heading: "Selamat bergabung di sini",
+    intro: `${hi(name)} akun kamu sudah kami siapkan. Demi keamanan, kami tidak pernah mengirim kata sandi lewat email. Yuk, atur kata sandi kamu sendiri lewat tombol di bawah.`,
     cta: { label: "Atur kata sandi kamu", url },
   }));
 }
 
 export function magicLinkEmail(url: string, name?: string): Out {
-  return build("Tautan masuk ke akun Maubisa kamu", layout({
+  return build("Tautan masuk ke akun kamu", layout({
     channel: "akun", category: "Keamanan Akun", preheader: "Tautan masuk sekali pakai", eyebrow: "Masuk", heading: "Masuk tanpa ribet",
-    intro: `${hi(name)} tinggal klik tombol di bawah untuk langsung masuk ke akun Maubisa kamu, tanpa perlu kata sandi. Tautannya berlaku 10 menit dan cuma bisa dipakai sekali.`,
+    intro: `${hi(name)} tinggal klik tombol di bawah untuk langsung masuk ke akun kamu, tanpa perlu kata sandi. Tautannya berlaku 10 menit dan cuma bisa dipakai sekali.`,
     cta: { label: "Masuk sekarang", url },
   }));
 }
 
 export function resetPasswordEmail(url: string): Out {
   const blocks = notice("info", "Tautan ini berlaku sekali pakai dan hanya sebentar. Kalau kamu tidak pernah merasa meminta ini, abaikan saja email ini ya. Akun kamu tetap aman kok.");
-  return build("Atur ulang kata sandi Maubisa kamu", layout({
+  return build("Atur ulang kata sandi akun kamu", layout({
     channel: "akun", category: "Keamanan Akun", preheader: "Tautan untuk atur ulang kata sandi", eyebrow: "Keamanan", heading: "Lupa kata sandi? Tenang",
-    intro: "Kami menerima permintaan untuk mengatur ulang kata sandi akun Maubisa kamu. Kalau ini memang kamu, klik tombol di bawah untuk membuat kata sandi baru.",
+    intro: "Kami menerima permintaan untuk mengatur ulang kata sandi akun kamu. Kalau ini memang kamu, klik tombol di bawah untuk membuat kata sandi baru.",
     blocks, cta: { label: "Buat kata sandi baru", url },
   }));
 }
@@ -287,7 +287,7 @@ export function passwordChangedEmail(o: { name?: string; when?: string; manageUr
   const blocks = notice("success", "Kata sandi akun kamu berhasil diperbarui.") + (o.when ? `<div style="height:12px"></div>` + infoTable([{ label: "Waktu", value: esc(o.when) }]) : "");
   return build("Kata sandi kamu berhasil diubah", layout({
     channel: "akun", category: "Keamanan Akun", preheader: "Kata sandi akun kamu diperbarui", eyebrow: "Keamanan", heading: "Kata sandi kamu sudah diperbarui",
-    intro: `${hi(o.name)} kata sandi akun Maubisa kamu baru saja diganti. Kalau ini kamu, berarti semua beres. Kalau bukan, segera amankan akunmu ya.`,
+    intro: `${hi(o.name)} kata sandi akun kamu baru saja diganti. Kalau ini kamu, berarti semua beres. Kalau bukan, segera amankan akunmu ya.`,
     blocks, cta: o.manageUrl ? { label: "Amankan akun saya", url: o.manageUrl } : undefined,
   }));
 }
@@ -298,9 +298,9 @@ export function newDeviceLoginEmail(o: { name?: string; device: string; location
     o.location ? { label: "Lokasi", value: esc(o.location) } : null,
     o.when ? { label: "Waktu", value: esc(o.when) } : null,
   ]) + `<div style="height:14px"></div>` + notice("warning", "Kalau ini kamu, santai, tidak perlu melakukan apa pun. Kalau bukan, segera atur ulang kata sandi kamu ya.");
-  return build("Ada login baru di akun Maubisa kamu", layout({
+  return build("Ada login baru di akun kamu", layout({
     channel: "akun", category: "Keamanan Akun", preheader: `Login baru dari ${o.device}`, eyebrow: "Aktivitas Baru", heading: "Ada login dari perangkat baru",
-    intro: `${hi(o.name)} kami mendeteksi login baru ke akun Maubisa kamu. Kami kabari biar kamu selalu tahu apa yang terjadi di akunmu.`,
+    intro: `${hi(o.name)} kami mendeteksi login baru ke akun kamu. Kami kabari biar kamu selalu tahu apa yang terjadi di akunmu.`,
     blocks, cta: o.resetUrl ? { label: "Ini bukan saya", url: o.resetUrl } : undefined,
   }));
 }
@@ -309,15 +309,15 @@ export function twoFactorChangedEmail(o: { name?: string; enabled: boolean; when
   const blocks = notice(o.enabled ? "success" : "warning", o.enabled ? "Verifikasi dua langkah (2FA) sekarang aktif. Akun kamu jadi jauh lebih aman." : "Verifikasi dua langkah (2FA) baru saja dinonaktifkan di akun kamu.") + (o.when ? `<div style="height:12px"></div>` + infoTable([{ label: "Waktu", value: esc(o.when) }]) : "");
   return build(o.enabled ? "Verifikasi 2 langkah aktif di akunmu" : "Verifikasi 2 langkah dinonaktifkan", layout({
     channel: "akun", category: "Keamanan Akun", preheader: o.enabled ? "2FA aktif" : "2FA nonaktif", eyebrow: "Keamanan", heading: o.enabled ? "Akun kamu makin aman" : "Verifikasi 2 langkah nonaktif",
-    intro: `${hi(o.name)} ada perubahan pada pengaturan keamanan akun Maubisa kamu.`, blocks,
+    intro: `${hi(o.name)} ada perubahan pada pengaturan keamanan akun kamu.`, blocks,
   }));
 }
 
 export function welcomeEmail(o: { name?: string; loginUrl: string }): Out {
-  const blocks = steps(["Lengkapi profil kamu biar rekomendasinya makin pas.", "Jelajahi layanan kami: bimbingan skripsi, kelas bersertifikat, dan pengembangan diri.", "Mulai dari satu langkah kecil hari ini."]);
-  return build("Selamat datang di Maubisa", layout({
-    channel: "info", category: "Selamat Datang", preheader: "Akun Maubisa kamu sudah aktif", eyebrow: "Selamat Datang", heading: "Senang kamu di sini",
-    intro: `${hi(o.name)} selamat bergabung di Maubisa. Kami bukan sekadar platform belajar, tapi ruang tumbuh yang nemenin kamu di setiap fase. Yuk, mulai perjalananmu.`,
+  const blocks = steps(["Lengkapi profil kamu biar rekomendasinya makin pas.", "Jelajahi layanan kami: konsultasi, kelas bersertifikat, dan pengembangan diri.", "Mulai dari satu langkah kecil hari ini."]);
+  return build("Selamat datang di sini", layout({
+    channel: "info", category: "Selamat Datang", preheader: "Akun kamu sudah aktif", eyebrow: "Selamat Datang", heading: "Senang kamu di sini",
+    intro: `${hi(o.name)} selamat bergabung di sini. Kami bukan sekadar platform belajar, tapi ruang tumbuh yang nemenin kamu di setiap fase. Yuk, mulai perjalananmu.`,
     blocks, cta: { label: "Buka akun saya", url: o.loginUrl }, lifecycle: true,
   }));
 }
@@ -328,8 +328,8 @@ export function welcomeAccessEmail(o: { name?: string; email: string; loginUrl: 
     { label: "Halaman masuk", value: link(o.loginUrl) },
     o.productName ? { label: "Akses aktif", value: esc(o.productName) } : null,
   ]);
-  return build("Selamat bergabung di Maubisa, ini akses masuk kamu", layout({
-    channel: "akun", category: "Keamanan Akun", hero: "welcome", preheader: "Akun Maubisa kamu sudah siap", eyebrow: "Akun Baru", heading: "Akun kamu sudah siap",
+  return build("Selamat bergabung di sini, ini akses masuk kamu", layout({
+    channel: "akun", category: "Keamanan Akun", hero: "welcome", preheader: "Akun kamu sudah siap", eyebrow: "Akun Baru", heading: "Akun kamu sudah siap",
     intro: `${hi(o.name)} ${o.setPasswordUrl ? "akun kamu sudah kami siapkan. Demi keamanan, kami tidak mengirim kata sandi lewat email. Atur kata sandi kamu lewat tombol di bawah, lalu langsung masuk." : "akun kamu sudah siap dipakai. Klik tombol di bawah untuk mulai masuk."}`,
     blocks, cta: o.setPasswordUrl ? { label: "Atur kata sandi & masuk", url: o.setPasswordUrl } : { label: "Masuk ke akun", url: o.loginUrl },
   }));
@@ -358,7 +358,7 @@ export function receiptEmail(o: { orderId: string; itemName: string; amount: str
     { label: "Metode", value: esc(o.method) },
     { label: "Tanggal", value: esc(o.date) },
   ]);
-  return build(`Struk pembayaran Maubisa, ${o.orderId}`, layout({
+  return build(`Struk pembayaran, ${o.orderId}`, layout({
     channel: "tagihan", category: "Tagihan", preheader: `Pembayaran ${o.amount} berhasil`, eyebrow: "Pembayaran Berhasil", heading: "Pembayaran kamu berhasil",
     intro: `${hi(o.name)} makasih ya, pembayaran kamu sudah kami terima. Ini struk buat catatan kamu.`,
     blocks, cta: { label: "Lihat / unduh invoice", url: o.invoiceUrl },
@@ -404,13 +404,13 @@ export function paymentReminderEmail(o: { name?: string; orderId: string; itemNa
   }));
 }
 
-// ═══════════════════════════════════════════════ C. LANGGANAN MBG+ ═══════════
+// ═══════════════════════════════════════════════ C. LANGGANAN Keanggotaan Pro ═══════════
 
 export function subscriptionActiveEmail(o: { name?: string; planName: string; periodEnd?: string; manageUrl: string }): Out {
   const blocks = notice("success", `Langganan ${esc(o.planName)} kamu aktif. Selamat menikmati semua manfaatnya.`) + (o.periodEnd ? `<div style="height:12px"></div>` + infoTable([{ label: "Aktif hingga", value: esc(o.periodEnd) }]) : "");
   return build(`Selamat datang di ${o.planName}`, layout({
     channel: "tagihan", category: "Langganan", preheader: `${o.planName} aktif`, eyebrow: "Langganan Aktif", heading: `Selamat datang di ${o.planName}`,
-    intro: `${hi(o.name)} langgananmu sudah aktif. Terima kasih sudah bertumbuh bareng Maubisa.`,
+    intro: `${hi(o.name)} langgananmu sudah aktif. Terima kasih sudah berlangganan.`,
     blocks, cta: { label: "Kelola langganan", url: o.manageUrl },
   }));
 }
@@ -461,14 +461,14 @@ export function graceEndingEmail(o: { name?: string; planName: string; accessEnd
 export function subscriptionEndedEmail(o: { name?: string; planName: string; resumeUrl?: string }): Out {
   return build(`Langganan ${o.planName} berakhir`, layout({
     channel: "tagihan", category: "Langganan", preheader: `${o.planName} berakhir`, eyebrow: "Langganan", heading: "Langganan telah berakhir",
-    intro: `${hi(o.name)} langganan ${esc(o.planName)} kamu telah berakhir. Terima kasih sudah bertumbuh bareng kami. Kamu bisa mengaktifkannya lagi kapan saja.`,
+    intro: `${hi(o.name)} langganan ${esc(o.planName)} kamu telah berakhir. Terima kasih sudah berlangganan. Kamu bisa mengaktifkannya lagi kapan saja.`,
     cta: o.resumeUrl ? { label: "Aktifkan lagi", url: o.resumeUrl } : undefined, lifecycle: true,
   }));
 }
 
 export function winbackEmail(o: { name?: string; planName: string; offer?: string; resumeUrl: string }): Out {
   return build(`Kami merindukanmu di ${o.planName}`, layout({
-    channel: "info", category: "Kabar Maubisa", preheader: "Kembali ke Maubisa", eyebrow: "Untuk Kamu", heading: "Kami merindukanmu",
+    channel: "info", category: "Kabar Produk", preheader: "Kembali ke layanan", eyebrow: "Untuk Kamu", heading: "Kami merindukanmu",
     intro: `${hi(o.name)} sudah lama tidak ketemu. ${o.offer ? esc(o.offer) + " " : ""}Yuk lanjutkan pertumbuhanmu bareng ${esc(o.planName)}.`,
     cta: { label: "Aktifkan lagi", url: o.resumeUrl }, lifecycle: true,
   }));
@@ -601,13 +601,13 @@ export function courseCompletedEmail(o: { name?: string; className: string; cert
   }));
 }
 
-// ═══════════════════════════════════════════════ F. BIMBINGAN SKRIPSI ═══════
+// ═══════════════════════════════════════════ F. TAGIHAN / PAYMENT LINK ═══════
 
 export function thesisPaymentLinkEmail(o: { name?: string; amount: string; payUrl: string; note?: string }): Out {
   const blocks = amountBlock(o.amount, "Total tagihan bimbingan") + (o.note ? `<div style="height:12px"></div>` + notice("info", esc(o.note)) : "");
-  return build("Tagihan bimbingan skripsi Maubisa", layout({
-    channel: "tagihan", category: "Bimbingan Skripsi", preheader: `Tagihan ${o.amount}`, eyebrow: "Tagihan", heading: "Tagihan bimbingan kamu",
-    intro: `${hi(o.name)} sesuai obrolan kita, berikut tautan pembayaran untuk memulai bimbingan skripsimu.`,
+  return build("Tagihan konsultasi", layout({
+    channel: "tagihan", category: "Konsultasi", preheader: `Tagihan ${o.amount}`, eyebrow: "Tagihan", heading: "Tagihan bimbingan kamu",
+    intro: `${hi(o.name)} sesuai obrolan kita, berikut tautan pembayaran untuk memulai konsultasimu.`,
     blocks, cta: { label: "Bayar & mulai bimbingan", url: o.payUrl },
   }));
 }
@@ -615,7 +615,7 @@ export function thesisPaymentLinkEmail(o: { name?: string; amount: string; payUr
 export function thesisActiveEmail(o: { name?: string; mentorName?: string; loginUrl: string }): Out {
   const blocks = (o.mentorName ? personCard(o.mentorName, "Pembimbing kamu") + `<div style="height:14px"></div>` : "") + notice("success", "Bimbingan kamu aktif dan akunmu sudah siap. Yuk masuk dan mulai.");
   return build("Bimbingan aktif, akun kamu siap", layout({
-    channel: "info", category: "Bimbingan Skripsi", preheader: "Bimbingan aktif", eyebrow: "Bimbingan Aktif", heading: "Selamat, bimbingan kamu aktif",
+    channel: "info", category: "Konsultasi", preheader: "Bimbingan aktif", eyebrow: "Bimbingan Aktif", heading: "Selamat, bimbingan kamu aktif",
     intro: `${hi(o.name)} pembayaranmu sudah kami terima. ${o.mentorName ? `Kamu akan dibimbing oleh ${esc(o.mentorName)}.` : "Pembimbing kamu akan segera terhubung."}`,
     blocks, cta: { label: "Masuk ke portal", url: o.loginUrl },
   }));
@@ -628,7 +628,7 @@ export function thesisSessionScheduleEmail(o: { name?: string; sessionTitle: str
     { label: "Waktu", value: esc(o.time) },
   ]);
   return build(`Jadwal sesi: ${o.sessionTitle}`, layout({
-    channel: "info", category: "Bimbingan Skripsi", preheader: `Sesi ${o.date}`, eyebrow: "Jadwal Sesi", heading: "Jadwal sesi bimbingan",
+    channel: "info", category: "Konsultasi", preheader: `Sesi ${o.date}`, eyebrow: "Jadwal Sesi", heading: "Jadwal sesi bimbingan",
     intro: `${hi(o.name)} berikut detail jadwal sesi bimbingan kamu.`, blocks,
     cta: o.joinUrl ? { label: "Gabung sesi", url: o.joinUrl } : undefined, lifecycle: true,
   }));
@@ -637,7 +637,7 @@ export function thesisSessionScheduleEmail(o: { name?: string; sessionTitle: str
 export function thesisMentorMessageEmail(o: { name?: string; mentorName: string; preview: string; openUrl: string }): Out {
   const blocks = personCard(o.mentorName, "Pembimbing") + `<div style="height:14px"></div>` + panel(`<tr><td style="padding:16px 20px;font-family:${SANS};font-size:14px;line-height:1.7;color:${SUBINK};font-style:italic">"${esc(o.preview)}"</td></tr>`);
   return build(`Pesan baru dari ${o.mentorName}`, layout({
-    channel: "info", category: "Bimbingan Skripsi", preheader: `Pesan dari ${o.mentorName}`, eyebrow: "Pesan Baru", heading: "Ada pesan dari pembimbing",
+    channel: "info", category: "Konsultasi", preheader: `Pesan dari ${o.mentorName}`, eyebrow: "Pesan Baru", heading: "Ada pesan dari pembimbing",
     intro: `${hi(o.name)} pembimbingmu mengirim pesan baru.`, blocks,
     cta: { label: "Buka & balas", url: o.openUrl }, lifecycle: true,
   }));
@@ -646,8 +646,8 @@ export function thesisMentorMessageEmail(o: { name?: string; mentorName: string;
 export function thesisProgressSummaryEmail(o: { name?: string; items: string[]; openUrl: string }): Out {
   const blocks = steps(o.items.map(esc));
   return build("Ringkasan progres bimbingan kamu", layout({
-    channel: "info", category: "Bimbingan Skripsi", preheader: "Ringkasan progres", eyebrow: "Ringkasan", heading: "Progres bimbingan kamu",
-    intro: `${hi(o.name)} ini rangkuman perkembangan bimbingan skripsimu.`, blocks,
+    channel: "info", category: "Konsultasi", preheader: "Ringkasan progres", eyebrow: "Ringkasan", heading: "Progres bimbingan kamu",
+    intro: `${hi(o.name)} ini rangkuman perkembangan konsultasimu.`, blocks,
     cta: { label: "Buka portal bimbingan", url: o.openUrl }, lifecycle: true,
   }));
 }
@@ -688,7 +688,7 @@ export function streakNudgeEmail(o: { name?: string; days: number; continueUrl: 
 
 export function productNewsEmail(o: { name?: string; title: string; body: string; ctaUrl: string; ctaLabel?: string }): Out {
   return build(o.title, layout({
-    channel: "info", category: "Kabar Produk", preheader: esc(o.title), eyebrow: "Baru di Maubisa", heading: o.title,
+    channel: "info", category: "Kabar Produk", preheader: esc(o.title), eyebrow: "Baru di sini", heading: o.title,
     intro: `${hi(o.name)} ${esc(o.body)}`, cta: { label: o.ctaLabel || "Lihat sekarang", url: o.ctaUrl }, lifecycle: true,
   }));
 }

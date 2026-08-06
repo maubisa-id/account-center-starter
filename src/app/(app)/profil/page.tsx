@@ -31,7 +31,7 @@ export default async function Profil() {
       <SectionTitle
         eyebrow="Profil"
         title="Informasi pribadi"
-        desc="Kelola identitas dan preferensi akun Maubisa kamu."
+        desc="Kelola identitas dan preferensi akun ini kamu."
       />
 
       <Reveal>
@@ -87,7 +87,7 @@ export default async function Profil() {
                 Preferensi & personalisasi
               </h3>
               <p className="mt-1 text-sm text-zinc-500">
-                Minat & tujuan belajarmu. Dipakai app &amp; kelas Maubisa untuk menyesuaikan konten.
+                Minat & tujuan belajarmu. Dipakai app &amp; kelas untuk menyesuaikan konten.
               </p>
             </div>
             <PreferencesModal interests={interests} goals={goals} />

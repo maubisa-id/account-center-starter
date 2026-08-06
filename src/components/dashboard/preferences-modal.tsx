@@ -92,7 +92,7 @@ export function PreferencesModal({ interests, goals }: { interests: string[]; go
         open={open}
         onClose={() => setOpen(false)}
         title="Atur preferensi"
-        desc="Pilih minat & tujuan belajarmu. Dipakai app & kelas Maubisa untuk menyesuaikan konten."
+        desc="Pilih minat & tujuan belajarmu. Dipakai app & kelas untuk menyesuaikan konten."
       >
         <form onSubmit={save} className="space-y-6">
           <div>

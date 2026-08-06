@@ -84,7 +84,7 @@ export function LoginForm() {
   return (
     <AuthShell
       title="Selamat datang"
-      description="Masuk ke akun Maubisa untuk kelola langganan, akses, dan riwayat pembayaran."
+      description="Masuk untuk kelola langganan, akses, dan riwayat pembayaran."
       heroImageSrc={HERO}
       testimonials={TESTIMONIALS}
     >

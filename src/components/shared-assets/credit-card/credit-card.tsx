@@ -6,7 +6,7 @@ import { GenericCardMark, PaypassIcon } from "./icons";
 import { payIcon, bankLogo } from "@/lib/pay-assets";
 
 // Aset kartu kredit dari Untitled UI (untitleduico/react, shared-assets/credit-card),
-// di-vendor faithful. TAMBAHAN Maubisa: (1) varian "maubisa" bertema gradient navigasi
+// di-vendor faithful. Tambahan starter: (1) varian "maubisa" bertema gradient navigasi
 // (biru brand-500 -> brand-700), (2) prop `brand` untuk menampilkan logo jaringan yang
 // TERDETEKSI (Visa/MC/JCB/Amex/UnionPay/Discover) di kotak kanan-bawah alih-alih Mastercard.
 // Murni presentasional; tak menyimpan/mengirim data kartu.
@@ -27,7 +27,7 @@ const styles = sortCx({
     paypassIcon: "text-white",
     cardTypeRoot: "bg-white/10",
   },
-  // Maubisa: gradient navigasi (biru brand) + tekstur halus. Dipakai di seluruh app.
+  // Gradient navigasi (biru brand) + tekstur halus. Dipakai di seluruh app.
   maubisa: {
     root: "bg-brand-700 bg-linear-to-br from-brand-500 via-brand-600 to-brand-800 shadow-[0_12px_30px_-14px_rgba(5,32,79,0.55)] before:pointer-events-none before:absolute before:inset-0 before:z-1 before:rounded-[inherit] before:ring-1 before:ring-white/20 before:ring-inset",
     company: "text-white",
@@ -184,7 +184,7 @@ export const CreditCard = ({
           </div>
         )}
 
-        {/* Tekstur brand Maubisa: sheen kanan-atas, cincin konsentris kiri-bawah, sapuan cahaya
+        {/* Tekstur brand: sheen kanan-atas, cincin konsentris kiri-bawah, sapuan cahaya
             diagonal. Murni dekoratif (pointer-events-none, z-0) — di belakang teks. */}
         {type === "maubisa" && (
           <>

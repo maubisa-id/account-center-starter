@@ -228,7 +228,7 @@ export async function deleteAccount(): Promise<{ ok?: boolean; error?: string }>
   }
 }
 
-// Motion D: daftar event GRATIS (MBG Space). Tanpa Midtrans/invoice.
+// Motion D: daftar event GRATIS (Webinar Gratis). Tanpa Midtrans/invoice.
 // SUMBER PENDAFTARAN = collection Directus (sama dgn form website anonim) supaya satu
 // tempat. Account Center menambah core_user_id + identitas (dari core, tak diisi ulang).
 // HAK AKSES (entitlement) tetap di core supaya muncul di /akses. Kalau Directus belum

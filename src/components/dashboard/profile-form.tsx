@@ -228,7 +228,7 @@ export function ProfileForm({
       <Panel innerClassName="p-6 sm:p-8">
         <SectionHead
           title="Preferensi & personalisasi"
-          desc="Dipakai app & kelas Maubisa untuk menyesuaikan rekomendasi kontenmu. Diatur sekali di sini, bukan per-acara."
+          desc="Dipakai app & kelas untuk menyesuaikan rekomendasi kontenmu. Diatur sekali di sini, bukan per-acara."
         />
         <div className="mt-6 space-y-5">
           <div>

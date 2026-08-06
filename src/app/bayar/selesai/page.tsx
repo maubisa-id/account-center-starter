@@ -3,8 +3,8 @@ import { FinishStatus } from "@/components/pay/finish-status";
 import { BrandWordmark } from "@/components/auth/auth-ui";
 
 export const metadata: Metadata = {
-  title: "Status Pembayaran · Maubisa",
-  description: "Status pembayaran layanan Maubisa.",
+  title: "Status Pembayaran - Account Center Starter",
+  description: "Status pembayaran.",
   robots: { index: false, follow: false },
 };
 

@@ -20,7 +20,7 @@ export default async function UbahPaket() {
   for (const s of user.subscriptions) if (s.status === "active") activeCodes.add(s.productCode);
   for (const e of user.entitlements)
     if (e.status === "active" && e.productCode) activeCodes.add(e.productCode);
-  const hasPlus = activeCodes.has("mbg-plus");
+  const hasSubscription = activeCodes.has("membership-pro");
 
   // URL CTA eksternal (daftar/konsultasi) diresolusi di SERVER supaya klien tak baca env.
   const serviceUrls = Object.fromEntries(SCOPES.map((k) => [k, serviceUrl(k)])) as Record<
@@ -32,7 +32,7 @@ export default async function UbahPaket() {
     .filter((i) => i.status !== "off")
     .map((i) => ({
       ...i,
-      // CTA "konsultasi" (mis. bimbingan skripsi) mengarah ke WhatsApp selama Payment Link
+      // CTA "konsultasi" (mis. konsultasi) mengarah ke WhatsApp selama Payment Link
       // belum aktif; CTA "daftar" mengarah ke halaman layanannya. Diresolusi di SERVER.
       ctaUrl:
         i.cta === "consult"
@@ -54,11 +54,11 @@ export default async function UbahPaket() {
 
       <SectionTitle
         eyebrow="Katalog layanan"
-        title="Semua layanan Maubisa"
-        desc="Langganan MBG+, ikut kelas & sertifikasi, mulai bimbingan skripsi, atau jelajahi Book Universe. Setiap layanan berdiri sendiri, jadi menambah satu layanan tidak mengubah langganan lain yang sedang aktif. Pilih kategori untuk memfilter."
+        title="Semua layanan ini"
+        desc="Langganan, ikut kelas, mulai konsultasi, atau jelajahi buku. Setiap layanan berdiri sendiri, jadi menambah satu layanan tidak mengubah langganan lain yang sedang aktif. Pilih kategori untuk memfilter."
       />
 
-      <CatalogBrowser items={items} activeCodes={[...activeCodes]} hasPlus={hasPlus} />
+      <CatalogBrowser items={items} activeCodes={[...activeCodes]} hasPlus={hasSubscription} />
 
       <p className="text-xs leading-relaxed text-zinc-400">
         Layanan berlangganan &amp; sekali beli dibayar dengan aman lewat Midtrans. Untuk bimbingan

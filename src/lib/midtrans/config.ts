@@ -1,6 +1,6 @@
 // Konfigurasi & kredensial Midtrans (Core API). Framework-agnostic: TIDAK mengimpor
 // apa pun dari Next.js supaya modul ini bisa dipakai ulang di service/produk lain
-// (app, kelas) yang berbagi arsitektur pembayaran maubisa_core (ADR-002).
+// yang berbagi arsitektur pembayaran yang sama.
 //
 // Kunci dibaca dari environment (.env), TIDAK pernah di repo. Server key hanya di
 // server; client key boleh di browser (dipakai hanya bila kelak menambah kartu/3DS).
@@ -34,10 +34,10 @@ export function authHeader(): string {
 }
 
 // URL "pulang" setelah pembayaran selesai (Finish Redirect URL Payment Link, dan fallback
-// tab-baru 3DS kartu). Default = BETTER_AUTH_URL (akun.maubisa.id). Untuk checkout TAMU,
-// handoff §3/§4 menyarankan domain NETRAL (mis. https://bayar.maubisa.id) supaya pembeli tak
-// "terdampar" di domain "akun". Set PAYMENT_FINISH_URL untuk menimpanya (harus origin yang
-// melayani app ini, mis. bayar.maubisa.id, karena path /bayar/selesai dirender di sini).
+// tab-baru 3DS kartu). Default = BETTER_AUTH_URL (origin app ini). Untuk checkout TAMU, boleh
+// pakai domain NETRAL terpisah (mis. https://bayar.contoh.com) supaya pembeli tak "terdampar"
+// di domain "akun". Set PAYMENT_FINISH_URL untuk menimpanya (harus origin yang melayani app
+// ini, karena path /bayar/selesai dirender di sini).
 export function finishRedirectUrl(orderId: string): string {
   const base = (process.env.PAYMENT_FINISH_URL || process.env.BETTER_AUTH_URL || "").replace(/\/+$/, "");
   return `${base}/bayar/selesai?order_id=${encodeURIComponent(orderId)}`;

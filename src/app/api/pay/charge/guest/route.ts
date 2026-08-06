@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 // Kalau orang tidak jadi bayar, tidak ada user/invoice hantu yang tertinggal.
 //
 // Core API: alih-alih token Snap, mengembalikan PaymentInstruction (QR/VA/tagihan)
-// yang dirender langsung di halaman /beli dengan UI Maubisa.
+// yang dirender langsung di halaman /beli dengan UI layanan ini.
 
 type Body = {
   name?: string;
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       itemName,
       customer: { name, email, phone },
       cardTokenId: body.cardToken,
-      // Langganan (MBG+) dibayar kartu: minta Midtrans simpan token supaya recurring bisa
+      // Langganan dibayar kartu: minta Midtrans simpan token supaya recurring bisa
       // didaftarkan di webhook (token di-echo lewat notifikasi -> disimpan ke subscription).
       saveCardToken: isSub && method === "card",
       // Identitas + item dibawa ke webhook lewat custom_field (di-echo Midtrans).

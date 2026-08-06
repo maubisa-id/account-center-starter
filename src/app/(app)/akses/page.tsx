@@ -35,10 +35,10 @@ export default async function Akses() {
       <SectionTitle
         eyebrow="Akses"
         title="Akses & layanan"
-        desc="Buka layanan Maubisa yang aktif, lalu lihat rincian hak aksesmu."
+        desc="Buka layanan ini yang aktif, lalu lihat rincian hak aksesmu."
       />
 
-      <ServiceLauncher services={services} heading="Buka layanan" subheading="Layanan Maubisa yang aktif untukmu. Satu login untuk semuanya." />
+      <ServiceLauncher services={services} heading="Buka layanan" subheading="Layanan yang aktif untukmu. Satu login untuk semuanya." />
 
       <section className="space-y-4">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
