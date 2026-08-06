@@ -21,7 +21,7 @@ function sweep(now: number) {
 
 // Ambil IP klien untuk kunci rate-limit. PENTING: jangan pernah percaya nilai PALING KIRI
 // dari X-Forwarded-For — itu bisa diisi klien, sehingga penyerang tinggal merotasi IP palsu
-// untuk memicu ember baru tiap request (bypass total). Maubisa berada di belakang Cloudflare,
+// untuk memicu ember baru tiap request (bypass total). Aplikasi bisa berada di belakang Cloudflare,
 // yang menetapkan `cf-connecting-ip` ke IP klien asli dan MENOLAK header itu bila dikirim klien
 // (tak bisa dipalsukan). Urutan kepercayaan: Cloudflare -> proxy edge (x-real-ip) -> hop PALING
 // KANAN X-Forwarded-For (ditambahkan proxy tepercaya terdekat), baru "unknown".

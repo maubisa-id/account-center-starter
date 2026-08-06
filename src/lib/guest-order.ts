@@ -70,7 +70,7 @@ export async function createGuestUserAndInvoice(
   },
 ): Promise<GuestFulfillResult | null> {
   // Resolver bersama: itemRef bisa kode produk ATAU kode acara. Coba produk dulu; kalau
-  // bukan produk katalog, perlakukan sebagai acara berbayar (MBG Forge). Sama persis dgn
+  // bukan produk katalog, perlakukan sebagai acara berbayar (Webinar Contoh). Sama persis dgn
   // yang dipakai /api/pay/charge & /api/pay/charge/guest — harga otoritatif dari server.
   let resolved = await resolveCheckout({ product: args.fields.itemRef });
   if (isCheckoutError(resolved)) {
@@ -116,7 +116,7 @@ export async function createGuestUserAndInvoice(
   const periodStart = isSub ? now : null;
   const periodEnd = isSub ? new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) : null;
 
-  // LANGGANAN (mis. MBG+) via GUEST: buat baris subscription "pending" lalu tautkan ke invoice
+  // LANGGANAN (mis. Keanggotaan Pro) via GUEST: buat baris subscription "pending" lalu tautkan ke invoice
   // — paritas dengan alur login (/api/pay/charge). Efeknya: (1) langganan tampil & bisa
   // dibatalkan di dashboard walau pembeli mulai tanpa akun; (2) blok "paid" webhook meng-
   // aktifkan periode + MENDAFTARKAN recurring bila dibayar kartu (savedToken ada) lewat
@@ -127,7 +127,7 @@ export async function createGuestUserAndInvoice(
     const productCode = item.productCode ?? item.key;
     // GUARD anti-duplikat: kalau user sudah punya langganan AKTIF/PENDING untuk produk yang
     // sama, PAKAI ULANG (tautkan invoice ke sana) alih-alih membuat baris baru. Mencegah dua
-    // pendaftaran recurring => dua tagihan bulanan untuk produk yang sama (mis. beli MBG+ dua
+    // pendaftaran recurring => dua tagihan bulanan untuk produk yang sama (mis. beli Keanggotaan Pro dua
     // kali). Blok "paid" webhook lalu memperpanjang periode langganan yang sudah ada.
     const existingSub = await tx.subscription.findFirst({
       where: { userId: user.id, productCode, status: { in: ["active", "pending"] } },

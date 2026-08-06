@@ -1,24 +1,20 @@
-// Sumber tunggal nama LINI LAYANAN Maubisa (level scope). Dipisah dari lib/services.ts
-// supaya aman diimpor komponen klien (murni data, tanpa env/entitlement). Nama diambil dari
-// halaman publik maubisa.id/layanan + business plan MBG, jadi Account Center selaras dengan
-// web utama.
+// Sumber tunggal nama lini layanan (level scope). Dipisah dari lib/services.ts
+// supaya aman diimpor komponen klien (murni data, tanpa env/entitlement).
 //
-// Dua level yang HARUS jelas bedanya di UI:
-//  - LINI (scope)  = Maubisa Lulus / Berkembang / Mahir / Book Universe  → yang "dibuka" (SSO)
-//  - PRODUK (item) = MBG+, MBG Forge, Kelas X, Bimbingan Skripsi …       → yang "dibeli"
-// Katalog mengelompokkan produk DI BAWAH lininya; launcher & akses membuka di level lini.
+// Scope keys adalah identifier internal yang dipakai DB/seed/katalog. Jangan rename
+// thesis|app|kelas|book tanpa migrasi data; cukup ganti label tampilannya.
 
 export type ServiceScope = "thesis" | "app" | "kelas" | "book";
 
-// Urutan kanonik = perjalanan MBG (Lulus → Berkembang → Mahir → Book). Dipakai konsisten di
-// launcher, /akses, dan filter katalog supaya tidak acak antar-halaman.
+// Urutan kanonik dipakai konsisten di launcher, /akses, dan filter katalog.
 export const SERVICE_LINE_ORDER: ServiceScope[] = ["thesis", "app", "kelas", "book"];
 
+// Ganti nama/tagline sesuai produkmu.
 export const SERVICE_LINE: Record<ServiceScope, { name: string; tagline: string }> = {
-  thesis: { name: "Maubisa Lulus", tagline: "Bimbingan skripsi & tugas akhir" },
-  app: { name: "Maubisa Berkembang", tagline: "MBG+ · pengembangan diri & komunitas" },
-  kelas: { name: "Maubisa Mahir", tagline: "Kelas & sertifikasi profesional" },
-  book: { name: "Book Universe", tagline: "Buku & bundel pilihan" },
+  thesis: { name: "Bimbingan", tagline: "Konsultasi & pendampingan 1-on-1" },
+  app: { name: "Keanggotaan", tagline: "Langganan bulanan & komunitas" },
+  kelas: { name: "Kelas", tagline: "Kursus & sertifikasi" },
+  book: { name: "Buku", tagline: "Buku & bundel" },
 };
 
 // Nama lini untuk sebuah scope (fallback ke scope mentah bila tak dikenal).

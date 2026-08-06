@@ -37,7 +37,7 @@ export default async function Pembayaran() {
       <SectionTitle
         eyebrow="Pembayaran"
         title="Riwayat pembayaran"
-        desc="Semua transaksi dan tagihan pada akun Maubisa kamu."
+        desc="Semua transaksi dan tagihan pada akun ini kamu."
       />
 
       {pendingCount > 0 ? (

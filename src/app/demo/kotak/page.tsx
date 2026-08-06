@@ -6,7 +6,7 @@ import { DemoInbox } from "@/components/demo/inbox";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Kotak Email Demo · Maubisa",
+  title: "Kotak Email Demo - Account Center Starter",
   description: "Lihat email yang dikirim aplikasi (OTP, selamat datang, tagihan) secara langsung.",
   robots: { index: false, follow: false },
 };

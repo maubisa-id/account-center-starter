@@ -285,7 +285,7 @@ function AddCardDialog({
           <div className="min-w-0">
             <h3 className="text-base font-bold text-ink">Tambah kartu</h3>
             <p className="mt-1 text-sm leading-relaxed text-zinc-500">
-              Kartu disimpan sebagai token aman Midtrans. Nomor kartu tidak disimpan di server Maubisa.
+              Kartu disimpan sebagai token aman Midtrans. Nomor kartu tidak disimpan di server layanan ini.
             </p>
           </div>
           <button

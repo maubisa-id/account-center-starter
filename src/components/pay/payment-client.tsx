@@ -55,7 +55,7 @@ type Props = {
 const inputCls =
   "w-full rounded-2xl border border-black/[0.08] bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-500";
 
-// Orkestrator checkout Core API (UI custom Maubisa). Menggantikan popup Snap: pembeli
+// Orkestrator checkout Core API (UI custom aplikasi). Menggantikan popup Snap: pembeli
 // memilih metode -> charge -> instruksi (QR/VA/tagihan) dirender in-page + polling status.
 // Satu komponen dipakai untuk login (/checkout) DAN guest (/beli) supaya alurnya linear.
 export function PaymentClient({ mode, product, event, eventTitle, redirect, configured, clientKey, isProduction, eventPriceIdr, savedCards = [] }: Props) {
@@ -63,16 +63,16 @@ export function PaymentClient({ mode, product, event, eventTitle, redirect, conf
   const item = useMemo(
     () =>
       event
-        ? CATALOG.find((c) => c.key === "mbg-forge")
+        ? CATALOG.find((c) => c.key === "webinar-sample")
         : CATALOG.find((c) => c.key === product || c.productCode === product),
     [event, product],
   );
   // Harga yang DITAMPILKAN: untuk acara berbayar pakai harga asli Directus (bukan harga
-  // template mbg-forge), untuk produk katalog pakai harga katalog. Ini yang juga ditagih.
+  // template event), untuk produk katalog pakai harga katalog. Ini yang juga ditagih.
   const displayPrice = event ? eventPriceIdr ?? item?.priceIdr ?? null : item?.priceIdr ?? null;
   const purchasable =
     !!item && item.status === "live" && !!displayPrice && (item.cta === "subscribe" || item.cta === "buy");
-  // Item langganan (mis. MBG+) -> tampilkan pemberitahuan perpanjangan otomatis (consent).
+  // Item langganan -> tampilkan pemberitahuan perpanjangan otomatis (consent).
   const isSubscription = item?.itemType === "subscription";
 
   const [name, setName] = useState("");

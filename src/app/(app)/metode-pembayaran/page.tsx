@@ -70,7 +70,7 @@ export default async function MetodePembayaran() {
                     <IconSparkle className="h-5 w-5" />
                   </span>
                   <div>
-                    <div className="text-sm font-semibold text-ink">Langganan MBG+</div>
+                    <div className="text-sm font-semibold text-ink">Langganan aktif</div>
                     <div className="text-xs text-zinc-500">
                       {activeSub.savedToken
                         ? "Diperpanjang otomatis dengan kartu utama lewat Midtrans."
@@ -88,7 +88,7 @@ export default async function MetodePembayaran() {
       ) : null}
 
       <p className="text-xs leading-relaxed text-zinc-400">
-        Nomor kartu tidak pernah disimpan di server Maubisa. Transaksi diproses lewat Midtrans,
+        Nomor kartu tidak pernah disimpan di server aplikasi. Transaksi diproses lewat Midtrans,
         payment gateway berlisensi Bank Indonesia, dengan 3-D Secure untuk kartu.
       </p>
     </div>

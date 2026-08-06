@@ -3,11 +3,11 @@ import { newOrderId } from "@/lib/order-id";
 
 describe("newOrderId (unguessable order id)", () => {
   it("format standar: MB-<hint>-<ts36>-<rand10hex>", () => {
-    expect(newOrderId("mbg-forge")).toMatch(/^MB-mbg-forge-[0-9a-z]+-[0-9a-f]{10}$/);
+    expect(newOrderId("webinar-sample")).toMatch(/^MB-webinar-samp-[0-9a-z]+-[0-9a-f]{10}$/);
   });
 
   it("mensanitasi hint (lowercase, non-alnum -> '-', potong 12)", () => {
-    expect(newOrderId("MBG Forge!! 2025")).toMatch(/^MB-mbg-forge-20-[0-9a-z]+-[0-9a-f]{10}$/);
+    expect(newOrderId("Webinar Contoh!! 2025")).toMatch(/^MB-webinar-cont-[0-9a-z]+-[0-9a-f]{10}$/);
   });
 
   it("hint kosong -> tanpa segmen hint kosong (tak ada 'MB--')", () => {

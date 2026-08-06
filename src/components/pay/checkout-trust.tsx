@@ -15,7 +15,7 @@ const POINTS = [
 
 const WA_URL =
   "https://wa.me/62811134069?text=" +
-  encodeURIComponent("Halo MinBi, aku mau tanya soal pembayaran di Maubisa. Boleh dibantu?");
+  encodeURIComponent("Halo MinBi, aku mau tanya soal pembayaran di sini. Boleh dibantu?");
 
 export function CheckoutTrust() {
   return (

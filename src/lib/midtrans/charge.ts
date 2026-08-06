@@ -20,7 +20,7 @@ export type ChargeParams = {
   // KARTU (3DS): token sekali-pakai dari MidtransNew3ds.getCardToken (frontend).
   // Server TIDAK pernah menerima PAN/CVV mentah (PCI): hanya token_id.
   cardTokenId?: string;
-  // Simpan token kartu untuk langganan (recurring MBG+). Hasil saved_token_id dibaca
+  // Simpan token kartu untuk langganan (recurring subscription). Hasil saved_token_id dibaca
   // dari respons charge dan dipakai membuat Subscription API.
   saveCardToken?: boolean;
 };

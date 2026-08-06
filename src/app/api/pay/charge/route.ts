@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 // Charge Core API untuk pengguna login. Harga diambil dari server (bukan klien).
 // Akses BARU diaktifkan oleh webhook (server-to-server), bukan dari sini (ADR-002).
 // Mengganti alur Snap lama: alih-alih token popup, mengembalikan PaymentInstruction
-// (QR/VA/tagihan) yang dirender UI custom sesuai desain Maubisa.
+// (QR/VA/tagihan) yang dirender UI custom sesuai desain layanan ini.
 export async function POST(req: Request) {
   const limited = rateLimit(req, "pay-charge", { max: 15, windowMs: 60_000 });
   if (limited) return limited;
@@ -159,7 +159,7 @@ export async function POST(req: Request) {
   });
 
   try {
-    // Simpan token kartu bila: (a) langganan MBG+ dibayar kartu (recurring), ATAU
+    // Simpan token kartu bila: (a) langganan dibayar kartu (recurring), ATAU
     // (b) pengguna mencentang "Simpan kartu ini" saat checkout satu-kali. Webhook yang
     // memetakan saved_token_id -> PaymentMethod setelah pembayaran lunas. Kartu tersimpan
     // yang dipakai ulang tak perlu disimpan lagi (sudah ada).

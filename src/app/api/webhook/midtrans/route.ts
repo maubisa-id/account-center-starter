@@ -165,7 +165,7 @@ export async function POST(req: Request) {
       let invoice = await tx.invoice.findUnique({ where: { orderId } });
       if (!invoice) {
         const subRef = n.subscription_id ? String(n.subscription_id) : null;
-        // RECURRING (MBG+ Midtrans-managed): tagihan ulang otomatis datang dengan
+        // RECURRING (subscription Midtrans-managed): tagihan ulang otomatis datang dengan
         // subscription_id dan order_id BARU. Buat invoice renewal dari langganan lokal,
         // lalu blok "paid" di bawah memperpanjang periode + entitlement seperti biasa.
         if (subRef && status === "paid") {
@@ -407,7 +407,7 @@ export async function POST(req: Request) {
             date: tanggal(new Date()),
             invoiceUrl: `${process.env.BETTER_AUTH_URL ?? ""}/invoice/${invoice.orderId}`,
           };
-          // PAYMENT LINK (Motion C, bimbingan skripsi): core user dibuat admin saat
+          // PAYMENT LINK (Motion C, konsultasi): core user dibuat admin saat
           // generate link, TAPI akun Better Auth belum ada. Kalau memang belum ada,
           // kirim tautan atur kata sandi (sekali pakai) setelah lunas — sama seperti guest.
           if (invoice.motion === "payment_link" && !out.setPasswordEmail) {
@@ -541,7 +541,7 @@ export async function POST(req: Request) {
     }
   }
 
-  // RECURRING (MBG+): setelah charge pertama kartu LUNAS, daftarkan langganan ke
+  // RECURRING (subscription): setelah charge pertama kartu LUNAS, daftarkan langganan ke
   // Subscription API Midtrans supaya tagihan berikutnya otomatis (Midtrans-managed).
   // Dilakukan di luar transaksi (panggilan API eksternal). Klaim atomik di atas
   // (provider_ref = sentinel) memastikan ini hanya jalan sekali per langganan.

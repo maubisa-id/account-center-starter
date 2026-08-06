@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 
-// Dukungan langganan Midtrans-managed (recurring MBG+). Saat Midtrans menagih ulang
+// Dukungan langganan Midtrans-managed (recurring subscription). Saat Midtrans menagih ulang
 // otomatis, notifikasi datang dengan `subscription_id` dan order_id BARU yang belum
 // punya invoice lokal. Modul ini membuat invoice perpanjangan (renewal) dari data
 // langganan + invoice terakhirnya, lalu alur webhook yang ada (blok "paid")

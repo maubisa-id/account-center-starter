@@ -5,7 +5,7 @@ import { getEventPricing, isDirectusConfigured } from "@/lib/events";
 // Resolver checkout BERSAMA — satu sumber kebenaran untuk /api/pay/charge (login),
 // /api/pay/charge/guest (tamu), dan lib/guest-order (fulfillment webhook). Menghindari
 // drift aturan produk/harga di kode yang menyentuh uang. Aturan:
-//  - input { event } -> acara berbayar (MBG Forge), eventCode di-snapshot.
+//  - input { event } -> acara berbayar, eventCode di-snapshot.
 //  - input { product } / { key } -> item katalog by key atau productCode.
 //  - hanya item live + cta subscribe|buy yang boleh dibeli.
 //  - HARGA otoritatif dari DB products (fallback katalog). JANGAN percaya klien.
@@ -28,14 +28,14 @@ export function isCheckoutError(r: ResolvedCheckout | CheckoutError): r is Check
 }
 
 export async function resolveCheckout(input: CheckoutInput): Promise<ResolvedCheckout | CheckoutError> {
-  // ── ACARA BERBAYAR (MBG Forge & sejenis) ────────────────────────────────
+  // ── ACARA BERBAYAR (Webinar Contoh & sejenis) ────────────────────────────────
   // Harga & judul OTORITATIF diambil dari baris acara di Directus (bukan harga
-  // produk mbg-forge yang tetap), sesuai katalog-produk.md: "ambil judul + harga
+  // produk event contoh), sesuai katalog-produk.md: "ambil judul + harga
   // dari baris acara ... snapshot ke invoice". Ini mencegah bug nominal (mis. acara
   // Rp199.000 tertagih Rp29.000). Konsisten lintas login/guest/webhook karena
   // resolver ini dipakai bersama.
   if (input.event) {
-    const item = CATALOG.find((c) => c.key === "mbg-forge"); // template scope/itemType 'event'
+    const item = CATALOG.find((c) => c.key === "webinar-sample"); // template scope/itemType 'event'
     if (!item) return { error: "Produk tidak ditemukan.", status: 404 };
     const eventCode = input.event;
     const pricing = await getEventPricing(eventCode);
@@ -43,7 +43,7 @@ export async function resolveCheckout(input: CheckoutInput): Promise<ResolvedChe
     if (!pricing) {
       // Directus aktif tapi acara tak ada -> TOLAK (jangan tebak harga = jangan salah tagih).
       if (isDirectusConfigured()) return { error: "Acara tidak ditemukan.", status: 404 };
-      // Dev tanpa Directus: pakai contoh katalog mbg-forge.
+      // Dev tanpa Directus: pakai contoh katalog event.
       const raw = item.priceIdr;
       if (!raw || raw <= 0) return { error: "Harga produk tidak valid.", status: 400 };
       return {
@@ -68,7 +68,7 @@ export async function resolveCheckout(input: CheckoutInput): Promise<ResolvedChe
     };
   }
 
-  // ── PRODUK KATALOG (MBG+, dst) ──────────────────────────────────────────
+  // ── PRODUK KATALOG ──────────────────────────────────────────
   const code = input.key ?? input.product;
   const item = CATALOG.find((c) => c.key === code || c.productCode === code);
   if (!item) return { error: "Produk tidak ditemukan.", status: 404 };

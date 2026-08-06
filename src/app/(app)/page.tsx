@@ -44,7 +44,7 @@ export default async function Ringkasan() {
   const services = activeServices(user.entitlements);
   const days = sisaHari(sub?.currentPeriodEnd ?? null);
   const firstName = user.name.split(/\s+/)[0];
-  // Pintasan "Akses aktif": hak akses yang dimiliki (mis. MBG+, webinar) untuk pratinjau cepat →
+  // Pintasan "Akses aktif": hak akses yang dimiliki (mis. Keanggotaan Pro, webinar) untuk pratinjau cepat →
   // /akses. Beda dari launcher di atas: launcher = BUKA dashboard produk; ini = APA yang dimiliki.
   const invoiceById = new Map(user.invoices.map((i) => [i.id, i] as const));
   const eventTitles = await eventTitleMap();
@@ -68,7 +68,7 @@ export default async function Ringkasan() {
             Halo, {firstName}.
           </h1>
           <p className="max-w-lg text-sm leading-relaxed text-zinc-500">
-            Selamat melanjutkan langkahmu bersama Maubisa. Dari sini kamu bisa lanjut belajar,
+            Selamat melanjutkan langkahmu bersama kami. Dari sini kamu bisa lanjut belajar,
             kelola langganan, pantau akses, dan selesaikan pembayaran, semuanya di satu tempat.
           </p>
         </div>
@@ -147,7 +147,7 @@ export default async function Ringkasan() {
               <div className="py-8 text-center">
                 <p className="text-lg font-semibold text-ink">Belum ada langganan aktif</p>
                 <p className="mt-1 text-sm text-zinc-500">
-                  Aktifkan MBG+ untuk membuka semua fitur.
+                  Aktifkan langganan untuk membuka semua fitur.
                 </p>
                 <div className="mt-5 flex justify-center">
                   <ButtonLink href="/langganan/ubah">Jelajahi paket</ButtonLink>

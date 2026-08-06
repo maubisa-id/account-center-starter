@@ -141,7 +141,7 @@ function csvSection(title: string, rows: Record<string, unknown>[]): string {
 function buildCsv(d: ExportData): string {
   const accountRows = Object.entries(d.account).map(([field, value]) => ({ field, value }));
   const parts = [
-    `Data Pribadi Maubisa`,
+    `Data Pribadi sini`,
     `Diekspor,${csvCell(d.exportedAt)}`,
     ``,
     csvSection("AKUN", accountRows),
@@ -208,7 +208,7 @@ function buildPrintableHtml(d: ExportData): string {
   return `<!doctype html>
 <html lang="id"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Data Pribadi Maubisa</title>
+<title>Data Pribadi sini</title>
 <style>
   :root { --ink:#141414; --muted:#6b6b6b; --brand:#0a48b7; --line:#e5ebf4; --tint:#eef4fe; }
   * { box-sizing: border-box; }
@@ -271,7 +271,7 @@ function buildPrintableHtml(d: ExportData): string {
   ${gridTable(entRows)}
 
   <div class="foot">
-    Dokumen ini berisi data pribadi kamu di Maubisa (PT Litera Edu Solusi) sesuai hak portabilitas UU PDP.
+    Dokumen ini berisi data pribadi kamu di sini (PT Litera Edu Solusi) sesuai hak portabilitas UU PDP.
     Untuk data mentah lengkap (termasuk metadata), unduh format JSON dari halaman Privasi &amp; Data.
   </div>
 </div>

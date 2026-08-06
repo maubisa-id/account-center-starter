@@ -10,7 +10,7 @@ import { payIcon } from "@/lib/pay-assets";
 // Modal verifikasi 3D Secure 2.0 (EMV 3DS) IN-PAGE. Isi di dalam iframe adalah halaman ACS
 // milik BANK PENERBIT (di sandbox: simulator Midtrans). Konten itu lintas-origin dan tak bisa
 // kita gaya, memang begitu desain EMVCo: hanya bank yang boleh merender langkah otentikasinya.
-// Yang kita rapikan adalah BINGKAI-nya (chrome bermerek Maubisa) supaya pembeli tak merasa
+// Yang kita rapikan adalah BINGKAI-nya (chrome bermerek aplikasi) supaya pembeli tak merasa
 // terlempar keluar: perisai, judul, merek program 3DS sesuai kartu, dan jaminan Midtrans.
 // Hasil dilaporkan lewat callback authenticate() (js_event); "pending" = asinkron, jadi
 // keputusan final diserahkan ke polling status backend (webhook = sumber kebenaran).

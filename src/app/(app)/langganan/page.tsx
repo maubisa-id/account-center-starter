@@ -20,7 +20,7 @@ import { IconCheck, IconSparkle } from "@/components/icons";
 export const dynamic = "force-dynamic";
 
 const BENEFITS = [
-  "Akses penuh seluruh fitur MBG+",
+  "Akses fitur langganan",
   "Prioritas dukungan pelanggan",
   "Materi dan rekaman eksklusif",
   "Pengalaman bebas iklan",
@@ -46,7 +46,7 @@ export default async function Langganan() {
         <EmptyState
           icon={<IconSparkle className="h-6 w-6" />}
           title="Belum ada langganan aktif"
-          desc="Aktifkan MBG+ untuk membuka seluruh fitur dan materi eksklusif."
+          desc="Aktifkan langganan untuk membuka fitur dan materi eksklusif."
         />
         <div className="flex justify-center">
           <ButtonLink href="/langganan/ubah">Jelajahi paket</ButtonLink>
@@ -65,7 +65,7 @@ export default async function Langganan() {
       <SectionTitle
         eyebrow="Langganan"
         title="Paket & tagihan"
-        desc="Kelola paket langganan MBG+ dan lihat tagihannya."
+        desc="Kelola paket langganan dan lihat tagihannya."
       />
 
       <PendingPaymentBanner count={pendingSubInvoices.length} orderId={firstPendingSub?.orderId} />

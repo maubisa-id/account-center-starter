@@ -41,7 +41,7 @@ export default async function AdminOverviewPage({
       <SectionTitle
         eyebrow="Admin"
         title="Ringkasan"
-        desc={`Ikhtisar pembayaran, pengguna, dan langganan Maubisa (${lini}). Halaman ini hanya untuk dilihat.`}
+        desc={`Ikhtisar pembayaran, pengguna, dan langganan (${lini}). Halaman ini hanya untuk dilihat.`}
       />
 
       <form method="get" action="/admin/cari" className="flex max-w-xl items-center gap-2">

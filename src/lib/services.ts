@@ -1,4 +1,4 @@
-// Registry layanan Maubisa untuk "Buka layanan" (app launcher) di Account Center.
+// Registry layanan ini untuk "Buka layanan" (app launcher) di Account Center.
 // Arsitektur hub-and-spoke (ADR-001/002): tiap produk = subdomain sendiri, dan SSO
 // memakai cookie di domain ".maubisa.id". Karena itu tombol "Buka" cukup link biasa:
 // begitu sesi (Better Auth) aktif, membuka subdomain sudah otomatis login.
@@ -29,19 +29,19 @@ export function serviceUrl(key: ServiceKey): string {
   return baseUrl(key);
 }
 
-// URL konsultasi WhatsApp untuk layanan berbasis konsultasi (mis. bimbingan skripsi).
+// URL konsultasi WhatsApp untuk layanan berbasis konsultasi (mis. konsultasi).
 // Selagi checkout Payment Link belum aktif, tombol "Konsultasi" mengarah ke WhatsApp; nanti
 // setelah Payment Link jalan, paket bisa dibeli langsung & muncul di /akses.
 // Override penuh via NEXT_PUBLIC_WHATSAPP_CONSULT_URL, atau cukup ganti nomor via
-// NEXT_PUBLIC_WHATSAPP_NUMBER (default nomor resmi Maubisa).
+// NEXT_PUBLIC_WHATSAPP_NUMBER.
 export function consultUrl(key: ServiceKey): string {
   const full = process.env.NEXT_PUBLIC_WHATSAPP_CONSULT_URL;
   if (full) return full;
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "62811134069";
   const topic =
     key === "thesis"
-      ? "bimbingan skripsi/tugas akhir"
-      : "layanan Maubisa";
+      ? "konsultasi/tugas akhir"
+      : "layanan ini";
   const msg = encodeURIComponent(
     `Halo MinBi, aku mau konsultasi soal ${topic}. Boleh dibantu arahannya?`,
   );
@@ -74,19 +74,19 @@ function isEnabled(key: ServiceKey): boolean {
 const SERVICE_META: Record<ServiceKey, { name: string; blurb: string }> = {
   thesis: {
     name: SERVICE_LINE.thesis.name,
-    blurb: "Bimbingan skripsi & tugas akhir 1-on-1 bersama mentor.",
+    blurb: "Konsultasi & pendampingan 1-on-1 bersama mentor.",
   },
   app: {
     name: SERVICE_LINE.app.name,
-    blurb: "Video belajar, Reading Notes, komunitas, dan pengembangan diri.",
+    blurb: "Konten premium, komunitas, dan benefit pelanggan.",
   },
   kelas: {
     name: SERVICE_LINE.kelas.name,
-    blurb: "Kelas & sertifikasi profesional (Microsoft, Google, Adobe).",
+    blurb: "Kursus, cohort, atau sertifikasi profesional.",
   },
   book: {
     name: SERVICE_LINE.book.name,
-    blurb: "Buku dan bundel pilihan Maubisa.",
+    blurb: "Buku dan bundel pilihan layanan ini.",
   },
 };
 
@@ -116,13 +116,13 @@ function communityUrl(): string {
   return process.env.NEXT_PUBLIC_COMMUNITY_URL ?? "https://app.maubisa.id/komunitas";
 }
 
-// Punya akses komunitas (Discord) jika berlangganan MBG+ atau MBG Circle (termasuk MBG+).
+// Punya akses komunitas (Discord) jika punya langganan aktif atau akses komunitas.
 function hasCommunityAccess(entitlements: EntitlementLike[]): boolean {
   return entitlements.some(
     (e) =>
       isEntitlementActive(e) &&
-      (e.productCode === "mbg-plus" ||
-        e.productCode === "mbg-circle" ||
+      (e.productCode === "membership-pro" ||
+        e.productCode === "community-hub" ||
         (e.scope === "app" && e.itemType === "subscription")),
   );
 }
@@ -136,7 +136,7 @@ export function activeServices(entitlements: EntitlementLike[]): LaunchTarget[] 
     const k = asServiceKey(e.scope);
     if (k && !keys.includes(k)) keys.push(k);
   }
-  // Urutan kanonik (perjalanan MBG), bukan urutan kemunculan entitlement — konsisten antar-halaman.
+  // Urutan kanonik, bukan urutan kemunculan entitlement — konsisten antar-halaman.
   keys.sort((a, b) => lineOrderIndex(a) - lineOrderIndex(b));
   const community = hasCommunityAccess(entitlements);
   return keys.map((k) => ({
@@ -158,7 +158,7 @@ export function launchFor(ent: EntitlementLike): LaunchTarget | null {
   if (!key) return null;
 
   if (ent.itemType === "event" && ent.itemRef) {
-    // Event Center hidup di app.maubisa.id (MBG+). Hanya tawarkan "Buka" bila app sudah live,
+    // Event Center hidup di aplikasi utama. Hanya tawarkan "Buka" bila app sudah live,
     // supaya tak ada tautan mati sebelum dashboard dibangun.
     if (!isEnabled("app")) return null;
     return {

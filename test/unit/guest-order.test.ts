@@ -7,8 +7,8 @@ describe("guest custom_field pack/parse", () => {
   it("normal: name + phone", () => {
     const packed = packGuestField3("Budi", "0812");
     expect(packed).toBe("Budi::0812");
-    expect(parseGuestFields({ custom_field1: "budi@x.com", custom_field2: "mbg-forge", custom_field3: packed }))
-      .toEqual({ email: "budi@x.com", itemRef: "mbg-forge", name: "Budi", phone: "0812" });
+    expect(parseGuestFields({ custom_field1: "budi@x.com", custom_field2: "webinar-sample", custom_field3: packed }))
+      .toEqual({ email: "budi@x.com", itemRef: "webinar-sample", name: "Budi", phone: "0812" });
   });
 
   it("tanpa phone -> phone null", () => {

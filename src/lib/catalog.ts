@@ -1,7 +1,6 @@
-// Katalog layanan Maubisa untuk halaman "Ubah paket" (/langganan/ubah).
-// Sumber: docs/arsitektur/katalog-produk.md. Metadata presentasi (blurb, cta, status
-// section) ada di sini; HARGA & status aktif diambil dari `maubisa_core.products` lewat
-// src/lib/products.ts (server). Flag section (live/coming_soon/off) mewakili Directus.
+// Katalog layanan untuk halaman "Ubah paket" (/langganan/ubah).
+// Metadata presentasi (blurb, cta, status section) ada di sini; harga & status aktif
+// diambil dari tabel products lewat src/lib/products.ts (server).
 
 export type CatalogStatus = "live" | "coming_soon" | "off";
 export type CatalogCta = "subscribe" | "buy" | "register" | "consult" | "included";
@@ -12,7 +11,7 @@ export type CatalogItem = {
   blurb: string;
   price: string;
   cadence?: string;
-  /** Tampilkan awalan "Mulai dari" (untuk layanan berjenjang, mis. paket skripsi). */
+  /** Tampilkan awalan "Mulai dari" untuk layanan berjenjang. */
   priceFrom?: boolean;
   scope: "app" | "kelas" | "thesis" | "book";
   status: CatalogStatus;
@@ -25,66 +24,70 @@ export type CatalogItem = {
 
 export const CATALOG: CatalogItem[] = [
   {
-    key: "mbg-plus",
-    name: "MBG+",
-    blurb: "Langganan utama: materi eksklusif, komunitas, dan seluruh acara MBG+.",
+    key: "membership-pro",
+    name: "Keanggotaan Pro",
+    blurb: "Langganan bulanan untuk konten eksklusif, komunitas, dan benefit pelanggan.",
     price: "Rp75.000",
     cadence: "/bln",
     priceFrom: true,
     scope: "app",
     status: "live",
     cta: "subscribe",
-    productCode: "mbg-plus",
+    productCode: "membership-pro",
     badge: "Populer",
     priceIdr: 75000,
     itemType: "subscription",
   },
   {
-    key: "mbg-circle",
-    name: "MBG Circle",
-    blurb: "Komunitas Discord eksklusif. Sudah termasuk dalam langganan MBG+.",
-    price: "Termasuk MBG+",
+    key: "community-hub",
+    name: "Komunitas",
+    blurb: "Ruang komunitas pelanggan. Sudah termasuk dalam langganan aktif.",
+    price: "Termasuk langganan",
     scope: "app",
     status: "live",
     cta: "included",
   },
   {
-    key: "mbg-forge",
-    name: "MBG Forge",
-    blurb: "Webinar berbayar bersama praktisi. Bayar per acara.",
+    key: "webinar-sample",
+    name: "Webinar Contoh",
+    blurb: "Acara berbayar bersama praktisi. Bayar per acara.",
     price: "Rp29.000",
     cadence: "/acara",
     priceFrom: true,
     scope: "app",
     status: "live",
     cta: "buy",
-    productCode: "mbg-forge",
+    productCode: "webinar-sample",
     priceIdr: 29000,
     itemType: "event",
   },
   {
-    key: "mbg-space",
-    name: "MBG Space",
-    blurb: "Webinar gratis untuk semua. Cukup daftar untuk ikut.",
+    key: "webinar-free",
+    name: "Webinar Gratis",
+    blurb: "Acara gratis untuk semua. Cukup daftar untuk ikut.",
     price: "Gratis",
     scope: "app",
     status: "live",
     cta: "register",
   },
   {
-    key: "kelas",
-    name: "Kelas & Sertifikasi",
-    blurb: "Kelas online bersertifikat bersama mitra. Sedang disiapkan.",
-    price: "Segera",
+    key: "course-sample",
+    name: "Kelas Contoh",
+    blurb: "Kursus mandiri atau cohort sebagai contoh produk kelas.",
+    price: "Rp349.000",
+    priceFrom: true,
     scope: "kelas",
-    status: "coming_soon",
-    cta: "subscribe",
+    status: "live",
+    cta: "buy",
+    productCode: "course-sample",
+    priceIdr: 349000,
+    itemType: "course",
   },
   {
-    key: "thesis",
-    name: "Bimbingan Skripsi",
+    key: "consult-basic",
+    name: "Konsultasi",
     blurb:
-      "Pendampingan skripsi & tugas akhir 1-on-1 bersama mentor — dari cari topik, olah data, sampai siap sidang. Paket Mulai, Sempro, hingga Wisuda.",
+      "Pendampingan 1-on-1 bersama mentor atau konsultan. Mulai dari sesi basic hingga paket intensif.",
     price: "Rp150.000",
     priceFrom: true,
     scope: "thesis",
@@ -93,8 +96,8 @@ export const CATALOG: CatalogItem[] = [
   },
   {
     key: "book",
-    name: "Book Universe",
-    blurb: "Buku dan bundel pilihan Maubisa. Segera hadir.",
+    name: "Buku",
+    blurb: "Buku dan bundel digital. Segera hadir.",
     price: "Segera",
     scope: "book",
     status: "coming_soon",

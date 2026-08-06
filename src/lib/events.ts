@@ -1,6 +1,6 @@
-// Sumber acara Maubisa = CMS (Directus). Tim update event di panel Directus, Account
-// Center MENARIK datanya (tanpa deploy). Event gratis (MBG Space) didaftar di sini ->
-// jadi entitlement 'free' di core (tanpa invoice). Event berbayar (MBG Forge) -> checkout.
+// Sumber acara = CMS (Directus). Tim update event di panel Directus, Account
+// Center MENARIK datanya (tanpa deploy). Event gratis didaftar di sini ->
+// jadi entitlement 'free' di core (tanpa invoice). Event berbayar -> checkout.
 //
 // Defensif: kalau DIRECTUS_URL/TOKEN belum diset atau Directus error, pakai contoh lokal
 // supaya alur tetap jalan saat dev. Di produksi, isi env -> data asli dari CMS.
@@ -32,17 +32,17 @@ export function isDirectusConfigured(): boolean {
 // Contoh lokal (fallback dev). Slug dipakai sebagai id agar riwayat enak dibaca.
 const SAMPLE_EVENTS: MbEvent[] = [
   {
-    id: "mbg-space-riset-juli",
-    title: "MBG Space: Menyusun Bab 1 Anti Revisi",
-    description: "Sesi gratis membedah kerangka Bab 1 skripsi bareng mentor Maubisa.",
+    id: "webinar-free-intro",
+    title: "Webinar Gratis: Mulai dari Nol",
+    description: "Sesi gratis pengantar untuk peserta baru.",
     startsAt: new Date(Date.now() + 5 * 864e5).toISOString(),
     location: "Zoom (online)",
     isFree: true,
     priceIdr: 0,
   },
   {
-    id: "mbg-space-produktif",
-    title: "MBG Space: Produktif Tanpa Burnout",
+    id: "webinar-free-produktif",
+    title: "Webinar Gratis: Produktif Tanpa Burnout",
     description: "Ngobrol santai soal manajemen waktu & fokus buat mahasiswa akhir.",
     startsAt: new Date(Date.now() + 12 * 864e5).toISOString(),
     location: "Zoom (online)",
@@ -50,14 +50,14 @@ const SAMPLE_EVENTS: MbEvent[] = [
     priceIdr: 0,
   },
   {
-    id: "mbg-forge-pitching",
-    title: "MBG Forge: Workshop Pitching Riset (Berbayar)",
-    description: "Workshop intensif menyusun pitch deck riset. Kuota terbatas.",
+    id: "webinar-sample-workshop",
+    title: "Webinar Contoh: Workshop Praktis (Berbayar)",
+    description: "Workshop intensif bersama praktisi. Kuota terbatas.",
     startsAt: new Date(Date.now() + 20 * 864e5).toISOString(),
     location: "Zoom (online)",
     isFree: false,
     priceIdr: 29000,
-    productCode: "mbg-forge",
+    productCode: "webinar-sample",
   },
 ];
 
@@ -66,26 +66,26 @@ const SAMPLE_EVENTS: MbEvent[] = [
 // hasil getEvents() dan dikenali getEventById() -> checkout bisa resolve harga otoritatif.
 const DEMO_EVENTS: MbEvent[] = [
   {
-    id: "demo-forge-data-analitik",
-    title: "MBG Forge: Analisis Data Riset dengan Python",
-    description: "Kelas praktik olah data penelitian dari nol pakai Python & pandas. (Acara demo)",
+    id: "demo-webinar-data-analitik",
+    title: "Webinar Contoh: Analisis Data dengan Python",
+    description: "Kelas praktik olah data dari nol pakai Python & pandas. (Acara demo)",
     startsAt: new Date(Date.now() + 27 * 864e5).toISOString(),
     location: "Zoom (online)",
     isFree: false,
     priceIdr: 79000,
-    productCode: "mbg-forge",
+    productCode: "webinar-sample",
     service: "akademik",
   },
   {
-    id: "demo-forge-personal-branding",
-    title: "MBG Forge: Personal Branding untuk Fresh Graduate",
+    id: "demo-webinar-personal-branding",
+    title: "Webinar Contoh: Personal Branding untuk Fresh Graduate",
     description:
       "Bangun profil LinkedIn & portofolio yang dilirik rekruter bareng praktisi HR. (Acara demo)",
     startsAt: new Date(Date.now() + 34 * 864e5).toISOString(),
     location: "Zoom (online)",
     isFree: false,
     priceIdr: 149000,
-    productCode: "mbg-forge",
+    productCode: "webinar-sample",
     service: "pengembangan-diri",
   },
 ];
@@ -192,7 +192,7 @@ export async function getEventById(id: string): Promise<MbEvent | null> {
 // Harga OTORITATIF sebuah acara berbayar untuk checkout (server-side). Sumbernya baris
 // acara di Directus (staff-controlled), sesuai katalog-produk.md ("ambil judul + harga
 // dari baris acara ... snapshot ke invoice"). Dipakai lib/checkout resolveCheckout agar
-// nominal yang ditagih = harga acara sebenarnya, BUKAN harga produk mbg-forge tetap.
+// nominal yang ditagih = harga acara sebenarnya, bukan harga produk contoh.
 // Return null bila acara tak ditemukan (pemanggil boleh fallback/ tolak).
 export async function getEventPricing(
   id: string,

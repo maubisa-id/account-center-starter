@@ -140,7 +140,7 @@ export function RegisterForm() {
   return (
     <AuthShell
       title="Buat akun"
-      description="Daftar untuk mulai memakai layanan Maubisa dalam satu akun."
+      description="Daftar untuk mulai memakai semua layanan dalam satu akun."
       heroImageSrc={HERO}
       testimonials={TESTIMONIALS}
     >

@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 // Dipakai seed & fallback. Bukan lagi sumber utama identitas (sekarang dari sesi).
 export const DEMO_EMAIL = "budi@example.com";
 
-// Default workspace Maubisa (belum jadi kolom DB) — ditampilkan di profil.
+// Default workspace starter (belum jadi kolom DB) — ditampilkan di profil.
 export const WORKSPACE_DEFAULTS = {
   negara: "Indonesia",
   bahasa: "Bahasa Indonesia",

@@ -5,8 +5,8 @@ import { PaymentClient } from "@/components/pay/payment-client";
 import { BrandWordmark } from "@/components/auth/auth-ui";
 
 export const metadata: Metadata = {
-  title: "Beli · Maubisa",
-  description: "Isi data diri dan selesaikan pembayaran layanan Maubisa.",
+  title: "Beli - Account Center Starter",
+  description: "Isi data diri dan selesaikan pembayaran.",
 };
 
 export const dynamic = "force-dynamic";

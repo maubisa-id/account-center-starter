@@ -33,9 +33,9 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pusat Akun · Maubisa",
+  title: "Account Center Starter - Demo",
   description:
-    "Kelola profil, langganan, akses, dan riwayat pembayaran akun Maubisa kamu.",
+    "Demo starter untuk profil, langganan, akses, dan riwayat pembayaran."
 };
 
 export default function RootLayout({

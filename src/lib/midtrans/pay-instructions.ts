@@ -7,9 +7,9 @@ import type { PayMethodId } from "./types";
 export type Guide = { channel: string; steps: string[] };
 
 // CATATAN AGREGATOR: pembayaran diproses lewat Midtrans (payment gateway). Nomor
-// Virtual Account bukan rekening pribadi/perusahaan Maubisa — VA diterbitkan bank
+// Virtual Account bukan rekening pribadi/perusahaan — VA diterbitkan bank
 // atas nama sistem Midtrans. Karena itu petunjuk TIDAK menyuruh mencocokkan "penerima
-// = Maubisa" (nama yang tampil mengikuti sistem gateway, bisa berbeda per bank); yang
+// = nama merchant" (nama yang tampil mengikuti sistem gateway, bisa berbeda per bank); yang
 // wajib dicek pembeli adalah NOMINAL/total tagihan dan nomor VA yang dimasukkan.
 
 // Langkah generik VA (dipakai bank yang polanya mirip), tinggal sesuaikan nama menu.

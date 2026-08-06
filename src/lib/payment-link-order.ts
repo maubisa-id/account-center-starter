@@ -5,7 +5,7 @@ import type { PayMethodId } from "@/lib/midtrans/types";
 import { newOrderId } from "@/lib/order-id";
 import { isValidEmail } from "@/lib/is-email";
 
-// Alur pembuatan Payment Link (Motion C, bimbingan skripsi — ADR-001 §2.4 / ADR-002).
+// Alur pembuatan Payment Link (Motion C, konsultasi — ADR-001 §2.4 / ADR-002).
 // SATU implementasi dipakai dua pemanggil: /api/pay/link (server-to-server, gerbang
 // PROVISION_SECRET) dan halaman /admin (gerbang sesi admin). Harga OTORITATIF dari DB
 // products bila productCode dikenal; jika tidak, pakai amount yang dikirim. Catat user

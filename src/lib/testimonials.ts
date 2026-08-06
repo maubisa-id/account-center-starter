@@ -1,11 +1,11 @@
 import type { Testimonial } from "@/components/auth/auth-ui";
 
-// Testimoni asli dari website utama Maubisa (directus-maubisa berandaData.ts).
+// Contoh testimoni untuk demo.
 export const MAUBISA_TESTIMONIALS: Testimonial[] = [
   {
     name: "Aidah",
     handle: "Ilmu Komunikasi · Untirta",
-    text: "Next aku bakal konsul tugas ke sini lagi. Penjelasannya jelas dan bikin aku benar-benar paham. Maubisa mantap banget!",
+    text: "Next aku bakal konsul tugas ke sini lagi. Penjelasannya jelas dan bikin aku benar-benar paham. Mantap banget!",
   },
   {
     name: "Kinan",

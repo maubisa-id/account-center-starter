@@ -23,13 +23,13 @@ const EMAIL_PREFS = [
   { key: "email_belajar", label: "Belajar & progres", desc: "Pengingat progres belajar, materi baru, dan tenggat.", defaultOn: true },
   { key: "email_acara", label: "Acara & webinar", desc: "Pengingat H-1 dan info acara/webinar yang relevan.", defaultOn: true },
   { key: "email_komunitas", label: "Komunitas", desc: "Balasan/mention, pengumuman, dan tantangan bulanan.", defaultOn: true },
-  { key: "email_produk", label: "Pembaruan produk", desc: "Kabar fitur baru dan peningkatan layanan Maubisa.", defaultOn: true },
+  { key: "email_produk", label: "Pembaruan produk", desc: "Kabar fitur baru dan peningkatan layanan.", defaultOn: true },
   { key: "email_promo", label: "Promo & penawaran", desc: "Diskon dan penawaran khusus. Butuh izinmu (opt-in).", defaultOn: false },
 ];
 
 const CHANNEL_PREFS = [
   { key: "wa_updates", label: "WhatsApp", desc: "Pengingat perpanjangan & status pembayaran lewat WhatsApp (segera tersedia).", defaultOn: false },
-  { key: "inapp_push", label: "Push di dalam aplikasi", desc: "Notifikasi saat kamu membuka dashboard Maubisa (segera tersedia).", defaultOn: false },
+  { key: "inapp_push", label: "Push di dalam aplikasi", desc: "Notifikasi saat kamu membuka dashboard (segera tersedia).", defaultOn: false },
 ];
 
 export default async function Notifikasi() {
@@ -58,7 +58,7 @@ export default async function Notifikasi() {
       <SectionTitle
         eyebrow="Notifikasi"
         title="Notifikasi & preferensi"
-        desc="Atur email dan notifikasi apa saja yang ingin kamu terima dari Maubisa."
+        desc="Atur email dan notifikasi apa saja yang ingin kamu terima dari layanan ini."
         action={<Eyebrow>Tersimpan otomatis</Eyebrow>}
       />
 

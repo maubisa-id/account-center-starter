@@ -16,8 +16,9 @@ pakai sungguhan di `akun.maubisa.id`, lalu kami buka agar Anda tidak perlu mulai
 <p>
   <a href="https://demo-akun.maubisa.id"><img alt="Demo langsung" src="https://img.shields.io/badge/Demo%20langsung-demo--akun.maubisa.id-0a48b7?logo=vercel&logoColor=white"></a>
   <a href="https://github.com/maubisa-id/account-center-starter/generate"><img alt="Gunakan template ini" src="https://img.shields.io/badge/Gunakan%20template%20ini-2ea44f?logo=github&logoColor=white"></a>
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter&env=DB_PROVIDER,DATABASE_URL,BETTER_AUTH_SECRET,TURNSTILE_SECRET_KEY&envDescription=Provider%20%2B%20koneksi%20database%2C%20rahasia%20Better%20Auth%2C%20dan%20kunci%20Turnstile%20anti-bot%20%28wajib%20di%20produksi%29&envLink=https://github.com/maubisa-id/account-center-starter/blob/main/.env.example&project-name=account-center&repository-name=account-center-starter"><img alt="Deploy with Vercel" src="https://vercel.com/button"></a>
 </p>
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter)
 
 <p>
   <a href="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml"><img alt="Status CI" src="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml/badge.svg"></a>
@@ -183,21 +184,43 @@ Semua variabel dijelaskan di [`.env.example`](./.env.example). Yang paling penti
 > diambil dari sisi pengguna, jadi tidak bisa diakali. Akses baru terbuka setelah Midtrans mengabari
 > bahwa pembayaran benar-benar lunas, dan pesan itu dicek keasliannya lebih dulu.
 
+## Deploy ke Vercel
+
+Klik tombol **Deploy with Vercel** di atas, sambungkan repo, lalu isi environment variable dari
+`.env.example` sesuai kebutuhan:
+
+- `DATABASE_URL` dan `DB_PROVIDER`
+- `BETTER_AUTH_SECRET` dan `BETTER_AUTH_URL`
+- `MIDTRANS_IS_PRODUCTION`, `MIDTRANS_SERVER_KEY`, `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY`
+- `NEXT_PUBLIC_DEMO_MODE` (isi `1` hanya untuk demo publik)
+- `TURNSTILE_SECRET_KEY` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY` untuk produksi
+- `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_*`, `MAIL_REPLYTO_*`
+- `DIRECTUS_URL`, `DIRECTUS_TOKEN`, `DIRECTUS_EVENTS_COLLECTION` bila memakai CMS acara
+- `PROVISION_SECRET`, `ADMIN_EMAILS`, `NEXT_PUBLIC_*_URL`, dan `NEXT_PUBLIC_*_ENABLED` sesuai layanan
+
+`vercel.json` sudah menjalankan `node scripts/db-provider.mjs && prisma generate && prisma db push && next build`.
+Gunakan database terkelola (Neon, Supabase, PlanetScale, Railway, atau sejenisnya), lalu set
+`BETTER_AUTH_URL` ke domain Vercel final dan deploy ulang.
+
 ## Buat jadi milik Anda
 
-Kami rilis dengan merek Maubisa sebagai contoh nyata, tapi kode ini memang dibuat untuk Anda pakai
-ulang. Untuk menjadikannya milik sendiri:
+Repo tetap membawa identitas Maubisa sebagai asal template, sementara isi produk demo sudah netral.
+Untuk menjadikannya milik sendiri:
 
-1. **Ganti merek.** Logo di [`.github/assets/`](./.github/assets), warna `brand-*` di
-   `src/app/globals.css`, dan nama produk di `README.md`. Untuk kartu social preview, ubah `CARDS`
-   di [`scripts/make-og.mjs`](./scripts/make-og.mjs) lalu jalankan `npm run og`.
+1. **Ganti merek aplikasi.** Logo lewat `NEXT_PUBLIC_LOGO_URL` (atau aset di
+   [`.github/assets/`](./.github/assets) untuk repo), warna `brand-*` di `src/app/globals.css`,
+   serta nama pengirim email di `MAIL_FROM_*`. Untuk kartu social preview, ubah `CARDS` di
+   [`scripts/make-og.mjs`](./scripts/make-og.mjs) lalu jalankan `npm run og`.
 2. **Sesuaikan sinyal kepercayaan.** Badan hukum, nomor WhatsApp, dan testimoni di
    `src/components/pay/checkout-trust.tsx` serta `src/lib/testimonials.ts`.
-3. **Atur katalog dan harga.** Produk di `prisma/seed.ts` (dev) atau database (produksi), dan
-   metadata di `src/lib/catalog.ts`. Harga tetap dihitung di server, bukan dari halaman.
-4. **Isi kunci Midtrans Anda.** Dari [dashboard Midtrans](https://dashboard.midtrans.com/), pakai
+3. **Ganti lini layanan.** Label scope internal ada di `src/lib/service-lines.ts`; kunci
+   `thesis|app|kelas|book` sengaja tetap agar seed, DB, dan katalog tidak pecah.
+4. **Atur katalog dan harga.** Produk contoh ada di `prisma/seed.ts` (`membership-pro`,
+   `webinar-sample`, `consult-basic`, `consult-plus`, `course-sample`), metadata kartu di
+   `src/lib/catalog.ts`, dan harga produksi di database. Harga tetap dihitung di server.
+5. **Isi kunci Midtrans Anda.** Dari [dashboard Midtrans](https://dashboard.midtrans.com/), pakai
    Sandbox untuk uji dan Production saat rilis, lalu masukkan ke `.env`.
-5. **Deploy.** Cara tercepat: tombol **Deploy with Vercel** di atas. Bawa database terkelola sendiri
+6. **Deploy.** Cara tercepat: tombol **Deploy with Vercel** di atas. Bawa database terkelola sendiri
    (misalnya [Neon](https://neon.tech) atau [Supabase](https://supabase.com)); `vercel.json` sudah
    mengatur `prisma db push` dan `next build` otomatis. Setelah rilis pertama, set `BETTER_AUTH_URL`
    ke domain final Anda lalu deploy ulang. Untuk MySQL/PostgreSQL manual atau Docker, lihat
@@ -262,6 +285,12 @@ kartu sepenuhnya ditangani Midtrans. Detail teknis dan cara melapor ada di [SECU
 | [docs/produksi-mysql.md](./docs/produksi-mysql.md) | Deploy ke MySQL atau PostgreSQL |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Cara berkontribusi dan standar kode |
 | [CHANGELOG.md](./CHANGELOG.md) | Riwayat perubahan |
+
+## Kredit & Atribusi
+
+Template ini berasal dari [`maubisa-id/account-center-starter`](https://github.com/maubisa-id/account-center-starter)
+oleh Maubisa / PT Litera Edu Solusi. Kalau Anda memakai atau memodifikasi starter ini, kami akan senang
+kalau atribusi dan tautan asalnya tetap dicantumkan agar pengguna lain bisa menemukan sumbernya.
 
 ## Lisensi
 
