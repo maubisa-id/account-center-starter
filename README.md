@@ -18,7 +18,7 @@ pakai sungguhan di `akun.maubisa.id`, lalu kami buka agar Anda tidak perlu mulai
   <a href="https://github.com/maubisa-id/account-center-starter/generate"><img alt="Gunakan template ini" src="https://img.shields.io/badge/Gunakan%20template%20ini-2ea44f?logo=github&logoColor=white"></a>
 </p>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/maubisa-id/account-center-starter&env=DATABASE_URL,DB_PROVIDER,BETTER_AUTH_SECRET,BETTER_AUTH_URL,NEXT_PUBLIC_DEMO_MODE&envDescription=Database%20terkelola%20%2B%20rahasia%20auth%20(build%20menjalankan%20prisma%20db%20push)&envLink=https://github.com/maubisa-id/account-center-starter/blob/main/.env.example)
 
 <p>
   <a href="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml"><img alt="Status CI" src="https://github.com/maubisa-id/account-center-starter/actions/workflows/ci.yml/badge.svg"></a>
@@ -186,21 +186,47 @@ Semua variabel dijelaskan di [`.env.example`](./.env.example). Yang paling penti
 
 ## Deploy ke Vercel
 
-Klik tombol **Deploy with Vercel** di atas, sambungkan repo, lalu isi environment variable dari
-`.env.example` sesuai kebutuhan:
+Klik tombol **Deploy with Vercel** di atas. Saat impor, Vercel otomatis meminta env **wajib**
+berikut (build menjalankan `prisma db push`, jadi database harus siap sejak build pertama):
 
-- `DATABASE_URL` dan `DB_PROVIDER`
-- `BETTER_AUTH_SECRET` dan `BETTER_AUTH_URL`
-- `MIDTRANS_IS_PRODUCTION`, `MIDTRANS_SERVER_KEY`, `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY`
-- `NEXT_PUBLIC_DEMO_MODE` (isi `1` hanya untuk demo publik)
-- `TURNSTILE_SECRET_KEY` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY` untuk produksi
-- `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_*`, `MAIL_REPLYTO_*`
+- `DATABASE_URL` dan `DB_PROVIDER` — pakai database terkelola (Neon, Supabase, PlanetScale,
+  Railway) untuk deploy yang persisten. `file:./dev.db` + `sqlite` bisa untuk demo cepat, tapi di
+  serverless datanya sementara (tiap invocation terisolasi) — cukup untuk pratinjau, bukan produksi.
+- `BETTER_AUTH_SECRET` (rahasia acak) dan `BETTER_AUTH_URL` (isi domain Vercel final setelah rilis
+  pertama, lalu deploy ulang).
+- `NEXT_PUBLIC_DEMO_MODE` — isi `1` untuk demo publik (checkout sandbox, mailbox demo), kosongkan
+  untuk produksi.
+
+Env opsional lain (isi dari `.env.example` sesuai kebutuhan) bisa ditambahkan di Settings → Environment
+Variables kapan saja:
+
+- `MIDTRANS_IS_PRODUCTION`, `MIDTRANS_SERVER_KEY`, `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` untuk pembayaran
+- `TURNSTILE_SECRET_KEY` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY` untuk proteksi form di produksi
+- `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_*`, `MAIL_REPLYTO_*` untuk email
 - `DIRECTUS_URL`, `DIRECTUS_TOKEN`, `DIRECTUS_EVENTS_COLLECTION` bila memakai CMS acara
 - `PROVISION_SECRET`, `ADMIN_EMAILS`, `NEXT_PUBLIC_*_URL`, dan `NEXT_PUBLIC_*_ENABLED` sesuai layanan
 
 `vercel.json` sudah menjalankan `node scripts/db-provider.mjs && prisma generate && prisma db push && next build`.
-Gunakan database terkelola (Neon, Supabase, PlanetScale, Railway, atau sejenisnya), lalu set
-`BETTER_AUTH_URL` ke domain Vercel final dan deploy ulang.
+Setelah rilis pertama, set `BETTER_AUTH_URL` ke domain Vercel final lalu deploy ulang.
+
+> [!WARNING]
+> **Tidak bisa login / error 500 di Vercel?** Dua penyebab paling umum:
+>
+> 1. **SQLite tidak jalan di serverless.** `DATABASE_URL=file:./dev.db` hanya untuk lokal —
+>    filesystem Vercel bersifat sementara & read-only, jadi Better Auth gagal menulis sesi
+>    (endpoint `/api/auth/*` balas 500). Pakai database terkelola (mis. [Neon](https://neon.tech)
+>    gratis), lalu set `DATABASE_URL=postgresql://...` + `DB_PROVIDER=postgresql` +
+>    `BETTER_AUTH_SECRET` (acak) + `BETTER_AUTH_URL=https://<domain-vercel-anda>`, dan deploy ulang.
+> 2. **Belum ada akun.** `prisma db push` hanya membuat tabel, bukan data. Untuk akun demo
+>    (`budi@example.com` / `admin@example.com`, sandi `password123`), jalankan seed **sekali**
+>    menunjuk ke DB terkelola Anda:
+>    ```bash
+>    DATABASE_URL="postgresql://...anda..." DB_PROVIDER=postgresql npm run seed
+>    ```
+>    Atau lewati seed dan daftar akun baru di `/daftar` (pakai sandi kuat — `password123` ditolak
+>    saat daftar karena masuk daftar sandi lemah; ia hanya dipakai akun demo hasil seed). Untuk
+>    akses admin, isi `ADMIN_EMAILS` dengan email yang Anda daftarkan.
+
 
 ## Buat jadi milik Anda
 
