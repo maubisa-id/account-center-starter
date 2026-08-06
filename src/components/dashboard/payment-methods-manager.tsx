@@ -102,7 +102,7 @@ export function PaymentMethodsManager({
               }`}
             >
               <CreditCard
-                type="maubisa"
+                type="primary"
                 brand={m.brand ?? undefined}
                 bankCode={m.bankCode ?? undefined}
                 cardHolder=" "
@@ -302,7 +302,7 @@ function AddCardDialog({
         <div className="min-h-0 flex-1 overflow-y-auto px-6">
           <div className="flex justify-center">
             <CreditCard
-              type="maubisa"
+              type="primary"
               brand={detectCardNetwork(number).id}
               bankCode={bin?.bankCode ?? undefined}
               cardNumber={number || undefined}

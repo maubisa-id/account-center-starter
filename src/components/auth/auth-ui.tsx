@@ -4,7 +4,7 @@ import { useId, useState, useRef } from "react";
 import Link from "next/link";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { Eye, EyeOff, CircleAlert, User } from "lucide-react";
-import { LOGO_URL } from "@/lib/brand";
+import { LOGO_URL, BRAND } from "@/lib/brand";
 
 export interface Testimonial {
   name: string;
@@ -21,9 +21,9 @@ const SCATTER: { pos: string; rot: number; delay: string; hide?: string }[] = [
 
 export function BrandWordmark() {
   return (
-    <Link href="/" className="inline-flex items-center" aria-label="Maubisa">
+    <Link href="/" className="inline-flex items-center" aria-label={BRAND.name}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={LOGO_URL} alt="Maubisa" width={150} height={40} className="h-9 w-auto" />
+      <img src={LOGO_URL} alt={BRAND.name} width={150} height={40} className="h-9 w-auto" />
     </Link>
   );
 }

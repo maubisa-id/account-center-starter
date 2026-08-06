@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { IconWarn } from "@/components/icons";
+import { BRAND } from "@/lib/brand";
 
 // Error boundary segmen (app): tangkap error render/aksi server, beri jalan pulih (H9).
 export default function AppError({
@@ -29,8 +30,8 @@ export default function AppError({
         <p className="mt-2 text-sm leading-relaxed text-zinc-500">
           Kami menemui kendala saat memuat halaman ini. Coba muat ulang. Bila masih berlanjut,
           hubungi{" "}
-          <a href="mailto:halo@maubisa.id" className="font-semibold text-brand-600 hover:underline">
-            halo@maubisa.id
+          <a href={`mailto:${BRAND.supportEmail}`} className="font-semibold text-brand-600 hover:underline">
+            {BRAND.supportEmail}
           </a>
           .
         </p>

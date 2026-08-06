@@ -1,5 +1,6 @@
 import { getAccount } from "@/lib/account";
 import { tanggalPanjang } from "@/lib/format";
+import { BRAND } from "@/lib/brand";
 import { Panel, Card, Reveal, SectionTitle, InfoRow } from "@/components/ui";
 import { ExportDataButton, DeleteAccountButton } from "@/components/dashboard/privacy-actions";
 import { DbError, NoSeed } from "@/components/states";
@@ -84,14 +85,18 @@ export default async function Privasi() {
 
       <p className="text-xs leading-relaxed text-zinc-400">
         Selengkapnya di{" "}
-        <a
-          href="https://maubisa.id/pusat-kepercayaan"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium text-brand-600 hover:underline"
-        >
-          Pusat Kepercayaan
-        </a>
+        {BRAND.trustCenterUrl ? (
+          <a
+            href={BRAND.trustCenterUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-brand-600 hover:underline"
+          >
+            Pusat Kepercayaan
+          </a>
+        ) : (
+          <span className="font-medium">Pusat Kepercayaan</span>
+        )}
         .
       </p>
     </div>

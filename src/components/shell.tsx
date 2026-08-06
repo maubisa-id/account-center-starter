@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import type { Alert } from "@/lib/alerts";
-import { LOGO_URL } from "@/lib/brand";
+import { LOGO_URL, BRAND } from "@/lib/brand";
 import { ProfileMenu } from "./profile-menu";
 import { Avatar } from "./avatar";
 import { NotificationMenu } from "./notification-menu";
@@ -120,7 +120,7 @@ function BrandMark() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={LOGO_URL}
-        alt="Maubisa"
+        alt={BRAND.name}
         width={130}
         height={35}
         className="h-8 w-auto max-w-full self-start object-contain object-left brightness-0 invert"
@@ -472,21 +472,21 @@ export function AppShell({
         <footer className="mx-auto w-full max-w-6xl px-6 pb-8">
           <div className="flex flex-col items-center gap-2 border-t border-black/[0.05] pt-6 sm:flex-row sm:justify-between">
             <p className="text-xs text-zinc-400">
-              {`© ${new Date().getFullYear()} Maubisa · PT Litera Edu Solusi`}
+              {`© ${new Date().getFullYear()} ${BRAND.name}${BRAND.legalName ? ` · ${BRAND.legalName}` : ""}`}
             </p>
             <div className="flex items-center gap-4 text-xs text-zinc-400">
-              <a href="https://bantuan.maubisa.id/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
-                Bantuan
-              </a>
-              <a href="https://maubisa.id/pusat-kepercayaan/hukum/kebijakan-privasi" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
-                Privasi
-              </a>
-              <a href="https://maubisa.id/pusat-kepercayaan/hukum/syarat-ketentuan" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
-                Ketentuan
-              </a>
-              <a href="https://maubisa.id/pusat-kepercayaan/hukum/kebijakan-penggunaan" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
-                Penggunaan
-              </a>
+              {[
+                { label: "Bantuan", href: BRAND.helpUrl },
+                { label: "Privasi", href: BRAND.privacyUrl },
+                { label: "Ketentuan", href: BRAND.termsUrl },
+                { label: "Penggunaan", href: BRAND.acceptableUseUrl },
+              ]
+                .filter((l) => l.href)
+                .map((l) => (
+                  <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
+                    {l.label}
+                  </a>
+                ))}
             </div>
           </div>
         </footer>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconArrow } from "@/components/icons";
-import { LOGO_URL } from "@/lib/brand";
+import { LOGO_URL, BRAND } from "@/lib/brand";
 
 // Halaman 404 ramah: bantu user pulih dari salah alamat (H9) alih-alih layar kosong browser.
 export default function NotFound() {
@@ -10,7 +10,7 @@ export default function NotFound() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={LOGO_URL}
-          alt="Maubisa"
+          alt={BRAND.name}
           width={130}
           height={35}
           className="mx-auto h-8 w-auto object-contain"
@@ -32,7 +32,7 @@ export default function NotFound() {
             </span>
           </Link>
           <a
-            href="mailto:halo@maubisa.id"
+            href={`mailto:${BRAND.supportEmail}`}
             className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-soft ring-1 ring-black/[0.08] transition-colors hover:bg-zinc-50"
           >
             Hubungi bantuan

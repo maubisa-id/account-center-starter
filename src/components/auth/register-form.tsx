@@ -20,6 +20,7 @@ import { PasswordStrength } from "./password-strength";
 import { scorePassword } from "@/lib/password";
 import { suggestEmail } from "@/lib/email-hint";
 import { pickTestimonials } from "@/lib/testimonials";
+import { BRAND } from "@/lib/brand";
 
 const HERO =
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=80";
@@ -208,23 +209,31 @@ export function RegisterForm() {
         </div>
         <p className="animate-element animate-delay-700 text-center text-xs leading-relaxed text-zinc-400">
           Dengan membuat akun, kamu setuju dengan{" "}
-          <a
-            href="https://maubisa.id/pusat-kepercayaan/hukum/syarat-ketentuan"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-zinc-500 underline underline-offset-2 transition-colors hover:text-ink"
-          >
-            Syarat &amp; Ketentuan
-          </a>{" "}
+          {BRAND.termsUrl ? (
+            <a
+              href={BRAND.termsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-zinc-500 underline underline-offset-2 transition-colors hover:text-ink"
+            >
+              Syarat &amp; Ketentuan
+            </a>
+          ) : (
+            <span className="font-medium text-zinc-500">Syarat &amp; Ketentuan</span>
+          )}{" "}
           dan{" "}
-          <a
-            href="https://maubisa.id/pusat-kepercayaan/hukum/kebijakan-privasi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-zinc-500 underline underline-offset-2 transition-colors hover:text-ink"
-          >
-            Kebijakan Privasi
-          </a>
+          {BRAND.privacyUrl ? (
+            <a
+              href={BRAND.privacyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-zinc-500 underline underline-offset-2 transition-colors hover:text-ink"
+            >
+              Kebijakan Privasi
+            </a>
+          ) : (
+            <span className="font-medium text-zinc-500">Kebijakan Privasi</span>
+          )}
           .
         </p>
         <FormError message={msg} />

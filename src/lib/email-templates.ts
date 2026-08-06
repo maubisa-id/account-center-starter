@@ -14,6 +14,8 @@
  * 'info' -> info@ supaya user bisa memfilter, bukan semua dari satu no-reply.
  */
 
+import { BRAND as SITE } from "@/lib/brand";
+
 // ── Tokens (disamakan dengan token desain starter) ───────────
 const BRAND = "#0a48b7"; // brand-500
 const BRAND_LITE = "#3f6be0"; // brand-400 (untuk strip gradasi)
@@ -29,27 +31,17 @@ const ROWLINE = "#eef1f6";
 const TINT = "#eef4fe"; // brand-50
 const DISPLAY = "'Cabinet Grotesk','Clash Display',system-ui,-apple-system,'Segoe UI',sans-serif";
 const SANS = "'Satoshi',system-ui,-apple-system,'Segoe UI',sans-serif";
-const LOGO_DARK = "https://cdn.maubisa.id/public/cms/f39f0c03-bf4a-4550-abcf-956827f3b8b1.png";
+// Logo email (URL absolut; email tak bisa aset relatif). Dari BRAND (env); bila kosong,
+// header/footer memakai nama brand sebagai teks.
+const LOGO_DARK = SITE.logoDarkUrl;
+// Origin app untuk tautan (mis. kelola preferensi). Dari BETTER_AUTH_URL; kosong -> tautan disembunyikan.
+const APP_URL = (process.env.BETTER_AUTH_URL || "").replace(/\/+$/, "");
 
 // Aset visual (ilustrasi + badge). Di email, satu-satunya visual yang andal =
 // gambar raster (PNG) yang di-host, dipanggil lewat <img>. Base bisa dioverride
 // lewat EMAIL_ASSET_BASE untuk preview lokal.
 const ASSET_BASE = process.env.EMAIL_ASSET_BASE ? process.env.EMAIL_ASSET_BASE.replace(/\/+$/, "") : "";
-const CDN_ASSETS: Record<string, string> = {
-  "hero-security": "https://cdn.maubisa.id/public/cms/fccd0e4a-05ad-4e0c-b805-91b9bc5075f2.png",
-  "hero-welcome": "https://cdn.maubisa.id/public/cms/917131a3-fda4-4480-b58a-2ced0bb81330.png",
-  "hero-payment": "https://cdn.maubisa.id/public/cms/39a77f64-8403-4a04-92c2-5ea30b0fcac3.png",
-  "hero-billing": "https://cdn.maubisa.id/public/cms/c450ebf0-94ae-476f-a64b-26fc1822ff94.png",
-  "hero-event": "https://cdn.maubisa.id/public/cms/75740a36-d13e-4a54-ad39-3ed5f78aa0d2.png",
-  "hero-learning": "https://cdn.maubisa.id/public/cms/4c7ecdd7-7264-46e4-ac1c-49e379cc43b0.png",
-  "hero-thesis": "https://cdn.maubisa.id/public/cms/38069a57-b889-4f76-b752-cfb9ce7d2e94.png",
-  "hero-community": "https://cdn.maubisa.id/public/cms/ec23cb3d-018b-4cab-bc0a-f5f45bb6490d.png",
-  "badge-success": "https://cdn.maubisa.id/public/cms/28418f39-3a3a-4d4c-8a23-c89ae5b9fbca.png",
-  "badge-info": "https://cdn.maubisa.id/public/cms/9dada1da-8ffe-4d5c-8de9-d811585d6ff4.png",
-  "badge-warning": "https://cdn.maubisa.id/public/cms/5677d588-7102-4487-ba97-e6cd3d5bddd2.png",
-  "badge-danger": "https://cdn.maubisa.id/public/cms/5bd5f67c-9d48-4b85-8deb-2f9371a1b4e3.png",
-};
-const assetUrl = (name: string) => (ASSET_BASE ? `${ASSET_BASE}/${name}.png` : CDN_ASSETS[name]);
+const assetUrl = (name: string) => (ASSET_BASE ? `${ASSET_BASE}/${name}.png` : "");
 const heroUrl = (k: string) => assetUrl(`hero-${k}`);
 const badgeUrl = (k: string) => assetUrl(`badge-${k}`);
 const HERO_FALLBACK: Record<string, string> = {
@@ -196,13 +188,29 @@ function layout(o: {
 }): { from: string; replyTo?: string; html: string } {
   const year = new Date().getFullYear();
   const hero = o.hero || HERO_FALLBACK[o.category] || "community";
+  const heroImg = heroUrl(hero);
+  const logoMark = (h: number, style: string) =>
+    LOGO_DARK
+      ? `<img src="${LOGO_DARK}" alt="${esc(SITE.name)}" height="${h}" style="height:${h}px;width:auto;${style}border:0;outline:none">`
+      : `<span style="font-family:${DISPLAY};font-weight:700;color:${INK};font-size:${Math.round(h * 0.5)}px;line-height:${h}px;${style}">${esc(SITE.name)}</span>`;
+  const socialHtml = ([
+    ["Instagram", SITE.instagramUrl],
+    ["LinkedIn", SITE.linkedinUrl],
+    ["TikTok", SITE.tiktokUrl],
+  ] as [string, string][])
+    .filter(([, u]) => u)
+    .map(([label, u]) => `<a href="${u}" style="color:${MUTED};text-decoration:none">${label}</a>`)
+    .join(" &middot; ");
+  const legalHtml = ([
+    ["Kebijakan Privasi", SITE.privacyUrl],
+    ["Syarat & Ketentuan", SITE.termsUrl],
+    ["Pusat Kepercayaan", SITE.trustCenterUrl],
+  ] as [string, string][])
+    .filter(([, u]) => u)
+    .map(([label, u]) => `<a href="${u}" style="color:${MUTED};text-decoration:none">${label}</a>`)
+    .join(" &middot; ");
   const html = `<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"><meta name="x-apple-disable-message-reformatting"><title>${esc(o.heading)}</title>
 <style>
-  @font-face{font-family:'Cabinet Grotesk';src:url('https://maubisa.id/fonts/cabinet-grotesk-800.woff2') format('woff2');font-weight:800;font-display:swap}
-  @font-face{font-family:'Cabinet Grotesk';src:url('https://maubisa.id/fonts/cabinet-grotesk-700.woff2') format('woff2');font-weight:700;font-display:swap}
-  @font-face{font-family:'Satoshi';src:url('https://maubisa.id/fonts/satoshi-400.woff2') format('woff2');font-weight:400;font-display:swap}
-  @font-face{font-family:'Satoshi';src:url('https://maubisa.id/fonts/satoshi-500.woff2') format('woff2');font-weight:500;font-display:swap}
-  @font-face{font-family:'Satoshi';src:url('https://maubisa.id/fonts/satoshi-700.woff2') format('woff2');font-weight:700;font-display:swap}
   a{text-decoration:none}
   @media (max-width:600px){.mx{padding-left:24px!important;padding-right:24px!important}.h1{font-size:20px!important}.wrap{padding:14px 8px!important}}
 </style></head>
@@ -213,10 +221,10 @@ function layout(o: {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:${CARD};border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(20,20,20,.05),0 10px 26px -16px rgba(20,20,20,.14);border:1px solid #edf0f5">
       <tr><td height="6" bgcolor="${BRAND}" style="height:6px;line-height:6px;font-size:0;background:${BRAND};background-image:linear-gradient(90deg, ${BRAND} 0%, ${BRAND_LITE} 100%)">&nbsp;</td></tr>
       <tr><td class="mx" style="padding:28px 40px 0;background:${CARD}">
-        <img src="${LOGO_DARK}" alt="Logo" height="38" style="height:38px;width:auto;display:block;border:0;outline:none">
+        ${logoMark(38, "display:block;")}
       </td></tr>
       <tr><td style="padding:22px 40px 0;text-align:center">
-        <img src="${heroUrl(hero)}" width="180" alt="" style="width:180px;max-width:56%;height:auto;display:inline-block;border:0;outline:none">
+        ${heroImg ? `<img src="${heroImg}" width="180" alt="" style="width:180px;max-width:56%;height:auto;display:inline-block;border:0;outline:none">` : ""}
       </td></tr>
       <tr><td class="mx" style="padding:16px 40px 0">
         <div style="margin:0 0 12px"><span style="display:inline-block;background:${TINT};color:${BRAND};font-family:${SANS};font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border-radius:9999px">${esc(o.eyebrow)}</span></div>
@@ -229,12 +237,12 @@ function layout(o: {
     </table>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
       <tr><td style="padding:22px 28px 4px;text-align:center">
-        ${o.lifecycle ? `<p style="margin:0 0 14px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">Kamu menerima email ini sesuai preferensi notifikasi di akunmu. <a href="https://akun.maubisa.id/notifikasi" style="color:${SUBINK};text-decoration:underline">Kelola preferensi</a>.</p>` : ""}
-        <img src="${LOGO_DARK}" alt="Logo" height="20" style="height:20px;width:auto;display:inline-block;border:0;outline:none;margin:0 0 12px;opacity:.85">
-        <p style="margin:0 0 8px;font-family:${SANS};font-size:12px;line-height:1.7;color:${MUTED}">Butuh bantuan? <a href="mailto:halo@example.com" style="color:${SUBINK};font-weight:700;text-decoration:none">halo@example.com</a> &middot; <a href="https://wa.me/62811134069" style="color:${SUBINK};font-weight:700;text-decoration:none">WhatsApp</a></p>
-        <p style="margin:0 0 8px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}"><a href="https://www.instagram.com/maubisa.official/" style="color:${MUTED};text-decoration:none">Instagram</a> &middot; <a href="https://www.linkedin.com/company/maubisa-id" style="color:${MUTED};text-decoration:none">LinkedIn</a> &middot; <a href="https://www.tiktok.com/@maubisa.id" style="color:${MUTED};text-decoration:none">TikTok</a></p>
-        <p style="margin:0 0 10px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}"><a href="https://maubisa.id/pusat-kepercayaan/hukum/kebijakan-privasi" style="color:${MUTED};text-decoration:none">Kebijakan Privasi</a> &middot; <a href="https://maubisa.id/pusat-kepercayaan/hukum/syarat-ketentuan" style="color:${MUTED};text-decoration:none">Syarat &amp; Ketentuan</a> &middot; <a href="https://maubisa.id/pusat-kepercayaan/ringkasan" style="color:${MUTED};text-decoration:none">Pusat Kepercayaan</a></p>
-        <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">PT Litera Edu Solusi &middot; Jakarta, Indonesia<br>Email otomatis, mohon tidak membalas langsung. &copy; ${year} layanan ini.</p>
+        ${o.lifecycle ? `<p style="margin:0 0 14px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">Kamu menerima email ini sesuai preferensi notifikasi di akunmu.${APP_URL ? ` <a href="${APP_URL}/notifikasi" style="color:${SUBINK};text-decoration:underline">Kelola preferensi</a>` : ""}.</p>` : ""}
+        ${logoMark(20, "display:inline-block;margin:0 0 12px;opacity:.85;")}
+        <p style="margin:0 0 8px;font-family:${SANS};font-size:12px;line-height:1.7;color:${MUTED}">Butuh bantuan? <a href="mailto:${SITE.supportEmail}" style="color:${SUBINK};font-weight:700;text-decoration:none">${SITE.supportEmail}</a>${SITE.supportWhatsapp ? ` &middot; <a href="https://wa.me/${SITE.supportWhatsapp}" style="color:${SUBINK};font-weight:700;text-decoration:none">WhatsApp</a>` : ""}</p>
+        ${socialHtml ? `<p style="margin:0 0 8px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">${socialHtml}</p>` : ""}
+        ${legalHtml ? `<p style="margin:0 0 10px;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">${legalHtml}</p>` : ""}
+        <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.7;color:${MUTED}">${SITE.legalName ? `${esc(SITE.legalName)}${SITE.address ? ` &middot; ${esc(SITE.address)}` : ""}<br>` : ""}Email otomatis, mohon tidak membalas langsung. &copy; ${year} ${esc(SITE.name)}.</p>
       </td></tr>
     </table>
   </td></tr>

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { logAudit } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
 import { idr, tanggal } from "@/lib/format";
-import { LOGO_URL } from "@/lib/brand";
+import { LOGO_URL, BRAND } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -83,7 +83,7 @@ export async function GET(req: Request) {
     return new NextResponse(buildCsv(data), {
       headers: {
         "content-type": "text/csv; charset=utf-8",
-        "content-disposition": `attachment; filename="maubisa-data-${slug}.csv"`,
+        "content-disposition": `attachment; filename="account-data-${slug}.csv"`,
       },
     });
   }
@@ -100,7 +100,7 @@ export async function GET(req: Request) {
   return new NextResponse(JSON.stringify(data, null, 2), {
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "content-disposition": `attachment; filename="maubisa-data-${slug}.json"`,
+      "content-disposition": `attachment; filename="account-data-${slug}.json"`,
     },
   });
 }
@@ -239,7 +239,7 @@ function buildPrintableHtml(d: ExportData): string {
 </head><body>
 <div class="wrap">
   <div class="bar">
-    <div class="brand"><img src="${LOGO_URL}" alt="Maubisa" style="height:26px;width:auto;display:inline-block;vertical-align:middle;border:0"> <span>· Data Pribadi</span></div>
+    <div class="brand"><img src="${LOGO_URL}" alt="${BRAND.name}" style="height:26px;width:auto;display:inline-block;vertical-align:middle;border:0"> <span>· Data Pribadi</span></div>
     <div style="text-align:right">
       <button class="print-btn no-print" onclick="window.print()">Cetak / Simpan PDF</button>
       <div class="meta">Diekspor ${esc(tanggal(new Date(d.exportedAt)))}</div>

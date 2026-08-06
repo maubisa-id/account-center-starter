@@ -11,7 +11,7 @@ const COMMON = new Set([
   "password", "password1", "password12", "password123", "passw0rd", "kata sandi",
   "12345678", "123456789", "1234567890", "qwerty123", "qwertyui", "11111111",
   "abcd1234", "abc12345", "iloveyou", "welcome1", "admin123", "letmein1",
-  "1q2w3e4r", "sunshine", "princess", "football", "maubisa", "maubisa123",
+  "1q2w3e4r", "sunshine", "princess", "football",
   "rahasia", "rahasia123", "sayang123",
 ]);
 

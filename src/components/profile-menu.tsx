@@ -13,6 +13,7 @@ import {
   IconMail,
   type IconType,
 } from "./icons";
+import { BRAND } from "@/lib/brand";
 
 type MenuUser = { name: string; email: string; uuid?: string; avatarUrl?: string | null } | null;
 
@@ -20,8 +21,10 @@ const LINKS: { href: string; label: string; icon: IconType; external?: boolean }
   { href: "/profil", label: "Kelola profil", icon: IconUser },
   { href: "/keamanan", label: "Keamanan & privasi", icon: IconShield },
   { href: "/pembayaran", label: "Riwayat pembayaran", icon: IconReceipt },
-  { href: "https://bantuan.maubisa.id", label: "Pusat bantuan", icon: IconHelp, external: true },
-  { href: "https://maubisa.id/kontak", label: "Hubungi kami", icon: IconMail, external: true },
+  ...(BRAND.helpUrl
+    ? [{ href: BRAND.helpUrl, label: "Pusat bantuan", icon: IconHelp, external: true }]
+    : []),
+  { href: `mailto:${BRAND.supportEmail}`, label: "Hubungi kami", icon: IconMail, external: true },
 ];
 
 export function ProfileMenu({ user }: { user: MenuUser }) {

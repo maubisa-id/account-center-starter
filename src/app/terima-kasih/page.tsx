@@ -3,13 +3,14 @@ import { IconCheck, IconMail, IconArrow } from "@/components/icons";
 import { prisma } from "@/lib/prisma";
 import { idr } from "@/lib/format";
 import { ResendAccessEmail } from "@/components/pay/resend-access-email";
+import { BRAND } from "@/lib/brand";
 
 export const metadata = { title: "Pembayaran diterima - Account Center Starter" };
 
 export const dynamic = "force-dynamic";
 
-// Domain utama untuk tombol "pulang". Bisa ditimpa lewat env bila domain berbeda.
-const MAIN_SITE = process.env.NEXT_PUBLIC_MAIN_SITE_URL ?? "https://maubisa.id";
+// Domain utama untuk tombol "pulang". Dari BRAND.mainSiteUrl (env); bila kosong -> beranda app.
+const MAIN_SITE = BRAND.mainSiteUrl || "/";
 
 // Samarkan email untuk reassurance ("b•••@email.com"): cukup untuk pembeli mengenali
 // alamatnya sendiri tanpa memampang PII penuh di layar.

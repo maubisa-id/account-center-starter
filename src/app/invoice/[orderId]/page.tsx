@@ -5,20 +5,21 @@ import { prisma } from "@/lib/prisma";
 import { isAdminEmail } from "@/lib/admin";
 import { adminMfaRequired } from "@/lib/admin-mfa";
 import { idr, tanggal, namaProduk, namaLayanan, metodeBayar } from "@/lib/format";
-import { LOGO_URL } from "@/lib/brand";
+import { LOGO_URL, BRAND } from "@/lib/brand";
 import { PrintButton } from "@/components/dashboard/print-button";
 
 export const dynamic = "force-dynamic";
 
-// Identitas penerbit (penjual) yang tampil di invoice. Ubah di sini bila berubah.
+// Identitas penerbit (penjual) yang tampil di invoice. Diisi dari konfigurasi BRAND (env);
+// field kosong tak dirender, jadi template tetap rapi tanpa identitas asli.
 const SELLER = {
-  name: "Maubisa",
-  legal: "PT Litera Edu Solusi",
-  address: ["Taman Harapan No 26, Jakarta, 13630"],
-  phone: "+62 811 134069",
-  web: "https://maubisa.id",
-  email: "halo@maubisa.id",
-  npwp: "10.000.000.0-014.620.53",
+  name: BRAND.name,
+  legal: BRAND.legalName,
+  address: BRAND.address ? [BRAND.address] : [],
+  phone: BRAND.phone,
+  web: BRAND.mainSiteUrl,
+  email: BRAND.supportEmail,
+  npwp: BRAND.taxId,
 };
 
 export default async function InvoicePage({ params }: { params: Promise<{ orderId: string }> }) {
@@ -79,7 +80,7 @@ export default async function InvoicePage({ params }: { params: Promise<{ orderI
           {/* Header: logo + INVOICE */}
           <div className="flex items-start justify-between gap-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={LOGO_URL} alt="Maubisa" width={150} height={40} className="h-9 w-auto" />
+            <img src={LOGO_URL} alt={BRAND.name} width={150} height={40} className="h-9 w-auto" />
             <div className="text-right">
               <div className="text-2xl font-bold tracking-tight text-ink">INVOICE</div>
               <div className="mt-1 text-sm text-zinc-500">No. {invoice.orderId}</div>
@@ -110,14 +111,14 @@ export default async function InvoicePage({ params }: { params: Promise<{ orderI
             <div className="text-sm leading-relaxed">
               <div className="font-bold text-ink">Dari:</div>
               <div className="mt-1 font-semibold text-ink">{SELLER.name}</div>
-              <div className="text-zinc-500">{SELLER.legal}</div>
+              {SELLER.legal ? <div className="text-zinc-500">{SELLER.legal}</div> : null}
               {SELLER.address.map((line) => (
                 <div key={line} className="text-zinc-500">{line}</div>
               ))}
-              <div className="text-zinc-500">{SELLER.phone}</div>
-              <div className="text-zinc-500">{SELLER.web}</div>
+              {SELLER.phone ? <div className="text-zinc-500">{SELLER.phone}</div> : null}
+              {SELLER.web ? <div className="text-zinc-500">{SELLER.web}</div> : null}
               <div className="text-zinc-500">{SELLER.email}</div>
-              <div className="text-zinc-500">NPWP: {SELLER.npwp}</div>
+              {SELLER.npwp ? <div className="text-zinc-500">NPWP: {SELLER.npwp}</div> : null}
             </div>
 
             <div className="text-sm leading-relaxed">
@@ -194,7 +195,8 @@ export default async function InvoicePage({ params }: { params: Promise<{ orderI
           <div className="mt-10 border-t border-zinc-100 pt-6 text-center">
             <p className="text-sm font-medium text-ink">Terima kasih atas kepercayaanmu 🙏</p>
             <p className="mt-1 text-xs leading-relaxed text-zinc-400">
-              Invoice ini diterbitkan secara elektronik oleh {SELLER.name} ({SELLER.legal}) dan sah
+              Invoice ini diterbitkan secara elektronik oleh {SELLER.name}
+              {SELLER.legal ? ` (${SELLER.legal})` : ""} dan sah
               tanpa tanda tangan. Untuk pertanyaan, hubungi {SELLER.email}.
             </p>
           </div>

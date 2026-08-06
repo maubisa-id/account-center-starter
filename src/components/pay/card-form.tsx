@@ -90,7 +90,7 @@ export function CardForm({
       {/* Pratinjau kartu hidup (aset Untitled UI, varian gradient navigasi brand) */}
       <div className="flex justify-center">
         <CreditCard
-          type="maubisa"
+          type="primary"
           cardNumber={value.number || undefined}
           cardHolder={previewName || undefined}
           cardExpiration={expLabel}

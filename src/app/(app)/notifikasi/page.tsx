@@ -104,7 +104,7 @@ export default async function Notifikasi() {
       <Reveal delay={60}>
         <Panel innerClassName="p-6 sm:p-8">
           <h3 className="text-sm font-bold text-ink">Email</h3>
-          <p className="mt-1 text-sm text-zinc-500">Dikirim dari no-reply@maubisa.id ke {user.email}.</p>
+          <p className="mt-1 text-sm text-zinc-500">Notifikasi email dikirim ke {user.email}.</p>
           <div className="mt-4 divide-y divide-zinc-100">
             {EMAIL_TRANSACTIONAL.map((p) => (
               <PrefToggle key={p.key} prefKey={p.key} label={p.label} desc={p.desc} defaultOn={valueOf(p.key, p.defaultOn)} locked={p.locked} />

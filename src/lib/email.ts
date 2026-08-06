@@ -80,7 +80,7 @@ export async function sendEmail({ to, subject, html, text, from, replyTo }: Send
     // Envelope MAIL FROM dipaksa ke akun SMTP terautentikasi (sistem@) supaya Gmail
     // tidak menolak saat header From pakai alias sistem@ (no-reply@/notifikasi@).
     // Reply-To diarahkan ke alias manusia (halo@/tagihan@) supaya balasan tetap sampai.
-    const envelopeFrom = process.env.MAIL_USERNAME || process.env.MAIL_FROM_ADDRESS || "no-reply@maubisa.id";
+    const envelopeFrom = process.env.MAIL_USERNAME || process.env.MAIL_FROM_ADDRESS || "no-reply@example.com";
     await t.sendMail({ from: from ?? mailFrom(), to, subject, html, text: text ?? stripHtml(html), replyTo, envelope: { from: envelopeFrom, to } });
     return { ok: true, dev: false };
   } catch (e) {

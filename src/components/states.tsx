@@ -1,3 +1,5 @@
+import { BRAND } from "@/lib/brand";
+
 const IS_DEV = process.env.NODE_ENV !== "production";
 
 export function DbError({ error }: { error: string }) {
@@ -8,8 +10,8 @@ export function DbError({ error }: { error: string }) {
         <p className="mt-2 text-sm text-rose-600/80">
           Kami tidak bisa memuat data akunmu saat ini. Coba muat ulang halaman beberapa saat lagi.
           Jika masih bermasalah, hubungi{" "}
-          <a href="mailto:halo@maubisa.id" className="font-semibold underline">
-            halo@maubisa.id
+          <a href={`mailto:${BRAND.supportEmail}`} className="font-semibold underline">
+            {BRAND.supportEmail}
           </a>
           .
         </p>
@@ -43,8 +45,8 @@ export function NoSeed() {
         <h1 className="text-lg font-bold text-ink">Belum ada data akun</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Data akunmu belum tersedia. Coba muat ulang, atau hubungi{" "}
-          <a href="mailto:halo@maubisa.id" className="font-medium text-brand-600 underline">
-            halo@maubisa.id
+          <a href={`mailto:${BRAND.supportEmail}`} className="font-medium text-brand-600 underline">
+            {BRAND.supportEmail}
           </a>{" "}
           bila berlanjut.
         </p>

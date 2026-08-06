@@ -14,13 +14,13 @@ const SERVICE_KEYS: ServiceKey[] = ["app", "kelas", "thesis", "book"];
 function baseUrl(key: ServiceKey): string {
   switch (key) {
     case "app":
-      return process.env.NEXT_PUBLIC_APP_URL ?? "https://app.maubisa.id";
+      return process.env.NEXT_PUBLIC_APP_URL ?? "https://example.com";
     case "kelas":
-      return process.env.NEXT_PUBLIC_KELAS_URL ?? "https://kelas.maubisa.id";
+      return process.env.NEXT_PUBLIC_KELAS_URL ?? "https://example.com";
     case "thesis":
-      return process.env.NEXT_PUBLIC_THESIS_URL ?? "https://thesis.maubisa.id";
+      return process.env.NEXT_PUBLIC_THESIS_URL ?? "https://example.com";
     case "book":
-      return process.env.NEXT_PUBLIC_BOOK_URL ?? "https://maubisa.id/buku";
+      return process.env.NEXT_PUBLIC_BOOK_URL ?? "https://example.com";
   }
 }
 
@@ -37,13 +37,13 @@ export function serviceUrl(key: ServiceKey): string {
 export function consultUrl(key: ServiceKey): string {
   const full = process.env.NEXT_PUBLIC_WHATSAPP_CONSULT_URL;
   if (full) return full;
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "62811134069";
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "620000000000";
   const topic =
     key === "thesis"
       ? "konsultasi/tugas akhir"
       : "layanan ini";
   const msg = encodeURIComponent(
-    `Halo MinBi, aku mau konsultasi soal ${topic}. Boleh dibantu arahannya?`,
+    `Halo, aku mau konsultasi soal ${topic}. Boleh dibantu arahannya?`,
   );
   return `https://wa.me/${phone}?text=${msg}`;
 }
@@ -113,7 +113,7 @@ function asServiceKey(scope: string): ServiceKey | null {
 }
 
 function communityUrl(): string {
-  return process.env.NEXT_PUBLIC_COMMUNITY_URL ?? "https://app.maubisa.id/komunitas";
+  return process.env.NEXT_PUBLIC_COMMUNITY_URL ?? "https://example.com/community";
 }
 
 // Punya akses komunitas (Discord) jika punya langganan aktif atau akses komunitas.

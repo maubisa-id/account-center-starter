@@ -48,7 +48,7 @@ export function SavedCardPicker({
             }`}
           >
             <CreditCard
-              type="maubisa"
+              type="primary"
               brand={c.brand ?? undefined}
               bankCode={c.bankCode ?? undefined}
               cardHolder=" "

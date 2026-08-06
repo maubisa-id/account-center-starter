@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BRAND } from "@/lib/brand";
 
 // Aksi "kirim ulang email" di halaman /terima-kasih (§5 handoff). Memakai orderId (dibawa
 // dari alur bayar tamu) supaya server bisa menargetkan email pembeli tanpa menerima alamat
@@ -27,8 +28,8 @@ export function ResendAccessEmail({ orderId }: { orderId: string | null }) {
     return (
       <p className="mt-6 text-xs text-zinc-400">
         Belum menerima email dalam 15 menit? Cek folder spam atau hubungi{" "}
-        <a href="mailto:halo@maubisa.id" className="font-medium text-brand-600 hover:underline">
-          halo@maubisa.id
+        <a href={`mailto:${BRAND.supportEmail}`} className="font-medium text-brand-600 hover:underline">
+          {BRAND.supportEmail}
         </a>
         .
       </p>

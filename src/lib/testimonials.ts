@@ -1,7 +1,7 @@
 import type { Testimonial } from "@/components/auth/auth-ui";
 
 // Contoh testimoni untuk demo.
-export const MAUBISA_TESTIMONIALS: Testimonial[] = [
+export const SAMPLE_TESTIMONIALS: Testimonial[] = [
   {
     name: "Aidah",
     handle: "Ilmu Komunikasi · Untirta",
@@ -21,7 +21,7 @@ export const MAUBISA_TESTIMONIALS: Testimonial[] = [
 
 // Ambil n testimoni acak (deterministik per-seed agar SSR/CSR konsisten).
 export function pickTestimonials(seed: number, n = 3): Testimonial[] {
-  const arr = [...MAUBISA_TESTIMONIALS];
+  const arr = [...SAMPLE_TESTIMONIALS];
   // Fisher-Yates dengan PRNG sederhana berbasis seed (stabil).
   let s = seed || 1;
   const rand = () => {
